@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@plugin "@tailwindcss/forms";
+
+:root {
+  /* Premium Off-white background for 50+ demographic (high contrast & clear) */
+  --background: #fafaf9;
+  --foreground: #1c1917;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Primary Teal/Forest Palette (Growth and Stability) */
+  --color-primary-50: #f0f9f8;
+  --color-primary-100: #d3ede8;
+  --color-primary-200: #a7dcd2;
+  --color-primary-300: #75c4b7;
+  --color-primary-500: #299b8b;
+  --color-primary-600: #207c6f;
+  --color-primary-800: #1a5e55;
+  --color-primary-900: #174d46;
+
+  /* Secondary Plum Palette (Transformation and Creativity) */
+  --color-secondary-50: #fdf6fb;
+  --color-secondary-100: #f9eef5;
+  --color-secondary-200: #f2d4e7;
+  --color-secondary-300: #e8aed4;
+  --color-secondary-500: #c1589d;
+  --color-secondary-600: #a23880;
+  --color-secondary-800: #812f67;
+  --color-secondary-900: #6d2a58;
+}
+
+/* Modo Escuro Automático desativado para garantir a nova identidade clara */
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  @apply antialiased;
+}
