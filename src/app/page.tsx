@@ -119,7 +119,7 @@ export default function Home() {
         </section>
 
         {/* Problem & Solution Section (A Solução Turnkey) */}
-        <section id="solucao" className="py-24 bg-secondary-50">
+        <section id="solucao" className="py-24 bg-secondary-50 scroll-mt-28">
           <div className="container mx-auto px-6 max-w-7xl">
             <div className="flex flex-col lg:flex-row items-center gap-16">
               <div className="lg:w-1/2">
@@ -155,7 +155,7 @@ export default function Home() {
         </section>
 
         {/* Cadastro Section */}
-        <section id="cadastro" className="px-6 lg:px-12 py-24 lg:py-32 bg-white">
+        <section id="cadastro" className="px-6 lg:px-12 py-24 lg:py-32 bg-white scroll-mt-28">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="max-w-xl">
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-6">
