@@ -126,8 +126,8 @@ export default function Home() {
                 <div className="relative">
                   <div className="absolute -top-8 -left-8 w-40 h-40 bg-primary-200/50 rounded-full blur-3xl"></div>
                   <img
-                    src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1932"
-                    alt="Pessoas felizes"
+                    src="/nova-forma.jpg"
+                    alt="Viver em comunidade no Studio Be"
                     className="rounded-3xl shadow-2xl relative z-10 border-8 border-white"
                   />
                   <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-secondary-200/50 rounded-full blur-xl"></div>

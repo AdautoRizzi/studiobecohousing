@@ -40,7 +40,7 @@ export default function LoginPage() {
                 <div className="bg-white p-8 md:p-12 rounded-[2rem] shadow-xl border border-secondary-100 w-full max-w-md">
                     <div className="text-center mb-10">
                         <img src="/logo.png" alt="Studio Be" className="h-16 w-auto mx-auto mb-6 scale-125" />
-                        <h1 className="text-3xl font-bold text-primary-900 tracking-tight">App do Morador</h1>
+                        <h1 className="text-3xl font-bold text-primary-900 tracking-tight">Plataforma Studio Be</h1>
                         <p className="text-gray-500 mt-2">Faça login para acessar sua comunidade.</p>
                     </div>
 

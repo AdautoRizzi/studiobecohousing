@@ -11,7 +11,7 @@ const navItems = [
     { name: 'Modelos', path: '/modelos' },
     { name: 'Mídias', path: '/midias' },
     { name: 'Quem somos', path: '/quem-somos' },
-    { name: 'Menu do Morador', path: '/login' }
+    { name: 'Plataforma Studio Be', path: '/login' }
 ];
 
 export default function Header() {
