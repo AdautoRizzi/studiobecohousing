@@ -20,16 +20,16 @@ export default function Header() {
 
     return (
         <header className="bg-white border-b border-primary-100 shadow-sm sticky top-0 z-50">
-            <div className="container mx-auto px-6 py-2 flex justify-between items-center">
+            <div className="container mx-auto px-6 py-1 flex justify-between items-center">
                 {/* Logo */}
                 <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
-                    <img src="/logo.png" alt="Studio Be" className="h-28 md:h-40 w-auto object-contain scale-125 origin-left" />
+                    <img src="/logo.png" alt="Studio Be" className="h-28 md:h-40 w-auto object-contain" />
                 </Link>
 
                 {/* Navegação Desktop */}
                 <nav className="hidden md:flex items-center ml-auto">
-                    <div className="flex items-center space-x-6 lg:space-x-12 mr-8">
-                        {navItems.map((item) => {
+                    <div className="flex items-center space-x-8 lg:space-x-12 mr-8">
+                        {navItems.filter(i => i.name !== 'Modelos').map((item) => {
                             const isActive = pathname === item.path;
                             return (
                                 <Link
@@ -68,7 +68,7 @@ export default function Header() {
             {isMenuOpen && (
                 <div className="md:hidden bg-white border-t border-primary-50 animate-in fade-in slide-in-from-top-4 duration-300">
                     <nav className="flex flex-col px-6 pt-2 pb-6 space-y-3">
-                        {navItems.map((item) => {
+                        {navItems.filter(i => i.name !== 'Modelos').map((item) => {
                             const isActive = pathname === item.path;
                             return (
                                 <Link

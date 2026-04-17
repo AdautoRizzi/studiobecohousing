@@ -134,14 +134,14 @@ export default function Home() {
                 </div>
               </div>
               <div className="lg:w-1/2">
-                <h2 className="text-3xl md:text-5xl font-bold text-primary-900 mb-8 tracking-tight leading-tight">A solução chave na mão para o mais-viver</h2>
+                <h2 className="text-3xl md:text-5xl font-bold text-primary-900 mb-8 tracking-tight leading-tight">Uma nova forma de morar e viver</h2>
                 <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                   O Studio Be é um Ecossistema de Transição de Estilo de Vida que utiliza o prisma da diferenciação para escapar do "rebanho competitivo" imobiliário. Nossa proposta une curadoria humana e modelos de negócios inovadores em uma solução única:
                 </p>
                 <ol className="text-lg text-gray-600 mb-6 space-y-3 list-decimal list-outside pl-5">
                   <li><strong>Posicionamento Inverso:</strong> Subtraímos a transação imobiliária fria e adicionamos o extraordinário: uma curadoria humana e psicológica que foca na interioridade do ser, transformando o "morar" em uma travessia de vida.</li>
                   <li><strong>Ruptura de Categoria:</strong> Rejeitamos o rótulo de "moradia sênior" para criar um Ecossistema de Transição de Estilo de Vida. Aqui, o cliente deixa de ser um usuário passivo para ser o herói protagonista de sua própria jornada.</li>
-                  <li><strong>Fuga da Mesmice:</strong> Enquanto o mercado compete por preço e metros quadrados, nós nos distanciamos ao focar no pertencimento e propósito. Criamos um nicho de separação onde a conexão real e o legado são os maiores valores.</li>
+                  <li><strong>Fuga da Mesmice:</strong> Criamos lugares para viver as melhores histórias com pertencimento e propósito e rompemos com a lógica do mercado voltada a especulação imobiliária. Criamos um nicho de separação onde a conexão real e o legado são os maiores valores.</li>
                 </ol>
                 <p className="text-xl text-primary-800 font-medium mb-10 leading-relaxed italic">
                   Não entregamos paredes; entregamos o suporte para o seu florescimento.

@@ -6,7 +6,7 @@ export default function PublicFooter() {
         <footer id="contato" className="bg-primary-900 text-primary-50 py-16 px-6 lg:px-12 text-center border-t border-primary-800">
             <div className="container mx-auto flex flex-col items-center max-w-4xl space-y-8">
                 {/* Logo Central */}
-                <img src="/logo.png" alt="Studio Be" className="h-28 w-auto object-contain scale-125 mb-4 brightness-110" />
+                <img src="/logo.png" alt="Studio Be" className="h-28 w-auto object-contain mb-4 brightness-110" />
 
                 <h3 className="text-2xl font-bold text-white mb-2">Comunidades Intencionais</h3>
                 <p className="text-primary-200 text-lg max-w-xl mx-auto font-medium">
@@ -15,11 +15,11 @@ export default function PublicFooter() {
 
                 {/* Bloco de Contatos Rápidos */}
                 <div className="flex flex-col md:flex-row items-center justify-center gap-6 mt-8 mb-4 w-full">
-                    <a href="mailto:contato@studiobe-cohousing.com" className="flex items-center gap-3 bg-primary-800 hover:bg-secondary-600 transition-colors px-6 py-4 rounded-xl shadow-sm text-white font-medium w-full max-w-sm justify-center">
+                    <a href="mailto:contato@studiobecohousing.com" className="flex items-center gap-3 bg-primary-800 hover:bg-secondary-600 transition-colors px-6 py-4 rounded-xl shadow-sm text-white font-medium w-full max-w-sm justify-center">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>
-                        contato@studiobe-cohousing.com
+                        contato@studiobecohousing.com
                     </a>
 
                     <a href="https://wa.me/5511934898990?text=Ol%C3%A1%2C%20Studio%20Be%21%20Gostaria%20de%20saber%20mais." target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-primary-800 hover:bg-green-600 transition-colors px-6 py-4 rounded-xl shadow-sm text-white font-medium w-full max-w-sm justify-center">

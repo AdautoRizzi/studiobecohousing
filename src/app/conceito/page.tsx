@@ -85,7 +85,7 @@ export default function ConceitoPage() {
                         <div className="order-1 lg:order-2 relative group">
                             <div className="absolute inset-0 bg-primary-200 rounded-3xl transform rotate-3 transition-transform group-hover:rotate-6"></div>
                             <img
-                                src="https://images.unsplash.com/photo-1511452815075-bf609914b4de?q=80&w=2069"
+                                src="/projeto.jpg"
                                 alt="Arquitetura de cohousing"
                                 className="rounded-3xl shadow-xl w-full h-[400px] object-cover relative z-10 transition-transform duration-500 group-hover:-translate-y-2 group-hover:-translate-x-2"
                             />
@@ -97,7 +97,7 @@ export default function ConceitoPage() {
                         <div className="relative group">
                             <div className="absolute inset-0 bg-secondary-200 rounded-3xl transform -rotate-3 transition-transform group-hover:-rotate-6"></div>
                             <img
-                                src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1932"
+                                src="/cohousing-geral.jpg"
                                 alt="Grupo de pessoas felizes"
                                 className="rounded-3xl shadow-xl w-full h-[400px] object-cover relative z-10 transition-transform duration-500 group-hover:translate-y-2 group-hover:translate-x-2"
                             />
@@ -105,7 +105,7 @@ export default function ConceitoPage() {
                         <div>
                             <h2 className="text-3xl md:text-4xl font-bold text-primary-900 mb-6 tracking-tight">Para Quem é?</h2>
                             <p className="text-gray-700 mb-6 text-lg leading-relaxed">
-                                Destina-se especialmente a <span className="font-semibold text-primary-700">pessoas maduras e famílias maduras</span> que buscam uma vida com mais significado, simplicidade e conexão. É para quem deseja continuar ativo, produtivo e empreendedor, mas em um ritmo mais leve e com uma forte rede de apoio.
+                                Destina-se especialmente a <span className="font-semibold text-primary-700">pessoas e famílias maduras</span> que buscam uma vida com mais significado, simplicidade e conexão. É para quem deseja continuar ativo, produtivo e empreendedor, mas em um ritmo mais leve e com uma forte rede de apoio.
                             </p>
                             <div className="bg-secondary-50 border-l-4 border-primary-500 p-6 rounded-r-2xl my-8">
                                 <p className="text-gray-800 text-lg font-medium italic">
