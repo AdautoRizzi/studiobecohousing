@@ -75,10 +75,39 @@ export default function CohousingForm() {
     const nextStep = () => { window.scrollTo({ top: document.getElementById('cadastro')?.offsetTop! - 100, behavior: 'smooth' }); setStep(s => s + 1); };
     const prevStep = () => { window.scrollTo({ top: document.getElementById('cadastro')?.offsetTop! - 100, behavior: 'smooth' }); setStep(s => s - 1); };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Constrói a mensagem inteira para WhatsApp
+        // 1. Enviar para a Planilha do Google
+        const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyTq7VCLn1GZG2mMB9rGZBYFtedDezWmgEtq2hkMNx9aUKbuZjboz_oyjnMuigyYs8R/exec';
+        
+        const payload = {
+            nome: formData.nome,
+            email: formData.email,
+            moradiaAtual: formData.moradiaAtual,
+            idade: formData.idade,
+            profissao: formData.profissao,
+            genero: formData.genero,
+            ondeMorar: formData.ondeMorar,
+            tipologia: formData.tipologia,
+            comQuem: `${formData.comQuem} (${formData.totalPessoas} pessoas - ${formData.dormitorios} quartos, ${formData.suites} suítes)`,
+            resumoAfinidade: `Valores: ${formData.valores.join(', ')} | Interesses: ${formData.interesses.join(', ')} | Empreender: ${formData.empreender.join(', ')}`
+        };
+
+        try {
+            await fetch(googleScriptUrl, {
+                method: 'POST',
+                mode: 'no-cors', // Evita erro de CORS no navegador
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+        } catch (error) {
+            console.error("Erro ao salvar na planilha", error);
+        }
+
+        // 2. Constrói a mensagem inteira para WhatsApp
         const text = `*NOVA APLICAÇÃO DE INTERESSE - STUDIO BE*
         
 *👤 1. QUEM SOU EU*
