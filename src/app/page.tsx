@@ -198,7 +198,7 @@ export default function Home() {
             <div className="max-w-xl">
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-6">
                 Encontre a sua <br />
-                <span className="text-primary-600">próxima comunidade.</span>
+                <span className="text-primary-900">próxima comunidade.</span>
               </h2>
               <ul className="space-y-6 text-lg text-gray-600 mb-8">
                 <li className="flex gap-4">

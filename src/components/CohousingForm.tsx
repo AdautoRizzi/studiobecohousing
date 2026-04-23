@@ -8,6 +8,7 @@ const FAIXAS_ETARIAS = ['menos de 40 anos', '40 a 45 anos', '46 a 50 anos', '51 
 const GENEROS = ['feminino', 'masculino', 'prefiro não informar'];
 const TIPOS_COHOUSING = ['Urbano em grandes metrópoles', 'Urbano em cidades do interior', 'Rural - próximo ao centro da cidade', 'Urbano no litoral', 'Indiferente'];
 const TIPOLOGIAS = ['Casas térreas', 'Apartamentos', 'Loft', 'Indiferente'];
+const AREAS_RESIDENCIA = ['Até 50 m2', 'de 50 m2 a 80 m2', 'de 80 m2 a 120 m2', 'acima de 120 m2'];
 const COM_QUEM = ['sozinha/o', 'com cônjuge ou companheira/o', 'com amigos e/ou familiares'];
 const TOT_PESSOAS = ['1 pessoa', '2 pessoas', '3 pessoas', '4 pessoas'];
 const INTERESSES = ['Atividades culturais e artísticas', 'Alimentação compartilhada e gastronomia', 'Horta e jardinagem', 'Atividades físicas, esporte e lazer', 'Atividades de meditação ou contemplativas', 'Wellness (saúde e bem-estar)'];
@@ -31,6 +32,7 @@ export default function CohousingForm() {
         tipologia: '',
         comQuem: '',
         totalPessoas: '',
+        areaResidencia: '',
         dormitorios: '1',
         suites: '1',
         interesses: [] as string[],
@@ -70,7 +72,7 @@ export default function CohousingForm() {
     };
 
     const isStep1Valid = formData.nome.length > 2 && formData.email.includes('@') && formData.moradiaAtual && formData.idade && formData.profissao && formData.genero;
-    const isStep2Valid = formData.ondeMorar && formData.tipoCohousing && formData.tipologia && formData.comQuem && formData.totalPessoas;
+    const isStep2Valid = formData.ondeMorar && formData.tipoCohousing && formData.tipologia && formData.areaResidencia && formData.comQuem && formData.totalPessoas;
     const isStep3Valid = formData.interesses.length > 0 && formData.empreender.length > 0 && formData.valores.length > 0;
 
     const nextStep = () => { window.scrollTo({ top: document.getElementById('cadastro')?.offsetTop! - 100, behavior: 'smooth' }); setStep(s => s + 1); };
@@ -91,6 +93,7 @@ export default function CohousingForm() {
             genero: formData.genero,
             ondeMorar: formData.ondeMorar,
             tipologia: formData.tipologia,
+            areaResidencia: formData.areaResidencia,
             comQuem: `${formData.comQuem} (${formData.totalPessoas} pessoas - ${formData.dormitorios} quartos, ${formData.suites} suítes)`,
             resumoAfinidade: `Valores: ${formData.valores.join(', ')} | Interesses: ${formData.interesses.join(', ')} | Empreender: ${formData.empreender.join(', ')}`
         };
@@ -207,6 +210,13 @@ export default function CohousingForm() {
                                         <select name="tipologia" value={formData.tipologia} onChange={handleChange} className="w-full h-14 bg-gray-50 rounded-xl px-4 focus:ring-2 focus:ring-secondary-500 outline-none border border-gray-200 text-gray-900 font-medium" required>
                                             <option value="">Selecione...</option>
                                             {TIPOLOGIAS.map(t => <option key={t} value={t}>{t}</option>)}
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-700">Área da residência *</label>
+                                        <select name="areaResidencia" value={formData.areaResidencia} onChange={handleChange} className="w-full h-14 bg-gray-50 rounded-xl px-4 focus:ring-2 focus:ring-secondary-500 outline-none border border-gray-200 text-gray-900 font-medium" required>
+                                            <option value="">Selecione...</option>
+                                            {AREAS_RESIDENCIA.map(a => <option key={a} value={a}>{a}</option>)}
                                         </select>
                                     </div>
                                     <div className="space-y-2">
