@@ -59,9 +59,9 @@ export default function ConceitoPage() {
                     {/* Header da Página */}
                     <div className="text-center mb-24 max-w-4xl mx-auto">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary-50 text-primary-800 text-sm font-semibold mb-6 border border-secondary-100">
-                            ✨ O Movimento
+                            O Movimento
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 tracking-tight leading-tight mb-8">
+                        <h1 className="text-4xl md:text-6xl font-bold text-secondary-600 tracking-tight leading-tight mb-8">
                             Cohousing: Viver com Propósito
                         </h1>
                         <p className="text-xl md:text-2xl text-gray-600 mt-4 leading-relaxed font-light">
@@ -77,15 +77,14 @@ export default function ConceitoPage() {
                                 O cohousing tradicional é um modelo de vida que equilibra a privacidade do lar individual com a força da convivência comunitária. São vizinhanças planejadas onde os moradores compartilham espaços — como cozinhas e jardins — para combater o isolamento social e promover a sustentabilidade. É uma solução habitacional prática que vem ganhando espaço no Brasil, especialmente entre o público 50+ que busca apoio mútuo.
                             </p>
 
-                            <div className="mt-8 flex items-center gap-4 text-primary-800 font-medium">
-                                <span className="h-12 w-12 rounded-full bg-primary-50 flex items-center justify-center text-2xl">🌱</span>
+                            <div className="mt-8 flex items-center gap-4 text-primary-800 font-medium italic">
                                 "Menos muros, mais pontes"
                             </div>
                         </div>
                         <div className="order-1 lg:order-2 relative group">
                             <div className="absolute inset-0 bg-primary-200 rounded-3xl transform rotate-3 transition-transform group-hover:rotate-6"></div>
                             <img
-                                src="/projeto.jpg"
+                                src="/predio3.png"
                                 alt="Arquitetura de cohousing"
                                 className="rounded-3xl shadow-xl w-full h-[400px] object-cover relative z-10 transition-transform duration-500 group-hover:-translate-y-2 group-hover:-translate-x-2"
                             />
@@ -119,7 +118,7 @@ export default function ConceitoPage() {
                     <div className="text-center bg-secondary-50 rounded-[3rem] p-12 lg:p-20 shadow-sm border border-secondary-100">
                         <span className="text-primary-600 font-bold tracking-wider uppercase text-sm mb-4 block">Fundação Sólida</span>
                         <h2 className="text-3xl md:text-5xl font-bold text-gray-900 tracking-tight mb-16">
-                            Os 4 Pilares do Nosso Modelo
+                            A Solução Studio Be
                         </h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">

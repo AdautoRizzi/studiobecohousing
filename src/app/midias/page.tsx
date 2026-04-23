@@ -59,7 +59,7 @@ export default function MidiasPage() {
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary-50 text-primary-800 text-sm font-bold mb-6 border border-secondary-100 uppercase tracking-widest">
                             Na Imprensa
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 tracking-tight leading-tight mb-8">
+                        <h1 className="text-4xl md:text-6xl font-bold text-green-600 tracking-tight leading-tight mb-8">
                             O Mundo fala sobre o <span className="text-secondary-600">Cohousing</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-gray-600 mt-4 leading-relaxed font-light">
@@ -94,7 +94,7 @@ export default function MidiasPage() {
                         <div className="md:w-2/3">
                             <h2 className="text-3xl font-bold text-primary-900 mb-4 tracking-tight">Contato para Imprensa</h2>
                             <p className="text-primary-700 text-lg leading-relaxed">
-                                Você é jornalista ou lidera um veículo de mídia e quer entender melhor como operam as Vilas do Século 21? Agende uma entrevista com nossos especialistas.
+                                Você é jornalista ou lidera um veículo de mídia e quer entender como os novos conceitos do morar revolucionam o estilo de vida ? Agende uma entrevista com nossos especialistas.
                             </p>
                         </div>
                         <a href="mailto:contato@studiobe-cohousing.com?subject=Contato de Assessoria de Imprensa do Portal StudioBe" className="bg-primary-900 text-white hover:bg-primary-800 px-10 py-5 rounded-full font-bold shadow-xl transition-transform hover:scale-105 w-full md:w-auto text-lg whitespace-nowrap inline-block text-center mt-6 md:mt-0">

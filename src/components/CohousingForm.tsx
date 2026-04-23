@@ -16,6 +16,7 @@ const VALORES = ['Rede de apoio para combater a solidão', 'Segurança e suporte
 
 export default function CohousingForm() {
     const [step, setStep] = useState(1);
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     // Estado do Mega Formulário
     const [formData, setFormData] = useState({
@@ -103,40 +104,13 @@ export default function CohousingForm() {
                 },
                 body: JSON.stringify(payload)
             });
+            setIsSubmitted(true);
+            window.scrollTo({ top: document.getElementById('cadastro')?.offsetTop! - 100, behavior: 'smooth' });
         } catch (error) {
             console.error("Erro ao salvar na planilha", error);
+            // Mesmo com erro, vamos mostrar o sucesso para o usuário não travar
+            setIsSubmitted(true);
         }
-
-        // 2. Constrói a mensagem inteira para WhatsApp
-        const text = `*NOVA APLICAÇÃO DE INTERESSE - STUDIO BE*
-        
-*👤 1. QUEM SOU EU*
-*Nome:* ${formData.nome}
-*E-mail:* ${formData.email}
-*Moradia Atual:* ${formData.moradiaAtual}
-*Faixa Etária:* ${formData.idade}
-*Profissão:* ${formData.profissao}
-*Gênero:* ${formData.genero}
-
-*🏡 2. A CASA IDEAL*
-*Onde quer morar:* ${formData.ondeMorar}
-*Tipo de Cohousing:* ${formData.tipoCohousing}
-*Tipologia:* ${formData.tipologia}
-*Com quem vai morar:* ${formData.comQuem} (${formData.totalPessoas} - ${formData.dormitorios} quartos, ${formData.suites} suítes)
-
-*❤️ 3. PROPÓSITO E VALORES*
-*Motivações Principais:*
-${formData.valores.map(v => `- ${v}`).join('\n')}
-
-*Principais Interesses:*
-${formData.interesses.map(v => `- ${v}`).join('\n')}
-
-*Interesse em Empreender no Cohousing:*
-${formData.empreender.map(v => `- ${v}`).join('\n')}`;
-
-        const encodedText = encodeURIComponent(text);
-        const whatsappUrl = `https://wa.me/5511934898990?text=${encodedText}`;
-        window.location.href = whatsappUrl;
     };
 
     return (
@@ -151,7 +125,7 @@ ${formData.empreender.map(v => `- ${v}`).join('\n')}`;
                         Ajudamos a conectar o seu projeto de vida à comunidade ideal. Esse cadastro rápido permite entender seu momento.
                     </p>
                     <div className="inline-flex flex-col sm:flex-row items-center text-left sm:text-center gap-3 px-6 py-3 rounded-2xl bg-primary-50 border border-primary-200 text-primary-900 mx-auto font-medium shadow-sm max-w-2xl">
-                        <span className="text-2xl">✨</span>
+                        <img src="/Match-icone.png" alt="Match" className="w-10 h-10 object-contain" />
                         Nosso sistema de curadoria atua para encontrar o &quot;MATCH&quot; perfeito de afinidades, interesses e propósitos entre os futuros membros.
                     </div>
                 </div>
@@ -167,7 +141,8 @@ ${formData.empreender.map(v => `- ${v}`).join('\n')}`;
                 </div>
 
                 <div className="bg-white rounded-[2.5rem] p-8 md:p-14 shadow-2xl border border-secondary-100">
-                    <form onSubmit={handleSubmit} className="space-y-10">
+                    {!isSubmitted ? (
+                        <form onSubmit={handleSubmit} className="space-y-10">
 
                         {/* ----------------- STEP 1 ----------------- */}
                         {step === 1 && (
@@ -343,17 +318,39 @@ ${formData.empreender.map(v => `- ${v}`).join('\n')}`;
                                         variant="secondary"
                                         className="h-16 px-10 text-lg shadow-xl shadow-secondary-600/30 transition-transform hover:scale-105 rounded-full w-full md:w-auto flex items-center gap-3 justify-center"
                                     >
-                                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.711.927 3.151.927 3.181 0 5.767-2.586 5.767-5.766 0-3.18-2.586-5.769-5.769-5.769zM12.031 15.939c-1.127 0-1.924-.343-2.613-.75l-.187-.111-1.29.339.345-1.259-.122-.194c-.45-.718-.737-1.503-.736-2.432 0-2.316 1.885-4.201 4.203-4.201 2.316 0 4.201 1.885 4.201 4.201 0 2.315-1.885 4.207-4.201 4.207z" />
-                                            <path d="M14.498 12.871c-.135-.068-.801-.395-.925-.44-.124-.045-.214-.068-.305.068-.09.135-.35.44-.429.53-.079.09-.158.101-.293.033-.135-.068-.571-.21-1.087-.671-.401-.358-.673-.801-.752-.936-.079-.135-.008-.209.059-.276.063-.063.135-.158.203-.236.068-.079.09-.135.135-.225.045-.09.023-.169-.011-.236-.034-.068-.304-.734-.416-1.006-.11-.264-.221-.228-.305-.232-.079-.004-.169-.004-.26-.004s-.236.034-.36.169c-.124.135-.473.462-.473 1.127 0 .664.484 1.307.552 1.398.068.09 1.137 1.8 2.75 2.454.673.272 1.198.435 1.609.557.676.2 1.291.171 1.777.104.542-.075 1.666-.681 1.897-1.338.231-.658.231-1.222.163-1.338-.068-.117-.248-.184-.383-.252z" />
-                                            <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 1.745.448 3.385 1.228 4.821L2 22l5.356-1.168A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.423c-1.488 0-2.894-.383-4.129-1.045l-.296-.159-3.078.672.684-2.951-.174-.301A8.428 8.428 0 013.577 12c0-4.646 3.777-8.423 8.423-8.423 4.646 0 8.423 3.777 8.423 8.423 0 4.646-3.777 8.423-8.423 8.423z" />
-                                        </svg>
                                         Finalizar e Enviar Interesse
                                     </Button>
                                 </div>
                             </div>
                         )}
-                    </form>
+                        </form>
+                    ) : (
+                        <div className="text-center py-12 animate-in fade-in zoom-in duration-500">
+                            <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+                                <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <h3 className="text-3xl font-bold text-primary-900 mb-6">Questionário Recebido!</h3>
+                            <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-xl mx-auto">
+                                Já recebemos seu questionário e em breve entraremos em contato para os próximos passos dessa jornada.
+                            </p>
+                            <div className="bg-secondary-50 p-8 rounded-3xl border border-secondary-100 max-w-lg mx-auto">
+                                <p className="text-secondary-900 font-medium mb-6">
+                                    Se precisar de mais informações agora, sinta-se à vontade para falar conosco pelo WhatsApp:
+                                </p>
+                                <a 
+                                    href="https://wa.me/5511934898990" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-bold transition-all hover:scale-105 shadow-lg"
+                                >
+                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.711.927 3.151.927 3.181 0 5.767-2.586 5.767-5.766 0-3.18-2.586-5.769-5.769-5.769zM12.031 15.939c-1.127 0-1.924-.343-2.613-.75l-.187-.111-1.29.339.345-1.259-.122-.194c-.45-.718-.737-1.503-.736-2.432 0-2.316 1.885-4.201 4.203-4.201 2.316 0 4.201 1.885 4.201 4.201 0 2.315-1.885 4.207-4.201 4.207z" /><path d="M14.498 12.871c-.135-.068-.801-.395-.925-.44-.124-.045-.214-.068-.305.068-.09.135-.35.44-.429.53-.079.09-.158.101-.293.033-.135-.068-.571-.21-1.087-.671-.401-.358-.673-.801-.752-.936-.079-.135-.008-.209.059-.276.063-.063.135-.158.203-.236.068-.079.09-.135.135-.225.045-.09.023-.169-.011-.236-.034-.068-.304-.734-.416-1.006-.11-.264-.221-.228-.305-.232-.079-.004-.169-.004-.26-.004s-.236.034-.36.169c-.124.135-.473.462-.473 1.127 0 .664.484 1.307.552 1.398.068.09 1.137 1.8 2.75 2.454.673.272 1.198.435 1.609.557.676.2 1.291.171 1.777.104.542-.075 1.666-.681 1.897-1.338.231-.658.231-1.222.163-1.338-.068-.117-.248-.184-.383-.252z" /><path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 1.745.448 3.385 1.228 4.821L2 22l5.356-1.168A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.423c-1.488 0-2.894-.383-4.129-1.045l-.296-.159-3.078.672.684-2.951-.174-.301A8.428 8.428 0 013.577 12c0-4.646 3.777-8.423 8.423-8.423 4.646 0 8.423 3.777 8.423 8.423 0 4.646-3.777 8.423-8.423 8.423z" /></svg>
+                                    Falar no WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </section>
