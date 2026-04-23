@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from './ui/Button';
 
 // Opções das 15 questões estruturadas
@@ -18,6 +18,7 @@ const VALORES = ['Rede de apoio para combater a solidão', 'Segurança e suporte
 export default function CohousingForm() {
     const [step, setStep] = useState(1);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const formRef = useRef<HTMLDivElement>(null);
 
     // Estado do Mega Formulário
     const [formData, setFormData] = useState({
@@ -75,8 +76,17 @@ export default function CohousingForm() {
     const isStep2Valid = formData.ondeMorar && formData.tipoCohousing && formData.tipologia && formData.areaResidencia && formData.comQuem && formData.totalPessoas;
     const isStep3Valid = formData.interesses.length > 0 && formData.empreender.length > 0 && formData.valores.length > 0;
 
-    const nextStep = () => { window.scrollTo({ top: document.getElementById('cadastro')?.offsetTop! - 100, behavior: 'smooth' }); setStep(s => s + 1); };
-    const prevStep = () => { window.scrollTo({ top: document.getElementById('cadastro')?.offsetTop! - 100, behavior: 'smooth' }); setStep(s => s - 1); };
+    const scrollToForm = () => {
+        if (formRef.current) {
+            const yOffset = -120; // Espaço para o header fixo
+            const element = formRef.current;
+            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    };
+
+    const nextStep = () => { scrollToForm(); setStep(s => s + 1); };
+    const prevStep = () => { scrollToForm(); setStep(s => s - 1); };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -108,7 +118,7 @@ export default function CohousingForm() {
                 body: JSON.stringify(payload)
             });
             setIsSubmitted(true);
-            window.scrollTo({ top: document.getElementById('cadastro')?.offsetTop! - 100, behavior: 'smooth' });
+            scrollToForm();
         } catch (error) {
             console.error("Erro ao salvar na planilha", error);
             // Mesmo com erro, vamos mostrar o sucesso para o usuário não travar
@@ -143,7 +153,7 @@ export default function CohousingForm() {
                     ))}
                 </div>
 
-                <div className="bg-white rounded-[2.5rem] p-8 md:p-14 shadow-2xl border border-secondary-100">
+                <div ref={formRef} className="bg-white rounded-[2.5rem] p-8 md:p-14 shadow-2xl border border-secondary-100">
                     {!isSubmitted ? (
                         <form onSubmit={handleSubmit} className="space-y-10">
 
