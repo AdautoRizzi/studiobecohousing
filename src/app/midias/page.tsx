@@ -59,7 +59,7 @@ export default function MidiasPage() {
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary-50 text-primary-800 text-sm font-bold mb-6 border border-secondary-100 uppercase tracking-widest">
                             Na Imprensa
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-bold text-green-600 tracking-tight leading-tight mb-8">
+                        <h1 className="text-4xl md:text-6xl font-bold text-primary-900 tracking-tight leading-tight mb-8">
                             O Mundo fala sobre o <span className="text-secondary-600">Cohousing</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-gray-600 mt-4 leading-relaxed font-light">

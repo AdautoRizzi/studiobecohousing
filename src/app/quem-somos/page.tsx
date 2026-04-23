@@ -17,7 +17,7 @@ export default function QuemSomosPage() {
                             Conheça Nossa História
                         </div>
                         <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-8">
-                            <span className="text-secondary-600">Nós somos o</span> <span className="text-green-600">Studio Be</span>
+                            <span className="text-secondary-600">Nós somos o</span> <span className="text-primary-900">Studio Be</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-gray-600 mt-4 leading-relaxed font-light">
                             Pioneiros na implementação de comunidades intencionais autênticas no Brasil. Desenhando o futuro do pertencer.
@@ -26,7 +26,7 @@ export default function QuemSomosPage() {
 
                     <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
                         <div className="order-2 lg:order-1">
-                            <h2 className="text-3xl md:text-4xl font-bold text-green-600 mb-6 tracking-tight">O Fim da Solidão</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold text-primary-900 mb-6 tracking-tight">O Fim da Solidão</h2>
                             <p className="text-gray-700 mb-6 text-lg leading-relaxed">
                                 A Studio Be nasceu de uma inquietação profunda com o modelo tradicional de envelhecimento e isolamento nas grandes cidades. Nossa missão é clara: <span className="font-semibold text-primary-700">Construir os lugares onde você viverá as suas melhores histórias.</span>
                             </p>
