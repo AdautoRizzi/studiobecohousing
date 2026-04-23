@@ -108,14 +108,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="md:w-2/5 flex flex-col gap-4 w-full sm:w-auto">
-                <Link href="/modelos" className="inline-flex items-center justify-center bg-secondary-600 text-white hover:bg-secondary-700 shadow-xl shadow-secondary-600/20 transition-transform hover:scale-105 h-16 px-10 text-lg rounded-2xl w-full font-medium">
-                  Encontre sua Comunidade
-                </Link>
-                <Link href="/#cadastro" className="inline-flex items-center justify-center border-2 border-primary-600 text-primary-700 hover:bg-primary-50 h-16 px-10 text-lg rounded-2xl w-full bg-white font-medium">
-                  Cadastrar Interesse
-                </Link>
-              </div>
+
 
             </div>
           </div>
