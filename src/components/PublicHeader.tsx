@@ -16,7 +16,21 @@ const navItems = [
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [currentHash, setCurrentHash] = useState('');
     const pathname = usePathname();
+
+    React.useEffect(() => {
+        // Atualiza o hash inicial
+        setCurrentHash(window.location.hash);
+
+        // Ouve mudanças no hash (cliques em âncoras)
+        const handleHashChange = () => {
+            setCurrentHash(window.location.hash);
+        };
+
+        window.addEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('hashchange', handleHashChange);
+    }, []);
 
     return (
         <header className="bg-white border-b border-primary-100 shadow-sm sticky top-0 z-50">
@@ -30,11 +44,28 @@ export default function Header() {
                 <nav className="hidden md:flex items-center ml-auto">
                     <div className="flex items-center space-x-8 lg:space-x-12 mr-8">
                         {navItems.filter(i => i.name !== 'Modelos').map((item) => {
-                            const isActive = pathname === item.path;
+                            // Lógica aprimorada de Active
+                            const isHome = pathname === '/';
+                            const hasHash = item.path.includes('#');
+                            const itemHash = hasHash ? item.path.split('#')[1] : '';
+                            
+                            let isActive = false;
+                            if (hasHash) {
+                                isActive = isHome && currentHash === `#${itemHash}`;
+                            } else if (item.path === '/') {
+                                isActive = isHome && currentHash === '';
+                            } else {
+                                isActive = pathname === item.path;
+                            }
+
                             return (
                                 <Link
                                     key={item.name}
                                     href={item.path}
+                                    onClick={() => {
+                                        if (hasHash) setCurrentHash(`#${itemHash}`);
+                                        if (item.path === '/') setCurrentHash('');
+                                    }}
                                     className={`text-sm font-semibold transition duration-300 relative py-1 tracking-wide ${isActive ? 'text-secondary-600' : 'text-primary-900 hover:text-secondary-500'
                                         }`}
                                 >
@@ -69,12 +100,28 @@ export default function Header() {
                 <div className="md:hidden bg-white border-t border-primary-50 animate-in fade-in slide-in-from-top-4 duration-300">
                     <nav className="flex flex-col px-6 pt-2 pb-6 space-y-3">
                         {navItems.filter(i => i.name !== 'Modelos').map((item) => {
-                            const isActive = pathname === item.path;
+                            const isHome = pathname === '/';
+                            const hasHash = item.path.includes('#');
+                            const itemHash = hasHash ? item.path.split('#')[1] : '';
+                            
+                            let isActive = false;
+                            if (hasHash) {
+                                isActive = isHome && currentHash === `#${itemHash}`;
+                            } else if (item.path === '/') {
+                                isActive = isHome && currentHash === '';
+                            } else {
+                                isActive = pathname === item.path;
+                            }
+
                             return (
                                 <Link
                                     key={item.name}
                                     href={item.path}
-                                    onClick={() => setIsMenuOpen(false)}
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        if (hasHash) setCurrentHash(`#${itemHash}`);
+                                        if (item.path === '/') setCurrentHash('');
+                                    }}
                                     className={`w-full text-center py-3 rounded-xl transition duration-300 font-medium ${isActive ? 'bg-secondary-50 text-secondary-600' : 'text-primary-900 hover:bg-gray-50'
                                         }`}
                                 >
