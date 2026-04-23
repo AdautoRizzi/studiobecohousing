@@ -8,11 +8,11 @@ import PublicFooter from '@/components/PublicFooter';
 const noticias = [
     {
         id: 1,
-        veiculo: 'Revista Arquitetura & Cidade',
-        data: '15 de Janeiro, 2026',
-        titulo: 'O futuro é colaborativo: Como o Studio Be implanta Vilas de Moradia Compartilhada',
-        resumo: 'A incorporadora recém lançada propõe uma releitura do viver bem nas capitais brasileiras, mesclando infraestrutura de ponta com rede de apoio mútuo.',
-        link: '/em-construcao'
+        veiculo: 'Jornal A Tribuna',
+        data: 'Recentemente',
+        titulo: 'Studio Be na A Tribuna: O futuro do morar baseado na convivência e pertencimento',
+        resumo: 'Em entrevista, nossa fundadora Claudia compartilha o olhar do Studio Be sobre o cohousing — uma forma de morar que valoriza o convívio e uma vida mais consciente. Uma visão que une privacidade e comunidade em equilíbrio.',
+        link: 'https://www.atribuna.com.br/galeria/comportamento/cohousing-em-santos-prop-e-nova-forma-de-moradia-baseada-na-convivencia-1.508467'
     },
     {
         id: 2,
@@ -80,9 +80,8 @@ export default function MidiasPage() {
 
                                 <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-50">
                                     <span className="text-gray-400 text-sm font-medium">{noticia.data}</span>
-                                    <Link href={noticia.link} className="text-secondary-600 font-bold hover:text-secondary-800 flex items-center gap-2 transition-colors outline-none">
-                                        Ler matéria
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                    <Link href={noticia.link} target="_blank" rel="noopener noreferrer" className="text-secondary-600 font-bold hover:text-secondary-800 flex items-center gap-2 transition-colors outline-none">
+                                        → Ler matéria completa
                                     </Link>
                                 </div>
                             </div>
