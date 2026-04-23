@@ -42,7 +42,7 @@ export default function QuemSomosPage() {
                         <div className="order-1 lg:order-2 relative group">
                             <div className="absolute inset-0 bg-secondary-200 rounded-3xl transform rotate-3 transition-transform group-hover:rotate-6"></div>
                             <img
-                                src="/equipe.multidisciplinar2.png"
+                                src="/equipe multidisciplinar2.png"
                                 alt="Equipe discutindo projetos"
                                 className="rounded-3xl shadow-xl w-full h-[450px] object-cover relative z-10 transition-transform duration-500 group-hover:-translate-y-2 group-hover:-translate-x-2"
                             />

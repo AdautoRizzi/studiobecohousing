@@ -125,7 +125,7 @@ export default function CohousingForm() {
                         Ajudamos a conectar o seu projeto de vida à comunidade ideal. Esse cadastro rápido permite entender seu momento.
                     </p>
                     <div className="inline-flex flex-col sm:flex-row items-center text-left sm:text-center gap-3 px-6 py-3 rounded-2xl bg-primary-50 border border-primary-200 text-primary-900 mx-auto font-medium shadow-sm max-w-2xl">
-                        <img src="/Match-icone.png" alt="Match" className="w-10 h-10 object-contain" />
+                        <img src="/MATCH - icone.png" alt="Match" className="w-10 h-10 object-contain" />
                         Nosso sistema de curadoria atua para encontrar o &quot;MATCH&quot; perfeito de afinidades, interesses e propósitos entre os futuros membros.
                     </div>
                 </div>
