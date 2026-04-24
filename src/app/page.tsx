@@ -42,28 +42,7 @@ const differentiators = [
   { icon: <SparklesIcon />, title: 'Transformador', description: 'Desenvolvimento pessoal e geração de propósito.' },
 ];
 
-const pillars = [
-  {
-    icon: <LeafIcon />,
-    title: 'Sustentabilidade Integral',
-    description: 'Projetos carbono-neutro, com foco em economia circular, design biofílico e infraestrutura de baixo impacto ambiental.',
-  },
-  {
-    icon: <UsersIcon />,
-    title: 'Colaboração Real',
-    description: 'Governança democrática onde cada membro tem voz. As decisões são tomadas de forma participativa e transparente.',
-  },
-  {
-    icon: <HeartIcon />,
-    title: 'Acolhimento Humano',
-    description: 'Programas de mentoria e integração que garantem um ambiente acolhedor, onde todos se sentem parte da comunidade desde o início.',
-  },
-  {
-    icon: <ShieldIcon />,
-    title: 'Segurança Proativa',
-    description: 'Monitoramento 24/7 discreto e uma cultura de "guardiões de vizinhança", promovendo segurança e apoio mútuo.',
-  },
-];
+
 
 export default function Home() {
   return (
@@ -173,27 +152,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Nova Seção de Pilares Transferida */}
-            <div className="mt-24 pt-16 border-t border-secondary-200/30">
-              <div className="text-center mb-16">
-                <span className="text-primary-600 font-bold tracking-wider uppercase text-sm mb-4 block">Fundação Sólida</span>
-                <h3 className="text-3xl md:text-5xl font-bold text-primary-900 tracking-tight">
-                  Os 4 Pilares do Nosso Modelo
-                </h3>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {pillars.map((pillar, index) => (
-                  <div key={index} className="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 text-left border border-secondary-100 hover:border-primary-100 group">
-                    <div className="bg-primary-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary-100 transition-colors text-primary-600">
-                      {pillar.icon}
-                    </div>
-                    <h4 className="text-lg font-bold text-primary-900 mb-3">{pillar.title}</h4>
-                    <p className="text-gray-600 text-sm leading-relaxed">{pillar.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </section>
 
