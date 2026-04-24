@@ -108,8 +108,13 @@ export default function Home() {
                 </p>
               </div>
 
-
-
+              <div className="md:w-2/5">
+                <img 
+                  src="/cohousing4.png" 
+                  alt="Viver em Comunidade Studio Be" 
+                  className="rounded-[3rem] shadow-2xl w-full h-[450px] object-cover border-8 border-white hover:scale-105 transition-transform duration-500"
+                />
+              </div>
             </div>
           </div>
         </section>
