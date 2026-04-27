@@ -105,7 +105,9 @@ export default function CohousingForm() {
             tipologia: formData.tipologia,
             areaResidencia: formData.areaResidencia,
             comQuem: `${formData.comQuem} (${formData.totalPessoas} pessoas - ${formData.dormitorios} quartos, ${formData.suites} suítes)`,
-            resumoAfinidade: `Valores: ${formData.valores.join(', ')} | Interesses: ${formData.interesses.join(', ')} | Empreender: ${formData.empreender.join(', ')}`
+            valores: formData.valores.join(', '),
+            interesses: formData.interesses.join(', '),
+            empreender: formData.empreender.join(', ')
         };
 
         try {
