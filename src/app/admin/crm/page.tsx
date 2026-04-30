@@ -5,7 +5,7 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 export default async function CRMPage() {
-    const leads = getAllLeads();
+    const leads = await getAllLeads();
     
     // Reverse leads to show newest first
     const sortedLeads = [...leads].reverse();

@@ -8,13 +8,13 @@ export const dynamic = 'force-dynamic';
 
 export default async function LeadProfilePage(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
-    const lead = getLeadById(params.id);
+    const lead = await getLeadById(params.id);
     
     if (!lead) {
         redirect('/admin/crm');
     }
 
-    const allLeads = getAllLeads().filter(l => l.id !== lead.id);
+    const allLeads = (await getAllLeads()).filter(l => l.id !== lead.id);
 
     // Algoritmo de Match Simples
     const calculateMatch = (otherLead: any) => {

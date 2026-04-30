@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 
 export async function loginAction(email: string) {
-    const user = getUserByEmail(email);
+    const user = await getUserByEmail(email);
 
     if (!user) {
         return { success: false, error: 'Credenciais inválidas ou e-mail não encontrado.' };
@@ -28,7 +28,7 @@ export async function loginAction(email: string) {
 
 export async function registerAction(email: string, name: string, phone: string) {
     try {
-        const user = registerUser(email, name, phone);
+        const user = await registerUser(email, name, phone);
         return { success: true, user };
     } catch (err: any) {
         return { success: false, error: err.message || 'Erro ao registrar.' };
@@ -36,12 +36,12 @@ export async function registerAction(email: string, name: string, phone: string)
 }
 
 export async function getPendingUsersAction() {
-    const users = getAllUsers();
+    const users = await getAllUsers();
     return users.filter(u => u.status === 'Pendente');
 }
 
 export async function approveUserAction(email: string) {
-    const success = approveUser(email);
+    const success = await approveUser(email);
     return { success };
 }
 
@@ -75,7 +75,7 @@ export async function adminLogoutAction() {
 
 export async function submitCohousingFormAction(formData: any) {
     try {
-        const newLead = saveLead(formData);
+        const newLead = await saveLead(formData);
         return { success: true, leadId: newLead.id };
     } catch (error: any) {
         return { success: false, error: error.message || 'Erro ao salvar o formulário no CRM.' };
@@ -89,7 +89,7 @@ export async function updateLeadStatusAction(formData: FormData) {
 
     if (!leadId || !status) return;
 
-    updateLeadStatus(leadId, status, notasCrm);
+    await updateLeadStatus(leadId, status, notasCrm);
     revalidatePath('/admin/crm');
     revalidatePath(`/admin/crm/lead/${leadId}`);
 }

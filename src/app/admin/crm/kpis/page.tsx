@@ -4,7 +4,7 @@ import { getAllLeads } from '@/lib/db';
 export const dynamic = 'force-dynamic';
 
 export default async function KpisPage() {
-    const leads = getAllLeads();
+    const leads = await getAllLeads();
 
     const totalLeads = leads.length;
     const novos = leads.filter(l => l.status === 'Novo').length;
