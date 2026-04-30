@@ -22,7 +22,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
         let maxScore = lead.interesses.length + lead.valores.length + lead.empreender.length;
         if (maxScore === 0) maxScore = 1; // avoid division by zero
 
-        let matches = [];
+        let matches: string[] = [];
 
         lead.interesses.forEach(i => { if (otherLead.interesses.includes(i)) { score++; matches.push(i); } });
         lead.valores.forEach(v => { if (otherLead.valores.includes(v)) { score++; matches.push(v); } });
