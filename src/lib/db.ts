@@ -33,6 +33,28 @@ export interface Lead {
     createdAt: string;
 }
 
+export interface Interaction {
+    id: number;
+    lead_id: string;
+    content: string;
+    sent_at: string;
+}
+
+export interface MessageTemplate {
+    id: number;
+    title: string;
+    content: string;
+    created_at: string;
+}
+
+export interface QueuedMessage {
+    id: number;
+    lead_id: string;
+    message: string;
+    status: 'pending' | 'sent' | 'failed';
+    created_at: string;
+}
+
 // Funções para Usuários (Moradores)
 export async function getAllUsers(): Promise<UserAccount[]> {
     const { data, error } = await supabase
@@ -137,4 +159,50 @@ export async function updateLeadStatus(id: string, status: Lead['status'], notas
         .eq('id', id);
     
     return !error;
+}
+
+// Funções de Interação e Histórico
+export async function getInteractionsByLead(leadId: string): Promise<Interaction[]> {
+    const { data, error } = await supabase
+        .from('lead_interactions')
+        .select('*')
+        .eq('lead_id', leadId)
+        .order('sent_at', { ascending: false });
+    
+    if (error) return [];
+    return data as Interaction[];
+}
+
+// Funções de Templates
+export async function getMessageTemplates(): Promise<MessageTemplate[]> {
+    const { data, error } = await supabase
+        .from('message_templates')
+        .select('*')
+        .order('title', { ascending: true });
+    
+    if (error) return [];
+    return data as MessageTemplate[];
+}
+
+export async function createMessageTemplate(title: string, content: string) {
+    const { data, error } = await supabase
+        .from('message_templates')
+        .insert([{ title, content }])
+        .select()
+        .single();
+    
+    if (error) throw new Error(error.message);
+    return data;
+}
+
+// Funções de Fila de Mensagens
+export async function addToMessageQueue(leadId: string, message: string) {
+    const { data, error } = await supabase
+        .from('message_queue')
+        .insert([{ lead_id: leadId, message, status: 'pending' }])
+        .select()
+        .single();
+    
+    if (error) throw new Error(error.message);
+    return data;
 }

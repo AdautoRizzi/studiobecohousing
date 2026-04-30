@@ -15,10 +15,13 @@ const rl = readline.createInterface({
 });
 
 const client = new Client({
-    authStrategy: new LocalAuth() // Salva a sessão localmente
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        args: ['--no-sandbox']
+    }
 });
 
-console.log('🤖 Inicializando Bot do WhatsApp Studio Be (Supabase Cloud)...');
+console.log('🤖 Inicializando Bot do WhatsApp Studio Be (V2 - Fila & Histórico)...');
 
 client.on('qr', (qr) => {
     console.log('\n📱 Escaneie o QR Code abaixo com o seu WhatsApp:\n');
@@ -26,107 +29,116 @@ client.on('qr', (qr) => {
 });
 
 client.on('ready', () => {
-    console.log('✅ Cliente do WhatsApp está pronto e conectado!');
+    console.log('✅ Cliente do WhatsApp está pronto!');
     console.log('\n=======================================');
     console.log('   CRM STUDIO BE - CONTROLE DO WHATSAPP');
     console.log('=======================================\n');
+    
+    // Inicia o loop de monitoramento da fila
+    console.log('👀 Monitorando fila de mensagens no Supabase...');
+    monitorQueue();
+    
     menuInterativo();
 });
 
+async function monitorQueue() {
+    // Busca mensagens pendentes na fila
+    const { data: queue, error } = await supabase
+        .from('message_queue')
+        .select('*, leads(*)')
+        .eq('status', 'pending');
+
+    if (!error && queue && queue.length > 0) {
+        console.log(`\n📬 Encontradas ${queue.length} mensagens na fila para processar.`);
+        
+        for (const item of queue) {
+            try {
+                const lead = item.leads;
+                if (!lead || !lead.telefone) {
+                    await updateQueueStatus(item.id, 'failed');
+                    continue;
+                }
+
+                let numeroLimpo = lead.telefone.replace(/\D/g, '');
+                if (numeroLimpo.length === 11 || numeroLimpo.length === 10) {
+                    numeroLimpo = '55' + numeroLimpo;
+                }
+                const chatId = numeroLimpo + '@c.us';
+
+                await client.sendMessage(chatId, item.message);
+                console.log(`✅ Mensagem enviada para ${lead.nome} (${numeroLimpo})`);
+
+                // 1. Marca como enviado na fila
+                await updateQueueStatus(item.id, 'sent');
+                
+                // 2. Registra no histórico de interações do lead
+                await logInteraction(lead.id, item.message);
+
+                // Delay para evitar bloqueio
+                await new Promise(resolve => setTimeout(resolve, 5000));
+            } catch (err) {
+                console.error(`❌ Erro ao processar mensagem ${item.id}:`, err.message);
+                await updateQueueStatus(item.id, 'failed');
+            }
+        }
+    }
+
+    // Roda novamente a cada 10 segundos
+    setTimeout(monitorQueue, 10000);
+}
+
+async function updateQueueStatus(id, status) {
+    await supabase.from('message_queue').update({ status }).eq('id', id);
+}
+
+async function logInteraction(leadId, content) {
+    await supabase.from('lead_interactions').insert([{ lead_id: leadId, content }]);
+}
+
 async function getNovosLeads() {
-    const { data, error } = await supabase
-        .from('leads')
-        .select('*')
-        .eq('status', 'Novo');
-    
-    if (error) {
-        console.error('Erro ao buscar leads no Supabase:', error.message);
-        return [];
-    }
-    return data;
+    const { data, error } = await supabase.from('leads').select('*').eq('status', 'Novo');
+    return error ? [] : data;
 }
 
-async function markAsContatado(leadId) {
-    const { error } = await supabase
-        .from('leads')
-        .update({ 
-            status: 'Contatado',
-            notasCrm: `\n[Bot WhatsApp] Mensagem de boas-vindas enviada em ${new Date().toLocaleString('pt-BR')}`
-        })
-        .eq('id', leadId);
+async function addWelcomeToQueue(lead) {
+    const welcomeMsg = `Olá ${lead.nome}! 🌿 Aqui é da equipe de curadoria do Studio Be.\n\nRecebemos o seu cadastro na nossa plataforma e estamos muito felizes com o seu interesse no nosso Cohousing.\n\nPara avançarmos, gostaríamos de agendar um breve bate-papo. Qual seria o melhor dia e horário para você?`;
     
-    if (error) {
-        console.error(`Erro ao atualizar status do lead ${leadId}:`, error.message);
-    }
-}
+    const { error } = await supabase.from('message_queue').insert([{ 
+        lead_id: lead.id, 
+        message: welcomeMsg, 
+        status: 'pending' 
+    }]);
 
-async function sendWelcomeMessage(lead) {
-    if (!lead.telefone) {
-        console.log(`❌ O lead ${lead.nome} não possui telefone cadastrado.`);
-        return;
-    }
-
-    // Limpar o telefone para apenas números
-    let numeroLimpo = lead.telefone.replace(/\D/g, '');
-    
-    // Validar formato Brasil (se faltar 55, adiciona)
-    if (numeroLimpo.length === 11 || numeroLimpo.length === 10) {
-        numeroLimpo = '55' + numeroLimpo;
-    }
-
-    const chatId = numeroLimpo + '@c.us';
-    
-    const message = `Olá ${lead.nome}! 🌿 Aqui é da equipe de curadoria do Studio Be.\n\nRecebemos o seu cadastro na nossa plataforma e estamos muito felizes com o seu interesse no nosso Cohousing.\n\nPara avançarmos, gostaríamos de agendar um breve bate-papo. Qual seria o melhor dia e horário para você?`;
-
-    console.log(`\nEnviando mensagem para ${lead.nome} (${numeroLimpo})...`);
-    
-    try {
-        await client.sendMessage(chatId, message);
-        console.log(`✅ Mensagem enviada com sucesso para ${lead.nome}!`);
-        await markAsContatado(lead.id);
-    } catch (err) {
-        console.error('❌ Erro ao enviar mensagem:', err);
+    if (!error) {
+        await supabase.from('leads').update({ status: 'Contatado' }).eq('id', lead.id);
     }
 }
 
 async function menuInterativo() {
-    console.log('\nEscolha uma opção:');
-    console.log('1. Listar Leads "Novos" (Ainda não contatados)');
-    console.log('2. Enviar mensagem de boas-vindas para todos os "Novos"');
+    console.log('\nOpções:');
+    console.log('1. Listar Leads "Novos"');
+    console.log('2. Enviar boas-vindas para todos os "Novos" (Adicionar à Fila)');
     console.log('0. Sair');
 
     rl.question('\nOpção: ', async (answer) => {
         switch(answer) {
             case '1':
-                console.log('\n--- LEADS NOVOS NO SUPABASE ---');
                 const novos = await getNovosLeads();
-                if (novos.length === 0) console.log('Nenhum lead novo no momento.');
-                novos.forEach(l => console.log(`- ${l.nome} | Tel: ${l.telefone || 'Sem tel'}`));
+                novos.forEach(l => console.log(`- ${l.nome} (${l.telefone})`));
                 menuInterativo();
                 break;
             case '2':
                 const leadsParaEnviar = await getNovosLeads();
-                if (leadsParaEnviar.length === 0) {
-                    console.log('\nNenhum lead novo para enviar mensagem.');
-                    menuInterativo();
-                } else {
-                    console.log(`\nIniciando disparos para ${leadsParaEnviar.length} leads...`);
-                    for (const lead of leadsParaEnviar) {
-                        await sendWelcomeMessage(lead);
-                        // Delay de 5 segundos entre mensagens para evitar spam
-                        await new Promise(resolve => setTimeout(resolve, 5000));
-                    }
-                    console.log('\n--- Todos os disparos concluídos! ---');
-                    menuInterativo();
+                for (const lead of leadsParaEnviar) {
+                    await addWelcomeToQueue(lead);
+                    console.log(`➕ ${lead.nome} adicionado à fila.`);
                 }
+                menuInterativo();
                 break;
             case '0':
-                console.log('Encerrando bot...');
-                client.destroy();
                 process.exit(0);
                 break;
             default:
-                console.log('Opção inválida.');
                 menuInterativo();
                 break;
         }
