@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from './ui/Button';
+import { submitCohousingFormAction } from '@/app/actions';
 
 // Opções das 15 questões estruturadas
 const FAIXAS_ETARIAS = ['menos de 40 anos', '40 a 45 anos', '46 a 50 anos', '51 a 55 anos', '56 a 60 anos', '61 a 65 anos', '66 a 70 anos', '70 a 80 anos', 'mais de 80 anos'];
@@ -24,6 +25,7 @@ export default function CohousingForm() {
     const [formData, setFormData] = useState({
         nome: '',
         email: '',
+        telefone: '',
         moradiaAtual: '',
         idade: '',
         profissao: '',
@@ -72,7 +74,7 @@ export default function CohousingForm() {
         });
     };
 
-    const isStep1Valid = formData.nome.length > 2 && formData.email.includes('@') && formData.moradiaAtual && formData.idade && formData.profissao && formData.genero;
+    const isStep1Valid = formData.nome.length > 2 && formData.email.includes('@') && formData.telefone.length > 8 && formData.moradiaAtual && formData.idade && formData.profissao && formData.genero;
     const isStep2Valid = formData.ondeMorar && formData.tipoCohousing && formData.tipologia && formData.areaResidencia && formData.comQuem && formData.totalPessoas;
     const isStep3Valid = formData.interesses.length > 0 && formData.empreender.length > 0 && formData.valores.length > 0;
 
@@ -91,12 +93,24 @@ export default function CohousingForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // 1. Enviar para a Planilha do Google
+        // 1. Salvar no CRM interno
+        const crmPayload = {
+            ...formData
+        };
+
+        try {
+            await submitCohousingFormAction(crmPayload);
+        } catch (error) {
+            console.error("Erro ao salvar no CRM", error);
+        }
+
+        // 2. Enviar para a Planilha do Google (Backup)
         const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyTq7VCLn1GZG2mMB9rGZBYFtedDezWmgEtq2hkMNx9aUKbuZjboz_oyjnMuigyYs8R/exec';
         
         const payload = {
             nome: formData.nome,
             email: formData.email,
+            telefone: formData.telefone,
             moradiaAtual: formData.moradiaAtual,
             idade: formData.idade,
             profissao: formData.profissao,
@@ -171,6 +185,10 @@ export default function CohousingForm() {
                                     <div className="space-y-2">
                                         <label className="text-sm font-bold text-gray-700">E-mail *</label>
                                         <input type="email" name="email" value={formData.email} onChange={handleChange} className="w-full h-14 bg-gray-50 rounded-xl px-4 focus:ring-2 focus:ring-secondary-500 outline-none border border-gray-200 text-gray-900 font-medium" required />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-700">Telefone / WhatsApp *</label>
+                                        <input type="text" name="telefone" value={formData.telefone} onChange={handleChange} placeholder="(11) 90000-0000" className="w-full h-14 bg-gray-50 rounded-xl px-4 focus:ring-2 focus:ring-secondary-500 outline-none border border-gray-200 text-gray-900 font-medium" required />
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-sm font-bold text-gray-700">Moradia Atual (Cidade/UF) *</label>

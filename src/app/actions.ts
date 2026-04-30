@@ -1,7 +1,8 @@
 'use server';
 
-import { registerUser, approveUser, getUserByEmail, getAllUsers } from '@/lib/db';
+import { registerUser, approveUser, getUserByEmail, getAllUsers, saveLead, updateLeadStatus } from '@/lib/db';
 import { cookies } from 'next/headers';
+import { revalidatePath } from 'next/cache';
 
 export async function loginAction(email: string) {
     const user = getUserByEmail(email);
@@ -48,4 +49,47 @@ export async function logoutAction() {
     const cookieStore = await cookies();
     cookieStore.delete('auth_token');
     return { success: true };
+}
+
+export async function adminLoginAction(email: string, pass: string) {
+    const allowedAdmins = [
+        'ajrizzi@gmail.com',
+        'pct@cmaisi.com',
+        'claudia.studiobertucci@gmail.com'
+    ];
+
+    if (allowedAdmins.includes(email) && pass === 'StudioBeSucesso') {
+        const cookieStore = await cookies();
+        cookieStore.set('admin_token', email, { httpOnly: true, path: '/' });
+        return { success: true };
+    }
+
+    return { success: false, error: 'Credenciais administrativas inválidas.' };
+}
+
+export async function adminLogoutAction() {
+    const cookieStore = await cookies();
+    cookieStore.delete('admin_token');
+    return { success: true };
+}
+
+export async function submitCohousingFormAction(formData: any) {
+    try {
+        const newLead = saveLead(formData);
+        return { success: true, leadId: newLead.id };
+    } catch (error: any) {
+        return { success: false, error: error.message || 'Erro ao salvar o formulário no CRM.' };
+    }
+}
+
+export async function updateLeadStatusAction(formData: FormData) {
+    const leadId = formData.get('leadId') as string;
+    const status = formData.get('status') as any;
+    const notasCrm = formData.get('notasCrm') as string;
+
+    if (!leadId || !status) return;
+
+    updateLeadStatus(leadId, status, notasCrm);
+    revalidatePath('/admin/crm');
+    revalidatePath(`/admin/crm/lead/${leadId}`);
 }

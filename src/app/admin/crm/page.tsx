@@ -1,0 +1,91 @@
+import React from 'react';
+import { getAllLeads } from '@/lib/db';
+import Link from 'next/link';
+
+export const dynamic = 'force-dynamic';
+
+export default async function CRMPage() {
+    const leads = getAllLeads();
+    
+    // Reverse leads to show newest first
+    const sortedLeads = [...leads].reverse();
+
+    const getStatusColor = (status: string) => {
+        switch(status) {
+            case 'Novo': return 'bg-blue-100 text-blue-800 border-blue-200';
+            case 'Contatado': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+            case 'Qualificado': return 'bg-purple-100 text-purple-800 border-purple-200';
+            case 'Turma Atribuída': return 'bg-green-100 text-green-800 border-green-200';
+            case 'Descartado': return 'bg-red-100 text-red-800 border-red-200';
+            default: return 'bg-gray-100 text-gray-800 border-gray-200';
+        }
+    };
+
+    return (
+        <div>
+            <div className="flex justify-between items-end mb-8">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Gestão de Leads</h1>
+                    <p className="text-gray-500 mt-1">Acompanhe todos os interessados no projeto Studio Be.</p>
+                </div>
+                <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200 font-bold text-gray-700">
+                    Total: {leads.length} Leads
+                </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                        <tr>
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Contato</th>
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Idade / Perfil</th>
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Local / Desejo</th>
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                            <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {sortedLeads.length === 0 ? (
+                            <tr>
+                                <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                                    Nenhum lead encontrado. Compartilhe o link do formulário!
+                                </td>
+                            </tr>
+                        ) : (
+                            sortedLeads.map(lead => (
+                                <tr key={lead.id} className="hover:bg-gray-50 transition-colors">
+                                    <td className="px-6 py-4">
+                                        <div className="font-bold text-gray-900">{lead.nome}</div>
+                                        <div className="text-sm text-gray-500">{lead.email}</div>
+                                        <div className="text-sm text-gray-500">{lead.telefone || 'Sem telefone'}</div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="text-sm text-gray-900">{lead.idade}</div>
+                                        <div className="text-sm text-gray-500">{lead.profissao}</div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="text-sm text-gray-900">Mora em: {lead.moradiaAtual}</div>
+                                        <div className="text-sm text-primary-600 font-medium">Busca: {lead.ondeMorar}</div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${getStatusColor(lead.status)}`}>
+                                            {lead.status}
+                                        </span>
+                                        <div className="text-xs text-gray-400 mt-1">
+                                            {new Date(lead.createdAt).toLocaleDateString('pt-BR')}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 text-right whitespace-nowrap">
+                                        <Link href={`/admin/crm/lead/${lead.id}`} className="text-primary-600 hover:text-primary-900 font-bold bg-primary-50 px-4 py-2 rounded-lg hover:bg-primary-100 transition-colors">
+                                            Analisar Match
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
