@@ -5,17 +5,17 @@ import { Button } from '@/components/ui/Button';
 import { submitCohousingFormAction } from '@/app/actions';
 import { useRouter } from 'next/navigation';
 
-// Constantes sincronizadas com o CohousingForm.tsx
+// Sincronizado exatamente com CohousingForm.tsx
 const FAIXAS_ETARIAS = ['menos de 40 anos', '40 a 45 anos', '46 a 50 anos', '51 a 55 anos', '56 a 60 anos', '61 a 65 anos', '66 a 70 anos', '70 a 80 anos', 'mais de 80 anos'];
-const GENEROS = ['Feminino', 'Masculino', 'Não Binário', 'Prefiro não dizer'];
-const TIPOS_COHOUSING = ['Cohousing Sênior (50+ anos)', 'Cohousing Intergeracional (Todas as idades)', 'Não tenho preferência'];
-const TIPOLOGIAS = ['Studio', 'Casa/Apto 1 Dormitório', 'Casa/Apto 2 Dormitórios', 'Casa/Apto 3+ Dormitórios'];
-const AREAS_RESIDENCIA = ['Até 50m²', '50 a 75m²', '75 a 100m²', 'Acima de 100m²'];
-const COM_QUEM = ['Sozinho(a)', 'Com companheiro(a)', 'Com filhos', 'Com amigos/outros'];
-
-const INTERESSES = ['Horta e Jardinagem', 'Cozinha Comunitária', 'Atividades Físicas', 'Artes e Oficinas', 'Cinema e Cultura', 'Coworking / Trabalho', 'Meditação / Yoga', 'Festas e Eventos'];
-const VALORES = ['Privacidade', 'Ajuda Mútua', 'Sustentabilidade', 'Segurança', 'Economia Compartilhada', 'Redução de Solidão', 'Gestão Participativa'];
-const EMPREENDER = ['Sou investidor', 'Quero apenas morar', 'Posso ajudar na gestão', 'Tenho terreno/parceria', 'Quero co-criar o projeto'];
+const GENEROS = ['feminino', 'masculino', 'prefiro não informar'];
+const TIPOS_COHOUSING = ['Urbano em grandes metrópoles', 'Urbano em cidades do interior', 'Rural - próximo ao centro da cidade', 'Urbano no litoral', 'Indiferente'];
+const TIPOLOGIAS = ['Casas térreas', 'Apartamentos', 'Loft', 'Indiferente'];
+const AREAS_RESIDENCIA = ['Até 50 m2', 'de 50 m2 a 80 m2', 'de 80 m2 a 120 m2', 'acima de 120 m2'];
+const COM_QUEM = ['sozinha/o', 'com cônjuge ou companheira/o', 'com amigos e/ou familiares'];
+const TOT_PESSOAS = ['1 pessoa', '2 pessoas', '3 pessoas', '4 pessoas'];
+const INTERESSES = ['Atividades culturais e artísticas', 'Alimentação compartilhada e gastronomia', 'Horta e jardinagem', 'Atividades físicas, esporte e lazer', 'Atividades de meditação ou contemplativas', 'Wellness (saúde e bem-estar)'];
+const EMPREENDER = ['Não tenho interesse', 'Coworking', 'Dark kitchen (cozinha compartilhada)', 'Serviços na área de terapias, saúde e bem-estar', 'Cafeteria / restaurante', 'Prestação de serviços diversos', 'Conveniência / drogaria', 'Lavanderia auto-serviço', 'Espaço de eventos (artístico e cultural)'];
+const VALORES = ['Rede de apoio para combater a solidão', 'Segurança e suporte integrados', 'Manutenção da autonomia e independência', 'Redução de custos de manutenção', 'Sustentabilidade', 'Contato com a natureza', 'Proximidade a serviços e comércio', 'Rede de serviços de manutenção das unidades'];
 
 export default function ManualLeadForm() {
     const router = useRouter();
@@ -32,10 +32,10 @@ export default function ManualLeadForm() {
         tipoCohousing: '',
         tipologia: '',
         comQuem: '',
-        totalPessoas: '1',
+        totalPessoas: '',
         areaResidencia: '',
         dormitorios: '1',
-        suites: '0',
+        suites: '1',
         interesses: [] as string[],
         empreender: [] as string[],
         valores: [] as string[]
@@ -46,13 +46,21 @@ export default function ManualLeadForm() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleCheckboxChange = (name: 'interesses' | 'empreender' | 'valores', value: string) => {
+    const handleCheckboxChange = (field: 'interesses' | 'valores' | 'empreender', value: string) => {
         setFormData(prev => {
-            const current = prev[name];
-            if (current.includes(value)) {
-                return { ...prev, [name]: current.filter(i => i !== value) };
+            const currentArray = prev[field];
+
+            // Especial: Se marcar "não tenho interesse", limpa os outros (só para empreender)
+            if (field === 'empreender' && value === 'Não tenho interesse') {
+                return { ...prev, [field]: currentArray.includes(value) ? [] : [value] };
+            }
+
+            if (currentArray.includes(value)) {
+                return { ...prev, [field]: currentArray.filter(i => i !== value) };
             } else {
-                return { ...prev, [name]: [...current, value] };
+                let newArray = field === 'empreender' ? currentArray.filter(i => i !== 'Não tenho interesse') : [...currentArray];
+                newArray.push(value);
+                return { ...prev, [field]: newArray };
             }
         });
     };
@@ -65,40 +73,55 @@ export default function ManualLeadForm() {
             const res = await submitCohousingFormAction(formData);
             if (res.success) {
                 router.push(`/admin/crm/lead/${res.leadId}`);
+            } else {
+                alert('Erro: ' + res.error);
             }
         } catch (error) {
-            alert('Erro ao cadastrar lead.');
+            console.error(error);
+            alert('Erro crítico ao cadastrar lead.');
         }
         setLoading(false);
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto space-y-8 pb-20">
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
-                <h2 className="text-xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-100">1. Dados Básicos</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="md:col-span-2">
-                        <label className="text-xs font-bold text-gray-500 uppercase">Nome Completo</label>
-                        <input name="nome" type="text" onChange={handleChange} required className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+        <form onSubmit={handleSubmit} className="max-w-5xl mx-auto space-y-10 pb-24">
+            {/* 1. Dados Pessoais */}
+            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-gray-200">
+                <h3 className="text-xl font-bold text-primary-900 mb-8 flex items-center gap-2">
+                    <span className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm">1</span>
+                    Identificação e Perfil
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="md:col-span-2 lg:col-span-1">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Nome Completo</label>
+                        <input name="nome" value={formData.nome} onChange={handleChange} required className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase">E-mail</label>
-                        <input name="email" type="email" onChange={handleChange} required className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">E-mail</label>
+                        <input name="email" value={formData.email} onChange={handleChange} required className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase">Telefone / WhatsApp</label>
-                        <input name="telefone" type="text" onChange={handleChange} placeholder="(00) 00000-0000" required className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Telefone / WhatsApp</label>
+                        <input name="telefone" value={formData.telefone} onChange={handleChange} placeholder="(00) 00000-0000" required className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase">Idade</label>
-                        <select name="idade" onChange={handleChange} required className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Moradia Atual (Cidade/UF)</label>
+                        <input name="moradiaAtual" value={formData.moradiaAtual} onChange={handleChange} required className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Profissão Principal</label>
+                        <input name="profissao" value={formData.profissao} onChange={handleChange} required className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Faixa Etária</label>
+                        <select name="idade" value={formData.idade} onChange={handleChange} required className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {FAIXAS_ETARIAS.map(f => <option key={f} value={f}>{f}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase">Gênero</label>
-                        <select name="genero" onChange={handleChange} required className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Gênero</label>
+                        <select name="genero" value={formData.genero} onChange={handleChange} required className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {GENEROS.map(g => <option key={g} value={g}>{g}</option>)}
                         </select>
@@ -106,55 +129,98 @@ export default function ManualLeadForm() {
                 </div>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
-                <h2 className="text-xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-100">2. Preferências de Moradia</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase">Onde deseja morar?</label>
-                        <input name="ondeMorar" type="text" onChange={handleChange} placeholder="Ex: Interior de SP" className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+            {/* 2. Preferências */}
+            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-gray-200">
+                <h3 className="text-xl font-bold text-primary-900 mb-8 flex items-center gap-2">
+                    <span className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm">2</span>
+                    A Casa e Localização
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="md:col-span-2">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Onde deseja morar?</label>
+                        <input name="ondeMorar" value={formData.ondeMorar} onChange={handleChange} placeholder="Ex: Interior de SP" className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase">Com quem vai morar?</label>
-                        <select name="comQuem" onChange={handleChange} className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Tipo de Cohousing</label>
+                        <select name="tipoCohousing" value={formData.tipoCohousing} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
-                            {COM_QUEM.map(c => <option key={c} value={c}>{c}</option>)}
+                            {TIPOS_COHOUSING.map(t => <option key={t} value={t}>{t}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase">Tipologia</label>
-                        <select name="tipologia" onChange={handleChange} className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Tipologia</label>
+                        <select name="tipologia" value={formData.tipologia} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {TIPOLOGIAS.map(t => <option key={t} value={t}>{t}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase">Área Pretendida</label>
-                        <select name="areaResidencia" onChange={handleChange} className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Área Residência</label>
+                        <select name="areaResidencia" value={formData.areaResidencia} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {AREAS_RESIDENCIA.map(a => <option key={a} value={a}>{a}</option>)}
                         </select>
                     </div>
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Com quem irá morar?</label>
+                        <select name="comQuem" value={formData.comQuem} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                            <option value="">Selecione...</option>
+                            {COM_QUEM.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Total de Pessoas</label>
+                        <select name="totalPessoas" value={formData.totalPessoas} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                            <option value="">Selecione...</option>
+                            {TOT_PESSOAS.map(p => <option key={p} value={p}>{p}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Dormitórios</label>
+                        <input name="dormitorios" type="number" value={formData.dormitorios} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Suítes</label>
+                        <input name="suites" type="number" value={formData.suites} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                    </div>
                 </div>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
-                <h2 className="text-xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-100">3. Perfil e Interesses</h2>
-                <div className="space-y-6">
+            {/* 3. Afinidade */}
+            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-gray-200">
+                <h3 className="text-xl font-bold text-primary-900 mb-8 flex items-center gap-2">
+                    <span className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm">3</span>
+                    Afinidades e Valores
+                </h3>
+                
+                <div className="space-y-8">
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase block mb-3">Interesses Coletivos</label>
+                        <label className="text-xs font-bold text-gray-500 uppercase block mb-4">Interesses Coletivos</label>
                         <div className="flex flex-wrap gap-2">
                             {INTERESSES.map(i => (
-                                <button key={i} type="button" onClick={() => handleCheckboxChange('interesses', i)} className={`px-4 py-2 rounded-xl border text-sm font-medium transition-colors ${formData.interesses.includes(i) ? 'bg-primary-600 text-white border-primary-600' : 'bg-gray-50 text-gray-600 border-gray-200'}`}>
+                                <button key={i} type="button" onClick={() => handleCheckboxChange('interesses', i)} className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${formData.interesses.includes(i) ? 'bg-primary-600 text-white border-primary-600 shadow-md' : 'bg-gray-50 text-gray-600 border-gray-100 hover:border-primary-200'}`}>
                                     {i}
                                 </button>
                             ))}
                         </div>
                     </div>
+
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase block mb-3">Valores</label>
+                        <label className="text-xs font-bold text-gray-500 uppercase block mb-4">Disponibilidade para Empreender</label>
+                        <div className="flex flex-wrap gap-2">
+                            {EMPREENDER.map(e => (
+                                <button key={e} type="button" onClick={() => handleCheckboxChange('empreender', e)} className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${formData.empreender.includes(e) ? 'bg-blue-600 text-white border-blue-600 shadow-md' : 'bg-gray-50 text-gray-600 border-gray-100 hover:border-blue-200'}`}>
+                                    {e}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase block mb-4">Valores Motivacionais</label>
                         <div className="flex flex-wrap gap-2">
                             {VALORES.map(v => (
-                                <button key={v} type="button" onClick={() => handleCheckboxChange('valores', v)} className={`px-4 py-2 rounded-xl border text-sm font-medium transition-colors ${formData.valores.includes(v) ? 'bg-secondary-600 text-white border-secondary-600' : 'bg-gray-50 text-gray-600 border-gray-200'}`}>
+                                <button key={v} type="button" onClick={() => handleCheckboxChange('valores', v)} className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${formData.valores.includes(v) ? 'bg-secondary-600 text-white border-secondary-600 shadow-md' : 'bg-gray-50 text-gray-600 border-gray-100 hover:border-secondary-200'}`}>
                                     {v}
                                 </button>
                             ))}
@@ -164,11 +230,12 @@ export default function ManualLeadForm() {
             </div>
 
             <div className="flex items-center gap-4">
-                <Button type="submit" disabled={loading} className="flex-1 h-14 rounded-2xl text-lg">
-                    {loading ? 'Cadastrando...' : 'Cadastrar Manualmente'}
+                <Button type="submit" disabled={loading} className="flex-1 h-16 rounded-[1.5rem] text-lg font-bold shadow-lg shadow-primary-900/10 active:scale-[0.98]">
+                    {loading ? 'Processando Cadastro...' : 'Salvar no CRM'}
                 </Button>
-                <button type="button" onClick={() => router.back()} className="px-8 h-14 rounded-2xl border border-gray-200 font-bold text-gray-500 hover:bg-gray-50">Cancelar</button>
+                <button type="button" onClick={() => router.back()} className="px-10 h-16 rounded-[1.5rem] border border-gray-200 font-bold text-gray-500 hover:bg-gray-50 transition-colors">Cancelar</button>
             </div>
         </form>
     );
 }
+

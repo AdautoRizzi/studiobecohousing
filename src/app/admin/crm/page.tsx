@@ -33,8 +33,14 @@ export default async function CRMPage() {
                         </Link>
                     </div>
                 </div>
-                <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200 font-bold text-gray-700">
-                    Total: {leads.length} Leads
+                <div className="flex gap-4 items-end">
+                    <Link href="/admin/crm/new" className="bg-primary-900 text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-primary-800 transition-all shadow-lg shadow-primary-900/20 flex items-center gap-2">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                        Novo Cadastro Manual
+                    </Link>
+                    <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200 font-bold text-gray-700">
+                        Total: {leads.length} Leads
+                    </div>
                 </div>
             </div>
 
