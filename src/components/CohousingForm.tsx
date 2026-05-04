@@ -93,52 +93,17 @@ export default function CohousingForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // 1. Salvar no CRM interno
-        const crmPayload = {
-            ...formData
-        };
-
         try {
-            await submitCohousingFormAction(crmPayload);
+            const res = await submitCohousingFormAction(formData);
+            if (res.success) {
+                setIsSubmitted(true);
+                scrollToForm();
+            } else {
+                alert('Houve um erro ao salvar seu interesse. Por favor, tente novamente ou fale conosco no WhatsApp.');
+            }
         } catch (error) {
             console.error("Erro ao salvar no CRM", error);
-        }
-
-        // 2. Enviar para a Planilha do Google (Backup)
-        const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyTq7VCLn1GZG2mMB9rGZBYFtedDezWmgEtq2hkMNx9aUKbuZjboz_oyjnMuigyYs8R/exec';
-        
-        const payload = {
-            nome: formData.nome,
-            email: formData.email,
-            telefone: formData.telefone,
-            moradiaAtual: formData.moradiaAtual,
-            idade: formData.idade,
-            profissao: formData.profissao,
-            genero: formData.genero,
-            ondeMorar: formData.ondeMorar,
-            tipologia: formData.tipologia,
-            areaResidencia: formData.areaResidencia,
-            comQuem: `${formData.comQuem} (${formData.totalPessoas} pessoas - ${formData.dormitorios} quartos, ${formData.suites} suítes)`,
-            valores: formData.valores.join(', '),
-            interesses: formData.interesses.join(', '),
-            empreender: formData.empreender.join(', ')
-        };
-
-        try {
-            await fetch(googleScriptUrl, {
-                method: 'POST',
-                mode: 'no-cors', // Evita erro de CORS no navegador
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload)
-            });
-            setIsSubmitted(true);
-            scrollToForm();
-        } catch (error) {
-            console.error("Erro ao salvar na planilha", error);
-            // Mesmo com erro, vamos mostrar o sucesso para o usuário não travar
-            setIsSubmitted(true);
+            alert('Erro de conexão. Verifique sua internet.');
         }
     };
 

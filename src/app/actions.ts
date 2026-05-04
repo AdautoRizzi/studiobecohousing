@@ -79,9 +79,43 @@ export async function adminLogoutAction() {
 
 export async function submitCohousingFormAction(formData: any) {
     try {
+        // 1. Salvar no CRM interno (Supabase)
         const newLead = await saveLead(formData);
+
+        // 2. Enviar para a Planilha do Google (Backup)
+        const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyTq7VCLn1GZG2mMB9rGZBYFtedDezWmgEtq2hkMNx9aUKbuZjboz_oyjnMuigyYs8R/exec';
+        
+        const payload = {
+            nome: formData.nome,
+            email: formData.email,
+            telefone: formData.telefone,
+            whatsapp: formData.telefone, // Backup com nome alternativo
+            phone: formData.telefone,    // Backup com nome alternativo
+            moradiaAtual: formData.moradiaAtual,
+            idade: formData.idade,
+            profissao: formData.profissao,
+            genero: formData.genero,
+            ondeMorar: formData.ondeMorar,
+            tipologia: formData.tipologia,
+            areaResidencia: formData.areaResidencia,
+            comQuem: `${formData.comQuem} (${formData.totalPessoas || 1} pessoas - ${formData.dormitorios || 0} quartos, ${formData.suites || 0} suítes)`,
+            valores: Array.isArray(formData.valores) ? formData.valores.join(', ') : formData.valores,
+            interesses: Array.isArray(formData.interesses) ? formData.interesses.join(', ') : formData.interesses,
+            empreender: Array.isArray(formData.empreender) ? formData.empreender.join(', ') : formData.empreender,
+            origem: formData.origem || 'Site/CRM'
+        };
+
+        // Envio assíncrono para não travar a resposta do CRM
+        fetch(googleScriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).catch(err => console.error("Erro no backup Google Sheets:", err));
+
         return { success: true, leadId: newLead.id };
     } catch (error: any) {
+        console.error("Erro ao salvar lead:", error);
         return { success: false, error: error.message || 'Erro ao salvar o formulário no CRM.' };
     }
 }
