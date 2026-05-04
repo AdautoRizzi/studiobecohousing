@@ -72,7 +72,10 @@ export default async function CRMPage() {
                                         {(() => {
                                             const fields = [lead.telefone, lead.profissao, lead.ondeMorar, lead.tipoCohousing, lead.areaResidencia];
                                             const missing = fields.filter(f => !f).length;
-                                            const arraysMissing = [lead.interesses.length, lead.valores.length, lead.empreender.length].filter(l => l === 0).length;
+                                            const interessesLen = (lead.interesses || []).length;
+                                            const valoresLen = (lead.valores || []).length;
+                                            const empreenderLen = (lead.empreender || []).length;
+                                            const arraysMissing = [interessesLen, valoresLen, empreenderLen].filter(l => l === 0).length;
                                             const totalMissing = missing + arraysMissing;
                                             
                                             if (totalMissing === 0) return <span className="text-[10px] font-bold bg-green-50 text-green-600 px-2 py-1 rounded border border-green-100 uppercase">100% Completo</span>;

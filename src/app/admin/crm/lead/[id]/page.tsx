@@ -75,9 +75,9 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                     { label: 'Onde Morar', val: lead.ondeMorar },
                                     { label: 'Tipo Localização', val: lead.tipoCohousing },
                                     { label: 'Área Residência', val: lead.areaResidencia },
-                                    { label: 'Interesses', val: lead.interesses.length > 0 },
-                                    { label: 'Valores', val: lead.valores.length > 0 },
-                                    { label: 'Empreender', val: lead.empreender.length > 0 }
+                                    { label: 'Interesses', val: (lead.interesses || []).length > 0 },
+                                    { label: 'Valores', val: (lead.valores || []).length > 0 },
+                                    { label: 'Empreender', val: (lead.empreender || []).length > 0 }
                                 ];
                                 const missing = fields.filter(f => !f.val).map(f => f.label);
                                 if (missing.length === 0) return <span className="text-xs font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full">Cadastro 100% Completo</span>;
@@ -117,9 +117,9 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                 { label: 'Profissão', val: lead.profissao },
                                 { label: 'Tipo de Localização', val: lead.tipoCohousing },
                                 { label: 'Área da Residência', val: lead.areaResidencia },
-                                { label: 'Interesses', val: lead.interesses.length > 0 },
-                                { label: 'Valores', val: lead.valores.length > 0 },
-                                { label: 'Empreendedorismo', val: lead.empreender.length > 0 }
+                                { label: 'Interesses', val: (lead.interesses || []).length > 0 },
+                                { label: 'Valores', val: (lead.valores || []).length > 0 },
+                                { label: 'Empreendedorismo', val: (lead.empreender || []).length > 0 }
                             ];
                             const missing = fields.filter(f => !f.val);
                             if (missing.length > 0) {
@@ -139,7 +139,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                             <div>
                                 <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Interesses & Atividades Coletivas</span>
                                 <div className="flex flex-wrap gap-2">
-                                    {lead.interesses.length > 0 ? (
+                                    {(lead.interesses || []).length > 0 ? (
                                         lead.interesses.map(i => <span key={i} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">{i}</span>)
                                     ) : (
                                         <span className="text-sm text-red-400 italic">Nenhum interesse selecionado</span>
@@ -149,7 +149,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                             <div>
                                 <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Valores Fundamentais no Cohousing</span>
                                 <div className="flex flex-wrap gap-2">
-                                    {lead.valores.length > 0 ? (
+                                    {(lead.valores || []).length > 0 ? (
                                         lead.valores.map(v => <span key={v} className="px-3 py-1 bg-secondary-50 text-secondary-700 border border-secondary-100 rounded-full text-sm">{v}</span>)
                                     ) : (
                                         <span className="text-sm text-red-400 italic">Nenhum valor selecionado</span>
@@ -159,7 +159,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                             <div>
                                 <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Disponibilidade para Empreender</span>
                                 <div className="flex flex-wrap gap-2">
-                                    {lead.empreender.length > 0 ? (
+                                    {(lead.empreender || []).length > 0 ? (
                                         lead.empreender.map(e => <span key={e} className="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-full text-sm">{e}</span>)
                                     ) : (
                                         <span className="text-sm text-red-400 italic">Interesse em empreender não selecionado</span>
