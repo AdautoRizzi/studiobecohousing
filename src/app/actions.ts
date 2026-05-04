@@ -86,39 +86,37 @@ export async function submitCohousingFormAction(formData: any) {
         const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyTq7VCLn1GZG2mMB9rGZBYFtedDezWmgEtq2hkMNx9aUKbuZjboz_oyjnMuigyYs8R/exec';
         
         const payload = {
-            nome: formData.nome,
-            email: formData.email,
-            telefone: formData.telefone,
-            whatsapp: formData.telefone,
-            phone: formData.telefone,
-            moradiaAtual: formData.moradiaAtual,
-            idade: formData.idade,
-            profissao: formData.profissao,
-            genero: formData.genero,
-            ondeMorar: formData.ondeMorar,
-            tipologia: formData.tipologia,
-            areaResidencia: formData.areaResidencia,
-            comQuem: `${formData.comQuem} (${formData.totalPessoas || 1} pessoas - ${formData.dormitorios || 0} quartos, ${formData.suites || 0} suítes)`,
+            nome: formData.nome || '',
+            email: formData.email || '',
+            telefone: formData.telefone || '',
+            moradiaAtual: formData.moradiaAtual || '',
+            idade: formData.idade || '',
+            profissao: formData.profissao || '',
+            genero: formData.genero || '',
+            ondeMorar: formData.ondeMorar || '',
+            tipologia: formData.tipologia || '',
+            areaResidencia: formData.areaResidencia || '',
+            comQuem: `${formData.comQuem || ''} (${formData.totalPessoas || 1} pessoas - ${formData.dormitorios || 0} quartos, ${formData.suites || 0} suítes)`,
+            observacoes: formData.observacoes || '',
             
-            // Interesses separados por coluna (até 4)
+            // Interesses (M, N, O, P)
             interesse_1: (formData.interesses || [])[0] || '',
             interesse_2: (formData.interesses || [])[1] || '',
             interesse_3: (formData.interesses || [])[2] || '',
             interesse_4: (formData.interesses || [])[3] || '',
             
-            // Valores separados por coluna (até 4)
+            // Valores (Q, R, S, T)
             valor_1: (formData.valores || [])[0] || '',
             valor_2: (formData.valores || [])[1] || '',
             valor_3: (formData.valores || [])[2] || '',
             valor_4: (formData.valores || [])[3] || '',
             
-            // Empreender separado por coluna (até 4)
+            // Empreender (U, V, W, X)
             empreender_1: (formData.empreender || [])[0] || '',
             empreender_2: (formData.empreender || [])[1] || '',
             empreender_3: (formData.empreender || [])[2] || '',
             empreender_4: (formData.empreender || [])[3] || '',
             
-            observacoes: formData.observacoes || '',
             origem: formData.origem || 'Site/CRM'
         };
 
