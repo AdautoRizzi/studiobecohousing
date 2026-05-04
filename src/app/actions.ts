@@ -122,13 +122,17 @@ export async function submitCohousingFormAction(formData: any) {
             origem: formData.origem || 'Site/CRM'
         };
 
-        // Envio assíncrono para não travar a resposta do CRM
-        fetch(googleScriptUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).catch(err => console.error("Erro no backup Google Sheets:", err));
+        // Envio para o Google Sheets (aguardando para garantir a entrega)
+        try {
+            await fetch(googleScriptUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        } catch (err) {
+            console.error("Erro no backup Google Sheets:", err);
+        }
 
         return { success: true, leadId: newLead.id };
     } catch (error: any) {
