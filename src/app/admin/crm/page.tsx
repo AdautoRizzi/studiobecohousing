@@ -40,6 +40,7 @@ export default async function CRMPage() {
                             <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Contato</th>
                             <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Idade / Perfil</th>
                             <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Local / Desejo</th>
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Cadastro</th>
                             <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
                             <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Ação</th>
                         </tr>
@@ -66,6 +67,17 @@ export default async function CRMPage() {
                                     <td className="px-6 py-4">
                                         <div className="text-sm text-gray-900">Mora em: {lead.moradiaAtual}</div>
                                         <div className="text-sm text-primary-600 font-medium">Busca: {lead.ondeMorar}</div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {(() => {
+                                            const fields = [lead.telefone, lead.profissao, lead.ondeMorar, lead.tipoCohousing, lead.areaResidencia];
+                                            const missing = fields.filter(f => !f).length;
+                                            const arraysMissing = [lead.interesses.length, lead.valores.length, lead.empreender.length].filter(l => l === 0).length;
+                                            const totalMissing = missing + arraysMissing;
+                                            
+                                            if (totalMissing === 0) return <span className="text-[10px] font-bold bg-green-50 text-green-600 px-2 py-1 rounded border border-green-100 uppercase">100% Completo</span>;
+                                            return <span className="text-[10px] font-bold bg-orange-50 text-orange-600 px-2 py-1 rounded border border-orange-100 uppercase">Incompleto (-{totalMissing})</span>;
+                                        })()}
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${getStatusColor(lead.status)}`}>
