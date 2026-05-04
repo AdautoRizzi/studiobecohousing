@@ -150,12 +150,16 @@ export default function CohousingForm() {
                 <div className="text-center mb-12">
                     <span className="text-secondary-600 font-bold uppercase tracking-wider text-sm mb-2 block">Seu Futuro Começa Aqui</span>
                     <h2 className="text-4xl md:text-5xl font-bold text-primary-900 mb-4 tracking-tight">Questionário de Afinidade</h2>
-                    <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-6">
-                        Ajudamos a conectar o seu projeto de vida à comunidade ideal. Esse cadastro rápido permite entender seu momento.
+                    <p className="text-xl text-gray-500 max-w-3xl mx-auto mb-6">
+                        Este é o primeiro passo para entendermos seu momento de vida, interesses e expectativas.<br />
+                        Nosso objetivo aqui é apenas identificar conexões possíveis.
                     </p>
-                    <div className="inline-flex flex-col sm:flex-row items-center text-left sm:text-center gap-3 px-6 py-3 rounded-2xl bg-primary-50 border border-primary-200 text-primary-900 mx-auto font-medium shadow-sm max-w-2xl">
-                        <img src="/MATCH - icone.png" alt="Match" className="w-10 h-10 object-contain" />
-                        Nosso sistema de curadoria atua para encontrar o &quot;MATCH&quot; perfeito de afinidades, interesses e propósitos entre os futuros membros.
+                    <div className="inline-flex flex-col sm:flex-row items-center text-left sm:text-center gap-3 px-6 py-4 rounded-2xl bg-primary-50 border border-primary-200 text-primary-900 mx-auto font-medium shadow-sm max-w-3xl">
+                        <img src="/MATCH - icone.png" alt="Match" className="w-10 h-10 object-contain flex-shrink-0" />
+                        <p className="text-sm md:text-base leading-relaxed">
+                            Nosso sistema de curadoria atua para encontrar o &quot;MATCH&quot; perfeito de afinidades, interesses e propósitos entre os futuros membros.<br />
+                            Você recebe sugestões de grupos com maior compatibilidade — e decide, no seu tempo, se quer seguir explorando.
+                        </p>
                     </div>
                 </div>
 

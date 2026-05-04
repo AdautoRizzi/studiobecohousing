@@ -164,24 +164,21 @@ export default function Home() {
                 Encontre a sua <br />
                 <span className="text-primary-900">próxima comunidade.</span>
               </h2>
-              <ul className="space-y-6 text-lg text-gray-600 mb-8">
-                <li className="flex gap-4">
+              <div className="space-y-6 text-lg text-gray-600 mb-8">
+                <div className="flex gap-4">
                   <span className="text-primary-500 font-bold">1.</span>
-                  <span>Preencha o formulário para entendermos seu perfil (região, orçamento, etc).</span>
-                </li>
-                <li className="flex gap-4">
+                  <span>Preencha o formulário para entendermos seu perfil (região, estilo de vida, tamanho da residência, etc).</span>
+                </div>
+                <div className="flex gap-4">
                   <span className="text-primary-500 font-bold">2.</span>
-                  <span>Nosso sistema irá cruzar os dados sugerindo os melhores grupos.</span>
-                </li>
-                <li className="flex gap-4">
-                  <span className="text-primary-500 font-bold">3.</span>
-                  <span>Participe das reuniões do "Fórum de Governança" dentro da nossa área exclusiva.</span>
-                </li>
-                <li className="flex gap-4">
-                  <span className="text-primary-500 font-bold">4.</span>
-                  <span>Inicie o planejamento do projeto sem burocracia e com assessoria completa.</span>
-                </li>
-              </ul>
+                  <span>Nosso sistema irá cruzar os dados sugerindo os melhores grupos de forma sigilosa.</span>
+                </div>
+                <div className="mt-8 space-y-4">
+                  <p><strong>O preenchimento não gera um compromisso com participação ou investimento.</strong></p>
+                  <p><strong>Você pode entrar, sair ou mudar de comunidade livremente nesta fase.</strong></p>
+                  <p className="text-primary-800">Você recebe sugestões de grupos com maior compatibilidade — e decide, no seu tempo, se quer seguir explorando.</p>
+                </div>
+              </div>
             </div>
             <div className="w-full">
               <CohousingForm />
