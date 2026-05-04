@@ -154,11 +154,10 @@ export default function CohousingForm() {
                         Este é o primeiro passo para entendermos seu momento de vida, interesses e expectativas.<br />
                         Nosso objetivo aqui é apenas identificar conexões possíveis.
                     </p>
-                    <div className="inline-flex flex-col sm:flex-row items-center text-left sm:text-center gap-3 px-6 py-4 rounded-2xl bg-primary-50 border border-primary-200 text-primary-900 mx-auto font-medium shadow-sm max-w-3xl">
-                        <img src="/MATCH - icone.png" alt="Match" className="w-10 h-10 object-contain flex-shrink-0" />
+                    <div className="flex flex-col items-center text-center gap-4 px-6 py-6 rounded-2xl bg-primary-50 border border-primary-200 text-primary-900 mx-auto font-medium shadow-sm max-w-3xl">
+                        <img src="/MATCH - icone.png" alt="Match" className="w-12 h-12 object-contain" />
                         <p className="text-sm md:text-base leading-relaxed">
-                            Nosso sistema de curadoria atua para encontrar o &quot;MATCH&quot; perfeito de afinidades, interesses e propósitos entre os futuros membros.<br />
-                            Você recebe sugestões de grupos com maior compatibilidade — e decide, no seu tempo, se quer seguir explorando.
+                            Nosso sistema de curadoria atua para encontrar o &quot;MATCH&quot; perfeito de afinidades, interesses e propósitos entre os futuros membros.
                         </p>
                     </div>
                 </div>

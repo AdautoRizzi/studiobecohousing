@@ -162,7 +162,7 @@ export default function Home() {
             <div className="max-w-xl">
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-6">
                 Encontre a sua <br />
-                <span className="text-primary-900">próxima comunidade.</span>
+                <span className="text-primary-900">próxima comunidade:</span>
               </h2>
               <div className="space-y-6 text-lg text-gray-600 mb-8">
                 <div className="flex gap-4">
@@ -173,9 +173,12 @@ export default function Home() {
                   <span className="text-primary-500 font-bold">2.</span>
                   <span>Nosso sistema irá cruzar os dados sugerindo os melhores grupos de forma sigilosa.</span>
                 </div>
+                <div className="flex gap-4">
+                  <span className="text-primary-500 font-bold">3.</span>
+                  <span>O preenchimento <strong>não gera um compromisso com participação ou investimento.</strong></span>
+                </div>
                 <div className="mt-8 space-y-4">
-                  <p><strong>O preenchimento não gera um compromisso com participação ou investimento.</strong></p>
-                  <p><strong>Você pode entrar, sair ou mudar de comunidade livremente nesta fase.</strong></p>
+                  <p>Você pode entrar, sair ou mudar de comunidade livremente nesta fase.</p>
                   <p className="text-primary-800">Você recebe sugestões de grupos com maior compatibilidade — e decide, no seu tempo, se quer seguir explorando.</p>
                 </div>
               </div>
