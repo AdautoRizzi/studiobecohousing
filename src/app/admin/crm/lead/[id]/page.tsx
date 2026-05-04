@@ -66,8 +66,11 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                 {/* Coluna 1: Dados do Cliente */}
                 <div className="lg:col-span-2 space-y-6">
                     <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
-                        <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
-                            <h2 className="text-xl font-bold text-gray-900">Ficha Completa do Questionário</h2>
+                        <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-6">
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-900">Dossiê do Candidato</h2>
+                                <p className="text-sm text-gray-500 mt-1">Todas as respostas coletadas no questionário de afinidade.</p>
+                            </div>
                             {(() => {
                                 const fields = [
                                     { label: 'Telefone', val: lead.telefone },
@@ -80,92 +83,144 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                     { label: 'Empreender', val: (lead.empreender || []).length > 0 }
                                 ];
                                 const missing = fields.filter(f => !f.val).map(f => f.label);
-                                if (missing.length === 0) return <span className="text-xs font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full">Cadastro 100% Completo</span>;
-                                return <span className="text-xs font-bold bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">Faltam {missing.length} informações</span>;
+                                if (missing.length === 0) return <span className="text-xs font-bold bg-green-100 text-green-700 px-4 py-2 rounded-full border border-green-200">Perfil 100% Completo</span>;
+                                return <span className="text-xs font-bold bg-orange-100 text-orange-700 px-4 py-2 rounded-full border border-orange-200">Pendente: {missing.length} itens</span>;
                             })()}
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider">Contato</span>
-                                <p className="font-medium text-gray-900">{lead.email}</p>
-                                <p className={`font-medium ${!lead.telefone ? 'text-red-400 italic text-sm' : 'text-gray-900'}`}>{lead.telefone || 'Telefone não informado'}</p>
-                            </div>
-                            <div>
-                                <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider">Perfil</span>
-                                <p className="font-medium text-gray-900">{lead.idade} • {lead.genero}</p>
-                                <p className={`font-medium ${!lead.profissao ? 'text-red-400 italic text-sm' : 'text-gray-900'}`}>{lead.profissao || 'Profissão não informada'}</p>
-                            </div>
-                            <div>
-                                <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider">Localização & Desejo</span>
-                                <p className={`font-medium ${!lead.ondeMorar ? 'text-red-400 italic' : 'text-primary-600'}`}>{lead.ondeMorar || 'Não informou onde quer morar'}</p>
-                                <p className="text-xs text-gray-500">Mora atualmente: {lead.moradiaAtual}</p>
-                                <p className="text-xs text-gray-500 mt-1">Preferência: <span className="font-bold">{lead.tipoCohousing || 'Não informada'}</span></p>
-                            </div>
-                            <div>
-                                <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider">Configuração da Moradia</span>
-                                <p className="font-medium text-gray-900">{lead.comQuem} ({lead.totalPessoas} pessoas)</p>
-                                <p className="font-medium text-gray-900">{lead.tipologia} • {lead.areaResidencia}</p>
-                                <p className="text-xs text-gray-500">{lead.dormitorios} dormitórios / {lead.suites} suítes</p>
-                            </div>
-                        </div>
+                        <div className="space-y-10">
+                            {/* Grupo 1: Identificação */}
+                            <section>
+                                <h3 className="text-xs font-bold text-secondary-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-secondary-500 rounded-full"></span>
+                                    1. Identificação e Perfil
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-12 bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Nome Completo</label>
+                                        <p className="font-bold text-gray-900">{lead.nome}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">E-mail</label>
+                                        <p className="font-medium text-gray-900">{lead.email}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">WhatsApp / Telefone</label>
+                                        <p className={`font-bold ${!lead.telefone ? 'text-red-500 italic' : 'text-gray-900'}`}>{lead.telefone || 'Não informado'}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Idade</label>
+                                        <p className="font-medium text-gray-900">{lead.idade || 'Não informado'}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Gênero</label>
+                                        <p className="font-medium text-gray-900">{lead.genero || 'Não informado'}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Profissão</label>
+                                        <p className={`font-medium ${!lead.profissao ? 'text-red-500 italic' : 'text-gray-900'}`}>{lead.profissao || 'Não informado'}</p>
+                                    </div>
+                                </div>
+                            </section>
 
-                        {/* Audit de Pendências */}
-                        {(() => {
-                            const fields = [
-                                { label: 'Telefone', val: lead.telefone },
-                                { label: 'Profissão', val: lead.profissao },
-                                { label: 'Tipo de Localização', val: lead.tipoCohousing },
-                                { label: 'Área da Residência', val: lead.areaResidencia },
-                                { label: 'Interesses', val: (lead.interesses || []).length > 0 },
-                                { label: 'Valores', val: (lead.valores || []).length > 0 },
-                                { label: 'Empreendedorismo', val: (lead.empreender || []).length > 0 }
-                            ];
-                            const missing = fields.filter(f => !f.val);
-                            if (missing.length > 0) {
-                                return (
-                                    <div className="mt-6 p-4 bg-red-50 border border-red-100 rounded-2xl">
-                                        <h4 className="text-xs font-bold text-red-700 uppercase mb-2">Informações Ausentes:</h4>
+                            {/* Grupo 2: Momento de Vida */}
+                            <section>
+                                <h3 className="text-xs font-bold text-secondary-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-secondary-500 rounded-full"></span>
+                                    2. Moradia e Localização
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12 bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Onde mora atualmente?</label>
+                                        <p className="font-medium text-gray-900">{lead.moradiaAtual || 'Não informado'}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Onde deseja morar?</label>
+                                        <p className={`font-bold ${!lead.ondeMorar ? 'text-red-500 italic' : 'text-primary-700'}`}>{lead.ondeMorar || 'Não informado'}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Preferência de Ambiente</label>
+                                        <p className="font-medium text-gray-900">{lead.tipoCohousing || 'Não informado'}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Tipologia Desejada</label>
+                                        <p className="font-medium text-gray-900">{lead.tipologia || 'Não informado'}</p>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* Grupo 3: Estrutura Familiar */}
+                            <section>
+                                <h3 className="text-xs font-bold text-secondary-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-secondary-500 rounded-full"></span>
+                                    3. Configuração da Residência
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-12 bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Com quem irá morar?</label>
+                                        <p className="font-medium text-gray-900">{lead.comQuem || 'Não informado'}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Total de Pessoas</label>
+                                        <p className="font-bold text-gray-900">{lead.totalPessoas || '1'} pessoa(s)</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Área Estimada</label>
+                                        <p className="font-medium text-gray-900">{lead.areaResidencia || 'Não informado'}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Quartos</label>
+                                        <p className="font-medium text-gray-900">{lead.dormitorios || '0'} dormitório(s)</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Suítes</label>
+                                        <p className="font-medium text-gray-900">{lead.suites || '0'} suíte(s)</p>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* Grupo 4: Afinidades (Tags) */}
+                            <section className="space-y-6">
+                                <h3 className="text-xs font-bold text-secondary-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-secondary-500 rounded-full"></span>
+                                    4. Interesses e Propósitos
+                                </h3>
+                                
+                                <div className="space-y-6 px-2">
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-3">Interesses & Atividades Coletivas</label>
                                         <div className="flex flex-wrap gap-2">
-                                            {missing.map(f => <span key={f.label} className="text-xs bg-white text-red-600 px-2 py-1 rounded border border-red-200">{f.label}</span>)}
+                                            {(lead.interesses || []).length > 0 ? (
+                                                lead.interesses.map(i => <span key={i} className="px-3 py-1.5 bg-primary-50 text-primary-700 font-medium rounded-lg text-sm border border-primary-100">{i}</span>)
+                                            ) : (
+                                                <span className="text-sm text-red-400 italic bg-red-50 px-3 py-1.5 rounded-lg border border-red-100">Nenhum interesse selecionado</span>
+                                            )}
                                         </div>
                                     </div>
-                                );
-                            }
-                            return null;
-                        })()}
 
-                        <div className="mt-8 space-y-6 border-t border-gray-50 pt-6">
-                            <div>
-                                <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Interesses & Atividades Coletivas</span>
-                                <div className="flex flex-wrap gap-2">
-                                    {(lead.interesses || []).length > 0 ? (
-                                        lead.interesses.map(i => <span key={i} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">{i}</span>)
-                                    ) : (
-                                        <span className="text-sm text-red-400 italic">Nenhum interesse selecionado</span>
-                                    )}
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-3">Valores Fundamentais no Cohousing</label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {(lead.valores || []).length > 0 ? (
+                                                lead.valores.map(v => <span key={v} className="px-3 py-1.5 bg-secondary-50 text-secondary-700 font-medium border border-secondary-100 rounded-lg text-sm">{v}</span>)
+                                            ) : (
+                                                <span className="text-sm text-red-400 italic bg-red-50 px-3 py-1.5 rounded-lg border border-red-100">Nenhum valor selecionado</span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-3">Disponibilidade para Empreender</label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {(lead.empreender || []).length > 0 ? (
+                                                lead.empreender.map(e => <span key={e} className="px-3 py-1.5 bg-blue-50 text-blue-700 font-medium border border-blue-100 rounded-lg text-sm">{e}</span>)
+                                            ) : (
+                                                <span className="text-sm text-red-400 italic bg-red-50 px-3 py-1.5 rounded-lg border border-red-100">Interesse em empreender não selecionado</span>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Valores Fundamentais no Cohousing</span>
-                                <div className="flex flex-wrap gap-2">
-                                    {(lead.valores || []).length > 0 ? (
-                                        lead.valores.map(v => <span key={v} className="px-3 py-1 bg-secondary-50 text-secondary-700 border border-secondary-100 rounded-full text-sm">{v}</span>)
-                                    ) : (
-                                        <span className="text-sm text-red-400 italic">Nenhum valor selecionado</span>
-                                    )}
-                                </div>
-                            </div>
-                            <div>
-                                <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Disponibilidade para Empreender</span>
-                                <div className="flex flex-wrap gap-2">
-                                    {(lead.empreender || []).length > 0 ? (
-                                        lead.empreender.map(e => <span key={e} className="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-full text-sm">{e}</span>)
-                                    ) : (
-                                        <span className="text-sm text-red-400 italic">Interesse em empreender não selecionado</span>
-                                    )}
-                                </div>
-                            </div>
+                            </section>
                         </div>
                     </div>
 

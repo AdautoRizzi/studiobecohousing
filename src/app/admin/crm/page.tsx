@@ -92,7 +92,7 @@ export default async function CRMPage() {
                                     </td>
                                     <td className="px-6 py-4 text-right whitespace-nowrap">
                                         <Link href={`/admin/crm/lead/${lead.id}`} className="text-primary-600 hover:text-primary-900 font-bold bg-primary-50 px-4 py-2 rounded-lg hover:bg-primary-100 transition-colors">
-                                            Analisar Match
+                                            Ver Ficha Completa
                                         </Link>
                                     </td>
                                 </tr>
