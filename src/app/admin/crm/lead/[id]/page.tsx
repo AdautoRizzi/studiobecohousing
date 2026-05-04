@@ -66,22 +66,41 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                 {/* Coluna 1: Dados do Cliente */}
                 <div className="lg:col-span-2 space-y-6">
                     <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
-                        <h2 className="text-xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-4">Ficha Completa do Questionário</h2>
+                        <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                            <h2 className="text-xl font-bold text-gray-900">Ficha Completa do Questionário</h2>
+                            {(() => {
+                                const fields = [
+                                    { label: 'Telefone', val: lead.telefone },
+                                    { label: 'Profissão', val: lead.profissao },
+                                    { label: 'Onde Morar', val: lead.ondeMorar },
+                                    { label: 'Tipo Localização', val: lead.tipoCohousing },
+                                    { label: 'Área Residência', val: lead.areaResidencia },
+                                    { label: 'Interesses', val: lead.interesses.length > 0 },
+                                    { label: 'Valores', val: lead.valores.length > 0 },
+                                    { label: 'Empreender', val: lead.empreender.length > 0 }
+                                ];
+                                const missing = fields.filter(f => !f.val).map(f => f.label);
+                                if (missing.length === 0) return <span className="text-xs font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full">Cadastro 100% Completo</span>;
+                                return <span className="text-xs font-bold bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">Faltam {missing.length} informações</span>;
+                            })()}
+                        </div>
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider">Contato</span>
                                 <p className="font-medium text-gray-900">{lead.email}</p>
-                                <p className="font-medium text-gray-900">{lead.telefone || 'Não informado'}</p>
+                                <p className={`font-medium ${!lead.telefone ? 'text-red-400 italic text-sm' : 'text-gray-900'}`}>{lead.telefone || 'Telefone não informado'}</p>
                             </div>
                             <div>
                                 <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider">Perfil</span>
                                 <p className="font-medium text-gray-900">{lead.idade} • {lead.genero}</p>
-                                <p className="font-medium text-gray-900">{lead.profissao}</p>
+                                <p className={`font-medium ${!lead.profissao ? 'text-red-400 italic text-sm' : 'text-gray-900'}`}>{lead.profissao || 'Profissão não informada'}</p>
                             </div>
                             <div>
-                                <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider">Localização Desejada</span>
-                                <p className="font-medium text-primary-600">{lead.ondeMorar}</p>
+                                <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider">Localização & Desejo</span>
+                                <p className={`font-medium ${!lead.ondeMorar ? 'text-red-400 italic' : 'text-primary-600'}`}>{lead.ondeMorar || 'Não informou onde quer morar'}</p>
                                 <p className="text-xs text-gray-500">Mora atualmente: {lead.moradiaAtual}</p>
+                                <p className="text-xs text-gray-500 mt-1">Preferência: <span className="font-bold">{lead.tipoCohousing || 'Não informada'}</span></p>
                             </div>
                             <div>
                                 <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider">Configuração da Moradia</span>
@@ -91,23 +110,60 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                             </div>
                         </div>
 
+                        {/* Audit de Pendências */}
+                        {(() => {
+                            const fields = [
+                                { label: 'Telefone', val: lead.telefone },
+                                { label: 'Profissão', val: lead.profissao },
+                                { label: 'Tipo de Localização', val: lead.tipoCohousing },
+                                { label: 'Área da Residência', val: lead.areaResidencia },
+                                { label: 'Interesses', val: lead.interesses.length > 0 },
+                                { label: 'Valores', val: lead.valores.length > 0 },
+                                { label: 'Empreendedorismo', val: lead.empreender.length > 0 }
+                            ];
+                            const missing = fields.filter(f => !f.val);
+                            if (missing.length > 0) {
+                                return (
+                                    <div className="mt-6 p-4 bg-red-50 border border-red-100 rounded-2xl">
+                                        <h4 className="text-xs font-bold text-red-700 uppercase mb-2">Informações Ausentes:</h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            {missing.map(f => <span key={f.label} className="text-xs bg-white text-red-600 px-2 py-1 rounded border border-red-200">{f.label}</span>)}
+                                        </div>
+                                    </div>
+                                );
+                            }
+                            return null;
+                        })()}
+
                         <div className="mt-8 space-y-6 border-t border-gray-50 pt-6">
                             <div>
                                 <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Interesses & Atividades Coletivas</span>
                                 <div className="flex flex-wrap gap-2">
-                                    {lead.interesses.map(i => <span key={i} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">{i}</span>)}
+                                    {lead.interesses.length > 0 ? (
+                                        lead.interesses.map(i => <span key={i} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">{i}</span>)
+                                    ) : (
+                                        <span className="text-sm text-red-400 italic">Nenhum interesse selecionado</span>
+                                    )}
                                 </div>
                             </div>
                             <div>
                                 <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Valores Fundamentais no Cohousing</span>
                                 <div className="flex flex-wrap gap-2">
-                                    {lead.valores.map(v => <span key={v} className="px-3 py-1 bg-secondary-50 text-secondary-700 border border-secondary-100 rounded-full text-sm">{v}</span>)}
+                                    {lead.valores.length > 0 ? (
+                                        lead.valores.map(v => <span key={v} className="px-3 py-1 bg-secondary-50 text-secondary-700 border border-secondary-100 rounded-full text-sm">{v}</span>)
+                                    ) : (
+                                        <span className="text-sm text-red-400 italic">Nenhum valor selecionado</span>
+                                    )}
                                 </div>
                             </div>
                             <div>
                                 <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Disponibilidade para Empreender</span>
                                 <div className="flex flex-wrap gap-2">
-                                    {lead.empreender.map(e => <span key={e} className="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-full text-sm">{e}</span>)}
+                                    {lead.empreender.length > 0 ? (
+                                        lead.empreender.map(e => <span key={e} className="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-full text-sm">{e}</span>)
+                                    ) : (
+                                        <span className="text-sm text-red-400 italic">Interesse em empreender não selecionado</span>
+                                    )}
                                 </div>
                             </div>
                         </div>
