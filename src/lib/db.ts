@@ -138,7 +138,6 @@ export async function saveLead(leadData: Omit<Lead, 'id' | 'status' | 'notasCrm'
         .from('leads')
         .insert([{
             ...leadData,
-            phone: leadData.telefone, // Fallback caso a coluna seja 'phone'
             id,
             status: 'Novo',
             notasCrm: ''
