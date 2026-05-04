@@ -120,16 +120,23 @@ export async function submitCohousingFormAction(formData: any) {
             origem: formData.origem || 'Site/CRM'
         };
 
-        // Envio para o Google Sheets (aguardando para garantir a entrega)
+        // Envio para o Google Sheets (ajustado para ambiente de servidor)
         try {
-            await fetch(googleScriptUrl, {
+            const response = await fetch(googleScriptUrl, {
                 method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload),
+                redirect: 'follow' // Importante para scripts do Google
             });
+            
+            if (!response.ok) {
+                console.error("Planilha retornou erro:", response.status, response.statusText);
+            }
         } catch (err) {
-            console.error("Erro no backup Google Sheets:", err);
+            console.error("Erro crítico no backup Google Sheets:", err);
         }
 
         return { success: true, leadId: newLead.id };
