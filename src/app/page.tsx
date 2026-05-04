@@ -175,10 +175,9 @@ export default function Home() {
                 </div>
                 <div className="flex gap-4">
                   <span className="text-primary-500 font-bold">3.</span>
-                  <span>O preenchimento <strong>não gera um compromisso com participação ou investimento.</strong></span>
+                  <span>O preenchimento <strong>não gera um compromisso com participação ou investimento.</strong> Você pode entrar, sair ou mudar de comunidade livremente nesta fase.</span>
                 </div>
                 <div className="mt-8 space-y-4">
-                  <p>Você pode entrar, sair ou mudar de comunidade livremente nesta fase.</p>
                   <p className="text-primary-800">Você recebe sugestões de grupos com maior compatibilidade — e decide, no seu tempo, se quer seguir explorando.</p>
                 </div>
               </div>
