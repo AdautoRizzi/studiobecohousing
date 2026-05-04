@@ -89,8 +89,8 @@ export async function submitCohousingFormAction(formData: any) {
             nome: formData.nome,
             email: formData.email,
             telefone: formData.telefone,
-            whatsapp: formData.telefone, // Backup com nome alternativo
-            phone: formData.telefone,    // Backup com nome alternativo
+            whatsapp: formData.telefone,
+            phone: formData.telefone,
             moradiaAtual: formData.moradiaAtual,
             idade: formData.idade,
             profissao: formData.profissao,
@@ -99,9 +99,26 @@ export async function submitCohousingFormAction(formData: any) {
             tipologia: formData.tipologia,
             areaResidencia: formData.areaResidencia,
             comQuem: `${formData.comQuem} (${formData.totalPessoas || 1} pessoas - ${formData.dormitorios || 0} quartos, ${formData.suites || 0} suítes)`,
-            valores: Array.isArray(formData.valores) ? formData.valores.join(', ') : formData.valores,
-            interesses: Array.isArray(formData.interesses) ? formData.interesses.join(', ') : formData.interesses,
-            empreender: Array.isArray(formData.empreender) ? formData.empreender.join(', ') : formData.empreender,
+            
+            // Interesses separados por coluna (até 4)
+            interesse_1: (formData.interesses || [])[0] || '',
+            interesse_2: (formData.interesses || [])[1] || '',
+            interesse_3: (formData.interesses || [])[2] || '',
+            interesse_4: (formData.interesses || [])[3] || '',
+            
+            // Valores separados por coluna (até 4)
+            valor_1: (formData.valores || [])[0] || '',
+            valor_2: (formData.valores || [])[1] || '',
+            valor_3: (formData.valores || [])[2] || '',
+            valor_4: (formData.valores || [])[3] || '',
+            
+            // Empreender separado por coluna (até 4)
+            empreender_1: (formData.empreender || [])[0] || '',
+            empreender_2: (formData.empreender || [])[1] || '',
+            empreender_3: (formData.empreender || [])[2] || '',
+            empreender_4: (formData.empreender || [])[3] || '',
+            
+            observacoes: formData.observacoes || '',
             origem: formData.origem || 'Site/CRM'
         };
 

@@ -31,6 +31,7 @@ export interface Lead {
     status: 'Novo' | 'Contatado' | 'Qualificado' | 'Turma Atribuída' | 'Descartado';
     notasCrm: string;
     proximoContato: string | null;
+    observacoes: string;
     createdAt: string;
 }
 

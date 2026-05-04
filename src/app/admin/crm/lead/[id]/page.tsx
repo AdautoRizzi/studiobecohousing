@@ -239,6 +239,21 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                     </div>
                                 </div>
                             </section>
+
+                            {/* Grupo 5: Observações */}
+                            {lead.observacoes && (
+                                <section>
+                                    <h3 className="text-xs font-bold text-secondary-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                        <span className="w-2 h-2 bg-secondary-500 rounded-full"></span>
+                                        5. Considerações do Cliente
+                                    </h3>
+                                    <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                                        <p className="text-sm text-gray-700 italic leading-relaxed">
+                                            &quot;{lead.observacoes}&quot;
+                                        </p>
+                                    </div>
+                                </section>
+                            )}
                         </div>
                     </div>
 

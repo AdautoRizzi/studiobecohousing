@@ -40,7 +40,8 @@ export default function CohousingForm() {
         suites: '1',
         interesses: [] as string[],
         empreender: [] as string[],
-        valores: [] as string[]
+        valores: [] as string[],
+        observacoes: ''
     });
 
     // Controla mudanças nos inputs comuns
@@ -314,6 +315,16 @@ export default function CohousingForm() {
                                                 </div>
                                             ))}
                                         </div>
+                                    {/* Observações Adicionais */}
+                                    <div className="space-y-4">
+                                        <label className="text-base font-bold text-gray-800 block mb-2">Há alguma observação, preferência ou consideração que você considera importante para a formação da sua comunidade?</label>
+                                        <textarea 
+                                            name="observacoes"
+                                            value={formData.observacoes}
+                                            onChange={handleChange as any}
+                                            placeholder="Conte-nos mais sobre suas expectativas ou necessidades especiais..."
+                                            className="w-full h-32 bg-gray-50 rounded-xl px-4 py-4 focus:ring-2 focus:ring-secondary-500 outline-none border border-gray-200 text-gray-900 font-medium resize-none"
+                                        />
                                     </div>
                                 </div>
 

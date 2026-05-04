@@ -38,7 +38,8 @@ export default function ManualLeadForm() {
         suites: '1',
         interesses: [] as string[],
         empreender: [] as string[],
-        valores: [] as string[]
+        valores: [] as string[],
+        observacoes: ''
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -226,6 +227,23 @@ export default function ManualLeadForm() {
                             ))}
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-gray-200">
+                <h3 className="text-xl font-bold text-primary-900 mb-6 flex items-center gap-2">
+                    <span className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm">4</span>
+                    Observações e Considerações
+                </h3>
+                <div>
+                    <label className="text-xs font-bold text-gray-500 uppercase block mb-3">Observações Adicionais</label>
+                    <textarea 
+                        name="observacoes"
+                        value={formData.observacoes}
+                        onChange={handleChange as any}
+                        placeholder="Observações importantes sobre o lead..."
+                        className="w-full h-32 bg-gray-50 border border-gray-100 rounded-xl px-4 py-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500 resize-none font-medium"
+                    />
                 </div>
             </div>
 
