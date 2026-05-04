@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { updateLeadStatusAction } from '@/app/actions';
 import { MessageSender } from '@/components/crm/MessageSender';
+import LogInteractionForm from '@/components/LogInteractionForm';
 
 export const dynamic = 'force-dynamic';
 
@@ -66,8 +67,16 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                         <p className="text-gray-500 mt-1">Cadastrado em {new Date(lead.createdAt).toLocaleDateString('pt-BR')}</p>
                     </div>
                 </div>
-                <div className="bg-primary-50 px-4 py-2 rounded-xl text-primary-800 font-bold border border-primary-200">
-                    Status: {lead.status}
+                <div className="flex flex-col items-end gap-2">
+                    <div className="bg-primary-50 px-4 py-2 rounded-xl text-primary-800 font-bold border border-primary-200">
+                        Status: {lead.status}
+                    </div>
+                    {lead.proximoContato && (
+                        <div className="bg-orange-50 px-3 py-1 rounded-lg text-orange-700 text-xs font-bold border border-orange-200 flex items-center gap-1.5 animate-pulse">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            Agendado para: {new Date(lead.proximoContato).toLocaleDateString('pt-BR')}
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -233,6 +242,9 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                         </div>
                     </div>
 
+                    {/* Registro de Atividade Manual */}
+                    <LogInteractionForm leadId={lead.id} />
+
                     {/* Histórico de Mensagens */}
                     <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
                         <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
@@ -251,7 +263,15 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                         <div className="absolute -left-[9px] top-0 w-4 h-4 bg-primary-500 rounded-full border-4 border-white"></div>
                                         <div className="flex-1">
                                             <div className="flex justify-between items-center mb-1">
-                                                <span className="text-xs font-bold text-primary-600 uppercase">WhatsApp Enviado</span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-xs font-bold text-primary-600 uppercase">
+                                                        {it.type === 'Ligação' && '📞 '}
+                                                        {it.type === 'Reunião' && '👥 '}
+                                                        {it.type === 'WhatsApp' && '📱 '}
+                                                        {it.type === 'E-mail' && '✉️ '}
+                                                        {it.type || 'Sistema'}
+                                                    </span>
+                                                </div>
                                                 <span className="text-xs text-gray-400">{new Date(it.sent_at).toLocaleString('pt-BR')}</span>
                                             </div>
                                             <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-xl border border-gray-100 whitespace-pre-wrap">{it.content}</p>
@@ -282,6 +302,15 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                     <option value="Turma Atribuída">Turma Atribuída</option>
                                     <option value="Descartado">Descartado</option>
                                 </select>
+                            </div>
+                            <div>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Agendar Próximo Contato</label>
+                                <input 
+                                    type="date" 
+                                    name="proximoContato" 
+                                    defaultValue={lead.proximoContato || ''} 
+                                    className="w-full h-10 px-3 rounded-lg border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500"
+                                />
                             </div>
                             <div>
                                 <label className="text-xs font-bold text-gray-500 uppercase">Notas Adicionais</label>

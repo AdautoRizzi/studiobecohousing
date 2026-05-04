@@ -30,6 +30,7 @@ export interface Lead {
     valores: string[];
     status: 'Novo' | 'Contatado' | 'Qualificado' | 'Turma Atribuída' | 'Descartado';
     notasCrm: string;
+    proximoContato: string | null;
     createdAt: string;
 }
 
@@ -37,6 +38,7 @@ export interface Interaction {
     id: number;
     lead_id: string;
     content: string;
+    type: 'WhatsApp' | 'Ligação' | 'Reunião' | 'E-mail' | 'Sistema';
     sent_at: string;
 }
 
@@ -147,10 +149,13 @@ export async function saveLead(leadData: Omit<Lead, 'id' | 'status' | 'notasCrm'
     return data;
 }
 
-export async function updateLeadStatus(id: string, status: Lead['status'], notasCrm?: string) {
+export async function updateLeadStatus(id: string, status: Lead['status'], notasCrm?: string, proximoContato?: string | null) {
     const updateData: any = { status };
     if (notasCrm !== undefined) {
         updateData.notasCrm = notasCrm;
+    }
+    if (proximoContato !== undefined) {
+        updateData.proximoContato = proximoContato;
     }
 
     const { error } = await supabase
@@ -159,6 +164,22 @@ export async function updateLeadStatus(id: string, status: Lead['status'], notas
         .eq('id', id);
     
     return !error;
+}
+
+export async function logManualInteraction(leadId: string, content: string, type: Interaction['type']) {
+    const { data, error } = await supabase
+        .from('lead_interactions')
+        .insert([{
+            lead_id: leadId,
+            content,
+            type,
+            sent_at: new Date().toISOString()
+        }])
+        .select()
+        .single();
+    
+    if (error) throw new Error(error.message);
+    return data;
 }
 
 // Funções de Interação e Histórico

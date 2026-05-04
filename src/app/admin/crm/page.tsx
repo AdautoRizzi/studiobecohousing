@@ -26,7 +26,12 @@ export default async function CRMPage() {
             <div className="flex justify-between items-end mb-8">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Gestão de Leads</h1>
-                    <p className="text-gray-500 mt-1">Acompanhe todos os interessados no projeto Studio Be.</p>
+                    <div className="flex gap-4 mt-2">
+                        <p className="text-gray-500">Acompanhe todos os interessados no projeto Studio Be.</p>
+                        <Link href="/admin/crm/agenda" className="text-orange-600 font-bold text-sm hover:underline flex items-center gap-1">
+                            📅 Ver Agenda de Contatos
+                        </Link>
+                    </div>
                 </div>
                 <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200 font-bold text-gray-700">
                     Total: {leads.length} Leads

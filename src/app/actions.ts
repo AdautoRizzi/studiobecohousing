@@ -90,10 +90,11 @@ export async function updateLeadStatusAction(formData: FormData) {
     const leadId = formData.get('leadId') as string;
     const status = formData.get('status') as any;
     const notasCrm = formData.get('notasCrm') as string;
+    const proximoContato = formData.get('proximoContato') as string;
 
     if (!leadId || !status) return;
 
-    await updateLeadStatus(leadId, status, notasCrm);
+    await updateLeadStatus(leadId, status, notasCrm, proximoContato || null);
     revalidatePath('/admin/crm');
     revalidatePath(`/admin/crm/lead/${leadId}`);
 }
