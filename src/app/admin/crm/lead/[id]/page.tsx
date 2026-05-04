@@ -22,17 +22,26 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
     // Algoritmo de Match Simples
     const calculateMatch = (otherLead: any) => {
         let score = 0;
-        let maxScore = lead.interesses.length + lead.valores.length + lead.empreender.length;
+        
+        const myInteresses = lead.interesses || [];
+        const myValores = lead.valores || [];
+        const myEmpreender = lead.empreender || [];
+        
+        const otherInteresses = otherLead.interesses || [];
+        const otherValores = otherLead.valores || [];
+        const otherEmpreender = otherLead.empreender || [];
+
+        let maxScore = myInteresses.length + myValores.length + myEmpreender.length;
         if (maxScore === 0) maxScore = 1;
 
         let matches: string[] = [];
 
-        lead.interesses.forEach(i => { if (otherLead.interesses.includes(i)) { score++; matches.push(i); } });
-        lead.valores.forEach(v => { if (otherLead.valores.includes(v)) { score++; matches.push(v); } });
-        lead.empreender.forEach(e => { if (otherLead.empreender.includes(e)) { score++; matches.push(e); } });
+        myInteresses.forEach(i => { if (otherInteresses.includes(i)) { score++; matches.push(i); } });
+        myValores.forEach(v => { if (otherValores.includes(v)) { score++; matches.push(v); } });
+        myEmpreender.forEach(e => { if (otherEmpreender.includes(e)) { score++; matches.push(e); } });
 
-        if (lead.ondeMorar === otherLead.ondeMorar) score += 2;
-        if (lead.tipologia === otherLead.tipologia) score += 1;
+        if (lead.ondeMorar && lead.ondeMorar === otherLead.ondeMorar) score += 2;
+        if (lead.tipologia && lead.tipologia === otherLead.tipologia) score += 1;
         maxScore += 3;
 
         return {
