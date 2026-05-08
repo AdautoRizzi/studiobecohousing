@@ -132,21 +132,45 @@ export async function getLeadById(id: string): Promise<Lead | undefined> {
     return data as Lead;
 }
 
-export async function saveLead(leadData: Omit<Lead, 'id' | 'status' | 'notasCrm' | 'createdAt'>) {
+export async function saveLead(formData: any) {
     const id = Date.now().toString() + Math.random().toString(36).substr(2, 5);
     
+    const leadData = {
+        id,
+        nome: formData.nome || '',
+        email: formData.email || '',
+        telefone: formData.telefone || '',
+        moradiaAtual: formData.moradiaAtual || '',
+        idade: formData.idade || '',
+        profissao: formData.profissao || '',
+        genero: formData.genero || '',
+        ondeMorar: formData.ondeMorar || '',
+        tipoCohousing: formData.tipoCohousing || '',
+        tipologia: formData.tipologia || '',
+        areaResidencia: formData.areaResidencia || '',
+        comQuem: formData.comQuem || '',
+        totalPessoas: formData.totalPessoas || '',
+        dormitorios: formData.dormitorios?.toString() || '0',
+        suites: formData.suites?.toString() || '0',
+        interesses: formData.interesses || [],
+        valores: formData.valores || [],
+        empreender: formData.empreender || [],
+        observacoes: formData.observacoes || '',
+        status: 'Novo',
+        notasCrm: '',
+        createdAt: new Date().toISOString()
+    };
+
     const { data, error } = await supabase
         .from('leads')
-        .insert([{
-            ...leadData,
-            id,
-            status: 'Novo',
-            notasCrm: ''
-        }])
+        .insert([leadData])
         .select()
         .single();
 
-    if (error) throw new Error(error.message);
+    if (error) {
+        console.error("Erro Supabase Insert:", error);
+        throw new Error(error.message);
+    }
     return data;
 }
 
