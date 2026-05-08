@@ -85,51 +85,49 @@ export async function submitCohousingFormAction(formData: any) {
         // 2. Enviar para a Planilha do Google (Backup)
         const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyTq7VCLn1GZG2mMB9rGZBYFtedDezWmgEtq2hkMNx9aUKbuZjboz_oyjnMuigyYs8R/exec';
         
-        const payload = {
-            nome: formData.nome || '',
-            email: formData.email || '',
-            telefone: formData.telefone || '',
-            moradiaAtual: formData.moradiaAtual || '',
-            idade: formData.idade || '',
-            profissao: formData.profissao || '',
-            genero: formData.genero || '',
-            ondeMorar: formData.ondeMorar || '',
-            tipologia: formData.tipologia || '',
-            areaResidencia: formData.areaResidencia || '',
-            comQuem: `${formData.comQuem || ''} (${formData.totalPessoas || 1} pessoas - ${formData.dormitorios || 0} quartos, ${formData.suites || 0} suítes)`,
-            observacoes: formData.observacoes || '',
-            
-            // Interesses (M, N, O, P)
-            interesse_1: (formData.interesses || [])[0] || '',
-            interesse_2: (formData.interesses || [])[1] || '',
-            interesse_3: (formData.interesses || [])[2] || '',
-            interesse_4: (formData.interesses || [])[3] || '',
-            
-            // Valores (Q, R, S, T)
-            valor_1: (formData.valores || [])[0] || '',
-            valor_2: (formData.valores || [])[1] || '',
-            valor_3: (formData.valores || [])[2] || '',
-            valor_4: (formData.valores || [])[3] || '',
-            
-            // Empreender (U, V, W, X)
-            empreender_1: (formData.empreender || [])[0] || '',
-            empreender_2: (formData.empreender || [])[1] || '',
-            empreender_3: (formData.empreender || [])[2] || '',
-            empreender_4: (formData.empreender || [])[3] || '',
-            
-            origem: formData.origem || 'Site/CRM'
-        };
+        // Criar o payload em formato de formulário (mais compatível com scripts básicos de planilha)
+        const params = new URLSearchParams();
+        params.append('nome', formData.nome || '');
+        params.append('email', formData.email || '');
+        params.append('telefone', formData.telefone || '');
+        params.append('moradiaAtual', formData.moradiaAtual || '');
+        params.append('idade', formData.idade || '');
+        params.append('profissao', formData.profissao || '');
+        params.append('genero', formData.genero || '');
+        params.append('ondeMorar', formData.ondeMorar || '');
+        params.append('tipologia', formData.tipologia || '');
+        params.append('areaResidencia', formData.areaResidencia || '');
+        params.append('comQuem', `${formData.comQuem || ''} (${formData.totalPessoas || 1} pessoas - ${formData.dormitorios || 0} quartos, ${formData.suites || 0} suítes)`);
+        params.append('observacoes', formData.observacoes || '');
+        
+        // Interesses
+        params.append('interesse_1', (formData.interesses || [])[0] || '');
+        params.append('interesse_2', (formData.interesses || [])[1] || '');
+        params.append('interesse_3', (formData.interesses || [])[2] || '');
+        params.append('interesse_4', (formData.interesses || [])[3] || '');
+        
+        // Valores
+        params.append('valor_1', (formData.valores || [])[0] || '');
+        params.append('valor_2', (formData.valores || [])[1] || '');
+        params.append('valor_3', (formData.valores || [])[2] || '');
+        params.append('valor_4', (formData.valores || [])[3] || '');
+        
+        // Empreender
+        params.append('empreender_1', (formData.empreender || [])[0] || '');
+        params.append('empreender_2', (formData.empreender || [])[1] || '');
+        params.append('empreender_3', (formData.empreender || [])[2] || '');
+        params.append('empreender_4', (formData.empreender || [])[3] || '');
+        
+        params.append('origem', formData.origem || 'Site/CRM');
 
-        // Envio para o Google Sheets (ajustado para ambiente de servidor)
         try {
             const response = await fetch(googleScriptUrl, {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: JSON.stringify(payload),
-                redirect: 'follow' // Importante para scripts do Google
+                body: params.toString(),
+                redirect: 'follow'
             });
             
             if (!response.ok) {
