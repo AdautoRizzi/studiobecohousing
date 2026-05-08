@@ -126,6 +126,10 @@ export default function CohousingForm() {
                             Nosso sistema de curadoria atua para encontrar o &quot;MATCH&quot; perfeito de afinidades, interesses e propósitos entre os futuros membros.
                         </p>
                     </div>
+                    <p className="text-[10px] md:text-xs text-gray-400 mt-6 font-medium flex items-center justify-center gap-2 uppercase tracking-widest">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                        Seus dados são tratados conforme a <a href="https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd" target="_blank" rel="noopener noreferrer" className="underline hover:text-secondary-600 transition-colors">LGPD</a>.
+                    </p>
                 </div>
 
                 {/* Stepper Visual */}
@@ -331,14 +335,20 @@ export default function CohousingForm() {
                                 <div className="mt-14 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">
                                     <Button type="button" variant="outline" onClick={prevStep} className="h-14 px-8 text-gray-600 rounded-full border-gray-300 w-full md:w-auto">Revisar Etapas</Button>
 
-                                    <Button
-                                        type="submit"
-                                        disabled={!isStep3Valid}
-                                        variant="secondary"
-                                        className="h-16 px-10 text-lg shadow-xl shadow-secondary-600/30 transition-transform hover:scale-105 rounded-full w-full md:w-auto flex items-center gap-3 justify-center"
-                                    >
-                                        Finalizar e Enviar Interesse
-                                    </Button>
+                                    <div className="flex flex-col items-center md:items-end gap-2 w-full md:w-auto">
+                                        <p className="text-[10px] text-gray-400 font-medium flex items-center gap-1.5 uppercase tracking-wider mb-1">
+                                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                            Dados protegidos pela <a href="https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd" target="_blank" rel="noopener noreferrer" className="underline hover:text-secondary-600">LGPD</a>
+                                        </p>
+                                        <Button
+                                            type="submit"
+                                            disabled={!isStep3Valid}
+                                            variant="secondary"
+                                            className="h-16 px-10 text-lg shadow-xl shadow-secondary-600/30 transition-transform hover:scale-105 rounded-full w-full md:w-auto flex items-center gap-3 justify-center"
+                                        >
+                                            Finalizar e Enviar Interesse
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         )}
