@@ -319,6 +319,7 @@ export default function CohousingForm() {
                                                 </div>
                                             ))}
                                         </div>
+                                    </div>
                                     {/* Observações Adicionais */}
                                     <div className="space-y-4">
                                         <label className="text-base font-bold text-gray-800 block mb-2">Há alguma observação, preferência ou consideração que você considera importante para a formação da sua comunidade?</label>
