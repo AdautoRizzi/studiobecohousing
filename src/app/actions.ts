@@ -85,48 +85,50 @@ export async function submitCohousingFormAction(formData: any) {
         // 2. Enviar para a Planilha do Google (Backup)
         const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyTq7VCLn1GZG2mMB9rGZBYFtedDezWmgEtq2hkMNx9aUKbuZjboz_oyjnMuigyYs8R/exec';
         
-        // Criar o payload em formato de formulário (mais compatível com scripts básicos de planilha)
-        const params = new URLSearchParams();
-        params.append('nome', formData.nome || '');
-        params.append('email', formData.email || '');
-        params.append('telefone', formData.telefone || '');
-        params.append('moradiaAtual', formData.moradiaAtual || '');
-        params.append('idade', formData.idade || '');
-        params.append('profissao', formData.profissao || '');
-        params.append('genero', formData.genero || '');
-        params.append('ondeMorar', formData.ondeMorar || '');
-        params.append('tipologia', formData.tipologia || '');
-        params.append('areaResidencia', formData.areaResidencia || '');
-        params.append('comQuem', `${formData.comQuem || ''} (${formData.totalPessoas || 1} pessoas - ${formData.dormitorios || 0} quartos, ${formData.suites || 0} suítes)`);
-        params.append('observacoes', formData.observacoes || '');
-        
-        // Interesses
-        params.append('interesse_1', (formData.interesses || [])[0] || '');
-        params.append('interesse_2', (formData.interesses || [])[1] || '');
-        params.append('interesse_3', (formData.interesses || [])[2] || '');
-        params.append('interesse_4', (formData.interesses || [])[3] || '');
-        
-        // Valores
-        params.append('valor_1', (formData.valores || [])[0] || '');
-        params.append('valor_2', (formData.valores || [])[1] || '');
-        params.append('valor_3', (formData.valores || [])[2] || '');
-        params.append('valor_4', (formData.valores || [])[3] || '');
-        
-        // Empreender
-        params.append('empreender_1', (formData.empreender || [])[0] || '');
-        params.append('empreender_2', (formData.empreender || [])[1] || '');
-        params.append('empreender_3', (formData.empreender || [])[2] || '');
-        params.append('empreender_4', (formData.empreender || [])[3] || '');
-        
-        params.append('origem', formData.origem || 'Site/CRM');
+        // Payload com chaves que batem EXATAMENTE com os cabeçalhos da planilha (Case Sensitive)
+        const payload = {
+            "Nome": formData.nome || '',
+            "Email": formData.email || '',
+            "Telefone": formData.telefone || '',
+            "Moradia": formData.moradiaAtual || '',
+            "Idade": formData.idade || '',
+            "Profissao": formData.profissao || '',
+            "Genero": formData.genero || '',
+            "Local": formData.ondeMorar || '',
+            "Tipologia": formData.tipologia || '',
+            "Área da residência": formData.areaResidencia || '',
+            "Pessoas/Com quem": `${formData.comQuem || ''} (${formData.totalPessoas || 1} pessoas - ${formData.dormitorios || 0} quartos, ${formData.suites || 0} suítes)`,
+            "Observações": formData.observacoes || '',
+            
+            // Interesses
+            "Interesse 1": (formData.interesses || [])[0] || '',
+            "Interesse 2": (formData.interesses || [])[1] || '',
+            "Interesse 3": (formData.interesses || [])[2] || '',
+            "Interesse 4": (formData.interesses || [])[3] || '',
+            
+            // Valores
+            "Valor 1": (formData.valores || [])[0] || '',
+            "Valor 2": (formData.valores || [])[1] || '',
+            "Valor 3": (formData.valores || [])[2] || '',
+            "Valor 4": (formData.valores || [])[3] || '',
+            
+            // Empreender
+            "Empreender 1": (formData.empreender || [])[0] || '',
+            "Empreender 2": (formData.empreender || [])[1] || '',
+            "Empreender 3": (formData.empreender || [])[2] || '',
+            "Empreender 4": (formData.empreender || [])[3] || '',
+            
+            "Origem": formData.origem || 'Site/CRM'
+        };
 
         try {
             const response = await fetch(googleScriptUrl, {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
-                body: params.toString(),
+                body: JSON.stringify(payload),
                 redirect: 'follow'
             });
             
