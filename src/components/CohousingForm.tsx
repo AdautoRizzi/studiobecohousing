@@ -100,7 +100,7 @@ export default function CohousingForm() {
                 setIsSubmitted(true);
                 scrollToForm();
             } else {
-                alert('Houve um erro ao salvar seu interesse. Por favor, tente novamente ou fale conosco no WhatsApp.');
+                alert(`Erro ao salvar interesse: ${res.error}\n\nDetalhes: ${res.details || 'Sem detalhes adicionais'}`);
             }
         } catch (error) {
             console.error("Erro ao salvar no CRM", error);

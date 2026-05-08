@@ -141,8 +141,12 @@ export async function submitCohousingFormAction(formData: any) {
 
         return { success: true, leadId: newLead.id };
     } catch (error: any) {
-        console.error("Erro ao salvar lead:", error);
-        return { success: false, error: error.message || 'Erro ao salvar o formulário no CRM.' };
+        console.error("Erro detalhado ao salvar lead:", error);
+        return { 
+            success: false, 
+            error: error.message || 'Erro ao salvar o formulário no CRM.',
+            details: error.details || error.hint || '' 
+        };
     }
 }
 
