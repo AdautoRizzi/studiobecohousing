@@ -33,7 +33,7 @@ ${formData.descricao}
 Olá Studio Be! Gostaria de submeter meus serviços para avaliação do conselho de moradores e me tornar um Parceiro Certificado da comunidade.`;
 
         const encodedText = encodeURIComponent(texto);
-        window.location.href = `https://wa.me/5511934898990?text=${encodedText}`;
+        window.location.href = `https://wa.me/5511925729548?text=${encodedText}`;
     };
 
     return (

@@ -52,7 +52,7 @@ export default function RegistroPage() {
                         </div>
 
                         <a
-                            href={`https://wa.me/5511934898990?text=Ol%C3%A1%20StudioBe%21%20Acabei%20de%20registrar%20meu%20acesso%20de%20morador%20no%20portal%20com%20o%20e-mail%20${email}.%20Podem%20me%20liberar%3F`}
+                            href={`https://wa.me/5511925729548?text=Ol%C3%A1%20StudioBe%21%20Acabei%20de%20registrar%20meu%20acesso%20de%20morador%20no%20portal%20com%20o%20e-mail%20${email}.%20Podem%20me%20liberar%3F`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-transform hover:scale-105 inline-flex items-center gap-3 w-full justify-center mb-4"
