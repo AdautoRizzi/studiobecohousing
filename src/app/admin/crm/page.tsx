@@ -1,6 +1,7 @@
 import React from 'react';
 import { getAllLeads } from '@/lib/db';
 import Link from 'next/link';
+import DeleteLeadButton from '@/components/crm/DeleteLeadButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -101,13 +102,14 @@ export default async function CRMPage() {
                                             {new Date(lead.createdAt).toLocaleDateString('pt-BR')}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 text-right whitespace-nowrap space-x-2">
+                                    <td className="px-6 py-4 text-right whitespace-nowrap space-x-2 flex items-center justify-end">
                                         <Link href={`/admin/crm/lead/${lead.id}`} className="text-gray-600 hover:text-gray-900 font-bold bg-gray-100 px-3 py-2 rounded-lg transition-colors text-xs">
                                             Analisar Match
                                         </Link>
                                         <Link href={`/admin/crm/lead/${lead.id}`} className="text-primary-600 hover:text-primary-900 font-bold bg-primary-50 px-3 py-2 rounded-lg hover:bg-primary-100 transition-colors text-xs border border-primary-100">
                                             Ver Dossiê
                                         </Link>
+                                        <DeleteLeadButton leadId={lead.id} leadName={lead.nome} />
                                     </td>
                                 </tr>
                             ))

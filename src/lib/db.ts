@@ -192,6 +192,16 @@ export async function updateLeadStatus(id: string, status: Lead['status'], notas
     return !error;
 }
 
+export async function deleteLead(id: string) {
+    const { error } = await supabase
+        .from('leads')
+        .delete()
+        .eq('id', id);
+
+    if (error) throw new Error(error.message);
+    return true;
+}
+
 export async function logManualInteraction(leadId: string, content: string, type: Interaction['type']) {
     const { data, error } = await supabase
         .from('lead_interactions')

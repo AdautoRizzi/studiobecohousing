@@ -16,7 +16,12 @@ const INTERESSES = ['Atividades culturais e artísticas', 'Alimentação compart
 const EMPREENDER = ['Não tenho interesse', 'Coworking', 'Dark kitchen (cozinha compartilhada)', 'Serviços na área de terapias, saúde e bem-estar', 'Cafeteria / restaurante', 'Prestação de serviços diversos', 'Conveniência / drogaria', 'Lavanderia auto-serviço', 'Espaço de eventos (artístico e cultural)'];
 const VALORES = ['Rede de apoio para combater a solidão', 'Segurança e suporte integrados', 'Manutenção da autonomia e independência', 'Redução de custos de manutenção', 'Sustentabilidade', 'Contato com a natureza', 'Proximidade a serviços e comércio', 'Rede de serviços de manutenção das unidades'];
 
-export default function CohousingForm() {
+interface Props {
+    isModal?: boolean;
+    onClose?: () => void;
+}
+
+export default function CohousingForm({ isModal, onClose }: Props) {
     const [step, setStep] = useState(1);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const formRef = useRef<HTMLDivElement>(null);
@@ -80,6 +85,7 @@ export default function CohousingForm() {
     const isStep3Valid = formData.interesses.length > 0 && formData.empreender.length > 0 && formData.valores.length > 0;
 
     const scrollToForm = () => {
+        if (isModal) return; // Não scrollar em modo modal
         if (formRef.current) {
             const yOffset = -120; // Espaço para o header fixo
             const element = formRef.current;
@@ -108,11 +114,9 @@ export default function CohousingForm() {
         }
     };
 
-    return (
-        <section id="cadastro" className="py-24 bg-white relative">
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-300 to-transparent"></div>
-
-            <div className="container mx-auto px-6 lg:px-12 max-w-4xl">
+    const content = (
+        <div className={`${isModal ? '' : 'container mx-auto px-6 lg:px-12 max-w-4xl'}`}>
+            {!isModal && (
                 <div className="text-center mb-12">
                     <span className="text-secondary-600 font-bold uppercase tracking-wider text-sm mb-2 block">Seu Futuro Começa Aqui</span>
                     <h2 className="text-4xl md:text-5xl font-bold text-primary-900 mb-4 tracking-tight">Questionário de Afinidade</h2>
@@ -128,9 +132,22 @@ export default function CohousingForm() {
                     </div>
                     <p className="text-[10px] md:text-xs text-gray-400 mt-6 font-medium flex items-center justify-center gap-2 uppercase tracking-widest">
                         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                        Seus dados são tratados conforme a <a href="https://www.gov.br/esporte/pt-br/acesso-a-informacao/lgpd" target="_blank" rel="noopener noreferrer" className="underline hover:text-secondary-600 transition-colors">LGPD</a>.
+                        Seus dados são tratados conforme a <a href="https://www.gov.br/esporte/pt-br/access-a-informacao/lgpd" target="_blank" rel="noopener noreferrer" className="underline hover:text-secondary-600 transition-colors">LGPD</a>.
                     </p>
                 </div>
+            )}
+
+            {isModal && (
+                <div className="flex justify-between items-center mb-8">
+                    <div>
+                        <h2 className="text-3xl font-bold text-primary-900">Questionário de Afinidade</h2>
+                        <p className="text-gray-500">Etapa {step} de 3</p>
+                    </div>
+                    <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                        <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+            )}
 
                 {/* Stepper Visual */}
                 <div className="flex items-center justify-between mb-12 relative max-w-xl mx-auto px-4 before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0 before:h-1 before:bg-gray-100 before:w-full before:-z-10">
@@ -383,6 +400,24 @@ export default function CohousingForm() {
                     )}
                 </div>
             </div>
+        </div>
+    );
+
+    if (isModal) {
+        return (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
+                <div className="absolute inset-0 bg-primary-950/80 backdrop-blur-sm" onClick={onClose}></div>
+                <div className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto animate-in zoom-in-95 fade-in duration-300">
+                    {content}
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <section id="cadastro" className="py-24 bg-white relative">
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-300 to-transparent"></div>
+            {content}
         </section>
     );
 }

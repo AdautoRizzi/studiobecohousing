@@ -3,7 +3,8 @@
 import { 
     registerUser, approveUser, getUserByEmail, getAllUsers, 
     saveLead, updateLeadStatus, getInteractionsByLead, 
-    getMessageTemplates, createMessageTemplate, addToMessageQueue 
+    getMessageTemplates, createMessageTemplate, addToMessageQueue,
+    deleteLead
 } from '@/lib/db';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
@@ -177,6 +178,16 @@ export async function createTemplateAction(title: string, content: string) {
     try {
         await createMessageTemplate(title, content);
         revalidatePath('/admin/crm/templates');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function deleteLeadAction(id: string) {
+    try {
+        await deleteLead(id);
+        revalidatePath('/admin/crm');
         return { success: true };
     } catch (error: any) {
         return { success: false, error: error.message };

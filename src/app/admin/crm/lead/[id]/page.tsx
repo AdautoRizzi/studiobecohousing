@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { updateLeadStatusAction } from '@/app/actions';
 import { MessageSender } from '@/components/crm/MessageSender';
 import LogInteractionForm from '@/components/LogInteractionForm';
+import DeleteLeadButton from '@/components/crm/DeleteLeadButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -68,8 +69,11 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                     </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                    <div className="bg-primary-50 px-4 py-2 rounded-xl text-primary-800 font-bold border border-primary-200">
-                        Status: {lead.status}
+                    <div className="flex items-center gap-2">
+                        <DeleteLeadButton leadId={lead.id} leadName={lead.nome} />
+                        <div className="bg-primary-50 px-4 py-2 rounded-xl text-primary-800 font-bold border border-primary-200">
+                            Status: {lead.status}
+                        </div>
                     </div>
                     {lead.proximoContato && (
                         <div className="bg-orange-50 px-3 py-1 rounded-lg text-orange-700 text-xs font-bold border border-orange-200 flex items-center gap-1.5 animate-pulse">
