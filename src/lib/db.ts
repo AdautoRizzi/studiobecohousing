@@ -161,26 +161,12 @@ export async function saveLead(formData: any) {
         createdAt: new Date().toISOString()
     };
 
-    // Tenta inserir com todos os campos
-    let { data, error } = await supabase
+    // Insere o lead no Supabase
+    const { data, error } = await supabase
         .from('leads')
         .insert([leadData])
         .select()
         .single();
-
-    // Se falhar porque a coluna 'observacoes' não existe no Supabase
-    if (error && error.message.includes("'observacoes'")) {
-        console.warn("Coluna 'observacoes' não encontrada. Tentando salvar sem ela...");
-        const { observacoes, ...safeData } = leadData;
-        const retry = await supabase
-            .from('leads')
-            .insert([safeData])
-            .select()
-            .single();
-        
-        data = retry.data;
-        error = retry.error;
-    }
 
     if (error) {
         console.error("Erro Supabase Insert:", error);
