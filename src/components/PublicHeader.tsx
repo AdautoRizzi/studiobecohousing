@@ -87,12 +87,13 @@ export default function Header() {
                                 );
                             })}
                         </div>
-                        <button
-                            onClick={() => setIsFormModalOpen(true)}
-                            className="bg-secondary-600 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-secondary-700 transition duration-300 shadow-md hover:shadow-lg whitespace-nowrap uppercase tracking-tighter"
+                        <Link
+                            href="/#cadastro"
+                            onClick={() => setCurrentHash('#cadastro')}
+                            className="bg-secondary-600 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-secondary-700 transition duration-300 shadow-md hover:shadow-lg whitespace-nowrap uppercase tracking-tighter inline-block"
                         >
                             Cadastrar Interesse
-                        </button>
+                        </Link>
                     </nav>
 
                     {/* Menu Mobile Toggle */}
@@ -139,15 +140,16 @@ export default function Header() {
                                     </Link>
                                 );
                             })}
-                            <button
+                            <Link
+                                href="/#cadastro"
                                 onClick={() => {
                                     setIsMenuOpen(false);
-                                    setIsFormModalOpen(true);
+                                    setCurrentHash('#cadastro');
                                 }}
                                 className="w-full text-center bg-secondary-600 text-white flex justify-center py-3 rounded-xl font-bold mt-2 shadow-lg"
                             >
                                 Cadastrar Interesse
-                            </button>
+                            </Link>
                         </nav>
                     </div>
                 )}
