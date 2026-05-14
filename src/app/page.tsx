@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import PublicHeader from '@/components/PublicHeader';
 import PublicFooter from '@/components/PublicFooter';
-import CohousingForm from '@/components/CohousingForm';
+import CohousingPreview from '@/components/CohousingPreview';
 import { Button } from '@/components/ui/Button';
 
 // Ícones SVG minimalistas que substituem os do zip original
@@ -189,7 +189,7 @@ export default function Home() {
               </div>
             </div>
             <div className="w-full">
-              <CohousingForm />
+              <CohousingPreview />
             </div>
           </div>
         </section>

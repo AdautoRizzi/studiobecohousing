@@ -30,8 +30,15 @@ export default function Header() {
             setCurrentHash(window.location.hash);
         };
 
+        const handleOpenModal = () => setIsFormModalOpen(true);
+
         window.addEventListener('hashchange', handleHashChange);
-        return () => window.removeEventListener('hashchange', handleHashChange);
+        window.addEventListener('openFormModal', handleOpenModal);
+        
+        return () => {
+            window.removeEventListener('hashchange', handleHashChange);
+            window.removeEventListener('openFormModal', handleOpenModal);
+        };
     }, []);
 
     return (
