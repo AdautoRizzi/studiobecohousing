@@ -41,7 +41,7 @@ export default function PublicFooter() {
 
                 <div className="pt-8 border-t border-primary-800 w-full text-center flex flex-col md:flex-row justify-center items-center gap-2">
                     <p className="opacity-70">&copy; {new Date().getFullYear()} Studio Be - Soluções em Cohousing. Todos os direitos reservados.</p>
-                    <span className="text-[10px] opacity-30 font-mono">v1.4</span>
+                    <span className="text-[10px] opacity-30 font-mono">v1.5</span>
                 </div>
             </div>
         </footer>
