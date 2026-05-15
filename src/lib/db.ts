@@ -32,6 +32,7 @@ export interface Lead {
     notasCrm: string;
     proximoContato: string | null;
     observacoes: string;
+    categoria?: string; // Ex: 'Lead Site', 'Pesquisa Antiga', 'Investidor', 'Proprietário de Área', 'Parceiro'
     createdAt: string;
 }
 
@@ -156,6 +157,7 @@ export async function saveLead(formData: any) {
         valores: formData.valores || [],
         empreender: formData.empreender || [],
         observacoes: formData.observacoes || '',
+        categoria: formData.categoria || 'Lead Site',
         status: 'Novo',
         notasCrm: '',
         createdAt: new Date().toISOString()

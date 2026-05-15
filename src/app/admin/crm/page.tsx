@@ -5,11 +5,21 @@ import DeleteLeadButton from '@/components/crm/DeleteLeadButton';
 
 export const dynamic = 'force-dynamic';
 
-export default async function CRMPage() {
+export default async function CRMPage({ searchParams }: { searchParams: { tab?: string } }) {
     const leads = await getAllLeads();
-    
+    const currentTab = searchParams.tab || 'leads';
+
     // Reverse leads to show newest first
     const sortedLeads = [...leads].reverse();
+
+    // Filtra com base na aba
+    const filteredLeads = sortedLeads.filter(lead => {
+        const cat = lead.categoria || 'Lead Site';
+        if (currentTab === 'leads') return cat === 'Lead Site';
+        if (currentTab === 'pesquisa') return cat === 'Pesquisa Antiga';
+        if (currentTab === 'stakeholders') return cat !== 'Lead Site' && cat !== 'Pesquisa Antiga';
+        return true;
+    });
 
     const getStatusColor = (status: string) => {
         switch(status) {
@@ -35,14 +45,28 @@ export default async function CRMPage() {
                     </div>
                 </div>
                 <div className="flex gap-4 items-end">
+                    <Link href="/admin/crm/importar" className="bg-gray-100 text-gray-700 px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-gray-200 transition-all flex items-center gap-2 border border-gray-200">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                        Importar Dados
+                    </Link>
                     <Link href="/admin/crm/new" className="bg-primary-900 text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-primary-800 transition-all shadow-lg shadow-primary-900/20 flex items-center gap-2">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                        Novo Cadastro Manual
+                        Novo Manual
                     </Link>
-                    <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200 font-bold text-gray-700">
-                        Total: {leads.length} Leads
-                    </div>
                 </div>
+            </div>
+
+            {/* Abas de Navegação */}
+            <div className="flex space-x-2 mb-6 bg-white p-2 rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+                <Link href="/admin/crm?tab=leads" className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'leads' ? 'bg-secondary-50 text-secondary-600 shadow-sm border border-secondary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
+                    🚀 Leads Site ({sortedLeads.filter(l => (l.categoria || 'Lead Site') === 'Lead Site').length})
+                </Link>
+                <Link href="/admin/crm?tab=pesquisa" className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'pesquisa' ? 'bg-primary-50 text-primary-700 shadow-sm border border-primary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
+                    📊 Pesquisa Antiga ({sortedLeads.filter(l => l.categoria === 'Pesquisa Antiga').length})
+                </Link>
+                <Link href="/admin/crm?tab=stakeholders" className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'stakeholders' ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}>
+                    🤝 Stakeholders ({sortedLeads.filter(l => l.categoria && l.categoria !== 'Lead Site' && l.categoria !== 'Pesquisa Antiga').length})
+                </Link>
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
@@ -58,14 +82,14 @@ export default async function CRMPage() {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {sortedLeads.length === 0 ? (
+                        {filteredLeads.length === 0 ? (
                             <tr>
-                                <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
-                                    Nenhum lead encontrado. Compartilhe o link do formulário!
+                                <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                                    Nenhum registro encontrado nesta categoria.
                                 </td>
                             </tr>
                         ) : (
-                            sortedLeads.map(lead => (
+                            filteredLeads.map(lead => (
                                 <tr key={lead.id} className="hover:bg-gray-50 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="font-bold text-gray-900">{lead.nome}</div>

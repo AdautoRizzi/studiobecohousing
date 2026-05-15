@@ -151,6 +151,24 @@ export async function submitCohousingFormAction(formData: any) {
     }
 }
 
+export async function bulkImportLeadsAction(leadsData: any[]) {
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const lead of leadsData) {
+        try {
+            await saveLead(lead);
+            successCount++;
+        } catch (e) {
+            console.error("Failed to import lead:", lead.nome, e);
+            failCount++;
+        }
+    }
+
+    revalidatePath('/admin/crm');
+    return { success: successCount, failed: failCount };
+}
+
 export async function updateLeadStatusAction(formData: FormData) {
     const leadId = formData.get('leadId') as string;
     const status = formData.get('status') as any;

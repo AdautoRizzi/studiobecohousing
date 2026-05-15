@@ -29,6 +29,8 @@ const INTERESSES = ['Atividades culturais e artísticas', 'Alimentação compart
 const EMPREENDER = ['Não tenho interesse', 'Coworking', 'Dark kitchen (cozinha compartilhada)', 'Serviços na área de terapias, saúde e bem-estar', 'Cafeteria / restaurante', 'Prestação de serviços diversos', 'Conveniência / drogaria', 'Lavanderia auto-serviço', 'Espaço de eventos (artístico e cultural)'];
 const VALORES = ['Rede de apoio para combater a solidão', 'Segurança e suporte integrados', 'Manutenção da autonomia e independência', 'Redução de custos de manutenção', 'Sustentabilidade', 'Contato com a natureza', 'Proximidade a serviços e comércio', 'Rede de serviços de manutenção das unidades'];
 
+const CATEGORIAS = ['Lead Site', 'Pesquisa Antiga', 'Investidor', 'Proprietário de Área', 'Parceiro', 'Outro'];
+
 export default function ManualLeadForm() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -51,7 +53,9 @@ export default function ManualLeadForm() {
         interesses: [] as string[],
         empreender: [] as string[],
         valores: [] as string[],
-        observacoes: ''
+        observacoes: '',
+        origem: 'Admin CRM',
+        categoria: 'Lead Site'
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -105,6 +109,12 @@ export default function ManualLeadForm() {
                     Identificação e Perfil
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="md:col-span-2 lg:col-span-1">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Categoria / Tipo</label>
+                        <select name="categoria" value={formData.categoria} onChange={handleChange} required className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                            {CATEGORIAS.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                    </div>
                     <div className="md:col-span-2 lg:col-span-1">
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Nome Completo</label>
                         <input name="nome" value={formData.nome} onChange={handleChange} required className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
