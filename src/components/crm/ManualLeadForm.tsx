@@ -53,6 +53,7 @@ export default function ManualLeadForm() {
         interesses: [] as string[],
         empreender: [] as string[],
         valores: [] as string[],
+        participouApresentacao: '',
         observacoes: '',
         origem: 'Admin CRM',
         categoria: 'Lead Site'
@@ -265,6 +266,14 @@ export default function ManualLeadForm() {
                     <span className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm">4</span>
                     Observações e Considerações
                 </h3>
+                <div className="mb-6">
+                    <label className="text-xs font-bold text-gray-500 uppercase block mb-3">Participou de Apresentação?</label>
+                    <select name="participouApresentacao" value={formData.participouApresentacao} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 outline-none focus:ring-2 focus:ring-primary-500">
+                        <option value="">Selecione...</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
                 <div>
                     <label className="text-xs font-bold text-gray-500 uppercase block mb-3">Observações Adicionais</label>
                     <textarea 

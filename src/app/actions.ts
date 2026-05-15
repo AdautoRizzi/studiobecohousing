@@ -80,6 +80,14 @@ export async function adminLogoutAction() {
 
 export async function submitCohousingFormAction(formData: any) {
     try {
+        // Prepara a observação com a nova pergunta para não quebrar a estrutura do banco
+        let observacoesFinais = formData.observacoes || '';
+        if (formData.participouApresentacao) {
+            const extra = `[Apresentação do Studio Be: ${formData.participouApresentacao}]`;
+            observacoesFinais = observacoesFinais ? `${extra}\n${observacoesFinais}` : extra;
+        }
+        formData.observacoes = observacoesFinais;
+
         // 1. Salvar no CRM interno (Supabase)
         const newLead = await saveLead(formData);
 

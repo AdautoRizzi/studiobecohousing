@@ -58,6 +58,7 @@ export default function CohousingForm({ isModal, onClose }: Props) {
         interesses: [] as string[],
         empreender: [] as string[],
         valores: [] as string[],
+        participouApresentacao: '',
         observacoes: ''
     });
 
@@ -85,7 +86,7 @@ export default function CohousingForm({ isModal, onClose }: Props) {
 
     const isStep1Valid = formData.nome.length > 2 && formData.email.includes('@') && formData.telefone.length > 8 && formData.moradiaAtual && formData.idade && formData.profissao && formData.genero;
     const isStep2Valid = formData.ondeMorar && formData.tipoCohousing && formData.tipologia && formData.areaResidencia && formData.comQuem && formData.totalPessoas;
-    const isStep3Valid = formData.interesses.length > 0 && formData.empreender.length > 0 && formData.valores.length > 0;
+    const isStep3Valid = formData.interesses.length > 0 && formData.empreender.length > 0 && formData.valores.length > 0 && formData.participouApresentacao !== '';
 
     const scrollToForm = () => {
         if (isModal) return;
@@ -301,6 +302,17 @@ export default function CohousingForm({ isModal, onClose }: Props) {
                                                 {e}
                                             </div>
                                         ))}
+                                    </div>
+                                </div>
+                                <div className="space-y-4">
+                                    <label className="text-sm font-bold text-gray-700">Você já participou de alguma apresentação presencial ou on-line do Studio Be? *</label>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <button type="button" onClick={() => setFormData({ ...formData, participouApresentacao: 'Sim' })} className={`p-4 rounded-xl border text-center font-bold transition-all ${formData.participouApresentacao === 'Sim' ? 'bg-primary-600 text-white border-primary-600 shadow-md' : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-primary-300'}`}>
+                                            Sim
+                                        </button>
+                                        <button type="button" onClick={() => setFormData({ ...formData, participouApresentacao: 'Não' })} className={`p-4 rounded-xl border text-center font-bold transition-all ${formData.participouApresentacao === 'Não' ? 'bg-primary-600 text-white border-primary-600 shadow-md' : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-primary-300'}`}>
+                                            Não
+                                        </button>
                                     </div>
                                 </div>
                                 <div className="space-y-4">
