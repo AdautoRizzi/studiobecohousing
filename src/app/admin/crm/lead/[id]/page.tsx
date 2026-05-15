@@ -53,7 +53,13 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
         };
     };
 
-    const matches = allLeads.map(calculateMatch).sort((a, b) => b.percentage - a.percentage).slice(0, 3);
+    const matches = allLeads.map(calculateMatch).sort((a, b) => b.percentage - a.percentage).slice(0, 10);
+
+    const sameRegionLeads = allLeads.filter(l => 
+        l.ondeMorar && 
+        lead.ondeMorar && 
+        l.ondeMorar.toLowerCase().trim() === lead.ondeMorar.toLowerCase().trim()
+    );
 
     return (
         <div className="max-w-6xl mx-auto space-y-6">
@@ -349,7 +355,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                     <div className="bg-gradient-to-br from-primary-900 to-primary-800 p-6 rounded-3xl shadow-sm text-white">
                         <h3 className="font-bold mb-4 flex items-center gap-2">
                             <svg className="w-5 h-5 text-secondary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                            Match de Afinidade
+                            Top 10 Matches
                         </h3>
                         <div className="space-y-3">
                             {matches.map((m, idx) => (
@@ -362,6 +368,29 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                 </div>
                             ))}
                         </div>
+                    </div>
+
+                    {/* Mesma Região */}
+                    <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
+                        <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <svg className="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            Mesma Região ({lead.ondeMorar || 'N/A'})
+                        </h3>
+                        {sameRegionLeads.length === 0 ? (
+                            <p className="text-xs text-gray-500">Nenhum outro lead encontado para esta região.</p>
+                        ) : (
+                            <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                                {sameRegionLeads.map(l => (
+                                    <div key={l.id} className="bg-gray-50 p-3 rounded-xl border border-gray-100 flex flex-col gap-1">
+                                        <div className="flex justify-between items-center">
+                                            <span className="font-bold text-sm text-gray-900 truncate mr-2">{l.nome}</span>
+                                            <span className="text-[10px] font-bold px-2 py-1 bg-gray-200 text-gray-700 rounded-md truncate max-w-[80px]" title={l.tipologia}>{l.tipologia || 'Indefinida'}</span>
+                                        </div>
+                                        <Link href={`/admin/crm/lead/${l.id}`} className="text-[10px] uppercase font-bold text-primary-600 hover:text-primary-800 underline">Ver Perfil</Link>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
