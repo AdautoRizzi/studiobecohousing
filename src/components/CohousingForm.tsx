@@ -6,12 +6,14 @@ import { submitCohousingFormAction } from '@/app/actions';
 
 // Opções das 15 questões estruturadas
 const FAIXAS_ETARIAS = ['menos de 40 anos', '40 a 45 anos', '46 a 50 anos', '51 a 55 anos', '56 a 60 anos', '61 a 65 anos', '66 a 70 anos', '70 a 80 anos', 'mais de 80 anos'];
-const GENEROS = ['feminino', 'masculino', 'prefiro não informar'];
-const TIPOS_COHOUSING = ['Urbano em grandes metrópoles', 'Urbano em cidades do interior', 'Rural - próximo ao centro da cidade', 'Urbano no litoral', 'Indiferente'];
-const TIPOLOGIAS = ['Casas térreas', 'Apartamentos', 'Loft', 'Indiferente'];
+const GENEROS = ['feminino', 'masculino', 'não binário', 'outro', 'prefiro não informar'];
+const TIPOS_COHOUSING = ['Urbano em grandes metrópoles', 'Urbano em cidades do interior', 'Rural - próximo ao centro da cidade', 'Litoral', 'Indiferente'];
+const TIPOLOGIAS = ['Casas', 'Apartamentos', 'Loft', 'Indiferente'];
 const AREAS_RESIDENCIA = ['Até 50 m2', 'de 50 m2 a 80 m2', 'de 80 m2 a 120 m2', 'acima de 120 m2'];
 const COM_QUEM = ['sozinha/o', 'com cônjuge ou companheira/o', 'com amigos e/ou familiares'];
 const TOT_PESSOAS = ['1 pessoa', '2 pessoas', '3 pessoas', '4 pessoas'];
+const QTD_DORMITORIOS = ['1 dormitório', '2 dormitórios', '3 dormitórios', 'Mais de 3'];
+const QTD_SUITES = ['1 suíte', '2 suítes', '3 suítes', 'Mais de 3'];
 const INTERESSES = ['Atividades culturais e artísticas', 'Alimentação compartilhada e gastronomia', 'Horta e jardinagem', 'Atividades físicas, esporte e lazer', 'Atividades de meditação ou contemplativas', 'Wellness (saúde e bem-estar)'];
 const EMPREENDER = ['Não tenho interesse', 'Coworking', 'Dark kitchen (cozinha compartilhada)', 'Serviços na área de terapias, saúde e bem-estar', 'Cafeteria / restaurante', 'Prestação de serviços diversos', 'Conveniência / drogaria', 'Lavanderia auto-serviço', 'Espaço de eventos (artístico e cultural)'];
 const VALORES = ['Rede de apoio para combater a solidão', 'Segurança e suporte integrados', 'Manutenção da autonomia e independência', 'Redução de custos de manutenção', 'Sustentabilidade', 'Contato com a natureza', 'Proximidade a serviços e comércio', 'Rede de serviços de manutenção das unidades'];
@@ -41,8 +43,8 @@ export default function CohousingForm({ isModal, onClose }: Props) {
         comQuem: '',
         totalPessoas: '',
         areaResidencia: '',
-        dormitorios: '1',
-        suites: '1',
+        dormitorios: '',
+        suites: '',
         interesses: [] as string[],
         empreender: [] as string[],
         valores: [] as string[],
@@ -239,11 +241,17 @@ export default function CohousingForm({ isModal, onClose }: Props) {
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-xs font-bold text-gray-500 uppercase">Dormitórios *</label>
-                                    <input type="number" name="dormitorios" value={formData.dormitorios} onChange={handleChange} min="1" max="10" className="w-full h-12 bg-gray-50 rounded-xl px-4 border border-gray-200 focus:ring-2 focus:ring-secondary-500 outline-none" required />
+                                    <select name="dormitorios" value={formData.dormitorios} onChange={handleChange} className="w-full h-12 bg-gray-50 rounded-xl px-4 border border-gray-200 focus:ring-2 focus:ring-secondary-500 outline-none" required>
+                                        <option value="">Selecione...</option>
+                                        {QTD_DORMITORIOS.map(d => <option key={d} value={d}>{d}</option>)}
+                                    </select>
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-xs font-bold text-gray-500 uppercase">Suítes *</label>
-                                    <input type="number" name="suites" value={formData.suites} onChange={handleChange} min="0" max="10" className="w-full h-12 bg-gray-50 rounded-xl px-4 border border-gray-200 focus:ring-2 focus:ring-secondary-500 outline-none" required />
+                                    <select name="suites" value={formData.suites} onChange={handleChange} className="w-full h-12 bg-gray-50 rounded-xl px-4 border border-gray-200 focus:ring-2 focus:ring-secondary-500 outline-none" required>
+                                        <option value="">Selecione...</option>
+                                        {QTD_SUITES.map(s => <option key={s} value={s}>{s}</option>)}
+                                    </select>
                                 </div>
                                 <div className="col-span-full pt-6 flex justify-between">
                                     <Button type="button" variant="outline" onClick={prevStep} className="h-14 px-8 rounded-full">Voltar</Button>
