@@ -12,8 +12,18 @@ const TIPOLOGIAS = ['Casas', 'Apartamentos', 'Loft', 'Indiferente'];
 const AREAS_RESIDENCIA = ['Até 50 m2', 'de 50 m2 a 80 m2', 'de 80 m2 a 120 m2', 'acima de 120 m2'];
 const COM_QUEM = ['sozinha/o', 'com cônjuge ou companheira/o', 'com amigos e/ou familiares'];
 const TOT_PESSOAS = ['1 pessoa', '2 pessoas', '3 pessoas', '4 pessoas'];
-const QTD_DORMITORIOS = ['1 dormitório', '2 dormitórios', '3 dormitórios', 'Mais de 3'];
-const QTD_SUITES = ['1 suíte', '2 suítes', '3 suítes', 'Mais de 3'];
+const QTD_DORMITORIOS = [
+    { label: '1 dormitório', value: '1' },
+    { label: '2 dormitórios', value: '2' },
+    { label: '3 dormitórios', value: '3' },
+    { label: 'Mais de 3', value: '4' }
+];
+const QTD_SUITES = [
+    { label: '1 suíte', value: '1' },
+    { label: '2 suítes', value: '2' },
+    { label: '3 suítes', value: '3' },
+    { label: 'Mais de 3', value: '4' }
+];
 const INTERESSES = ['Atividades culturais e artísticas', 'Alimentação compartilhada e gastronomia', 'Horta e jardinagem', 'Atividades físicas, esporte e lazer', 'Atividades de meditação ou contemplativas', 'Wellness (saúde e bem-estar)'];
 const EMPREENDER = ['Não tenho interesse', 'Coworking', 'Dark kitchen (cozinha compartilhada)', 'Serviços na área de terapias, saúde e bem-estar', 'Cafeteria / restaurante', 'Prestação de serviços diversos', 'Conveniência / drogaria', 'Lavanderia auto-serviço', 'Espaço de eventos (artístico e cultural)'];
 const VALORES = ['Rede de apoio para combater a solidão', 'Segurança e suporte integrados', 'Manutenção da autonomia e independência', 'Redução de custos de manutenção', 'Sustentabilidade', 'Contato com a natureza', 'Proximidade a serviços e comércio', 'Rede de serviços de manutenção das unidades'];
@@ -243,14 +253,14 @@ export default function CohousingForm({ isModal, onClose }: Props) {
                                     <label className="text-xs font-bold text-gray-500 uppercase">Dormitórios *</label>
                                     <select name="dormitorios" value={formData.dormitorios} onChange={handleChange} className="w-full h-12 bg-gray-50 rounded-xl px-4 border border-gray-200 focus:ring-2 focus:ring-secondary-500 outline-none" required>
                                         <option value="">Selecione...</option>
-                                        {QTD_DORMITORIOS.map(d => <option key={d} value={d}>{d}</option>)}
+                                        {QTD_DORMITORIOS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
                                     </select>
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-xs font-bold text-gray-500 uppercase">Suítes *</label>
                                     <select name="suites" value={formData.suites} onChange={handleChange} className="w-full h-12 bg-gray-50 rounded-xl px-4 border border-gray-200 focus:ring-2 focus:ring-secondary-500 outline-none" required>
                                         <option value="">Selecione...</option>
-                                        {QTD_SUITES.map(s => <option key={s} value={s}>{s}</option>)}
+                                        {QTD_SUITES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                                     </select>
                                 </div>
                                 <div className="col-span-full pt-6 flex justify-between">
