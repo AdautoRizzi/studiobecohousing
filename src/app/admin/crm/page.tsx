@@ -5,9 +5,10 @@ import DeleteLeadButton from '@/components/crm/DeleteLeadButton';
 
 export const dynamic = 'force-dynamic';
 
-export default async function CRMPage({ searchParams }: { searchParams: { tab?: string } }) {
+export default async function CRMPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+    const params = await searchParams;
     const leads = await getAllLeads();
-    const currentTab = searchParams.tab || 'leads';
+    const currentTab = params.tab || 'leads';
 
     // Reverse leads to show newest first
     const sortedLeads = [...leads].reverse();
