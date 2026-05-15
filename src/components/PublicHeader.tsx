@@ -89,7 +89,18 @@ export default function Header() {
                         </div>
                         <Link
                             href="/#cadastro"
-                            onClick={() => setCurrentHash('#cadastro')}
+                            onClick={(e) => {
+                                setCurrentHash('#cadastro');
+                                if (pathname === '/') {
+                                    e.preventDefault();
+                                    const elem = document.getElementById('cadastro');
+                                    if (elem) {
+                                        const yOffset = -100;
+                                        const y = elem.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                                        window.scrollTo({ top: y, behavior: 'smooth' });
+                                    }
+                                }
+                            }}
                             className="bg-secondary-600 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-secondary-700 transition duration-300 shadow-md hover:shadow-lg whitespace-nowrap uppercase tracking-tighter inline-block"
                         >
                             Cadastrar Interesse
@@ -142,9 +153,20 @@ export default function Header() {
                             })}
                             <Link
                                 href="/#cadastro"
-                                onClick={() => {
+                                onClick={(e) => {
                                     setIsMenuOpen(false);
                                     setCurrentHash('#cadastro');
+                                    if (pathname === '/') {
+                                        e.preventDefault();
+                                        setTimeout(() => {
+                                            const elem = document.getElementById('cadastro');
+                                            if (elem) {
+                                                const yOffset = -100;
+                                                const y = elem.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                                                window.scrollTo({ top: y, behavior: 'smooth' });
+                                            }
+                                        }, 100);
+                                    }
                                 }}
                                 className="w-full text-center bg-secondary-600 text-white flex justify-center py-3 rounded-xl font-bold mt-2 shadow-lg"
                             >
