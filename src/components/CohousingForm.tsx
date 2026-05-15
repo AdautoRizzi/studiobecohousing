@@ -237,6 +237,14 @@ export default function CohousingForm({ isModal, onClose }: Props) {
                                         {TOT_PESSOAS.map(p => <option key={p} value={p}>{p}</option>)}
                                     </select>
                                 </div>
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold text-gray-500 uppercase">Dormitórios *</label>
+                                    <input type="number" name="dormitorios" value={formData.dormitorios} onChange={handleChange} min="1" max="10" className="w-full h-12 bg-gray-50 rounded-xl px-4 border border-gray-200 focus:ring-2 focus:ring-secondary-500 outline-none" required />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold text-gray-500 uppercase">Suítes *</label>
+                                    <input type="number" name="suites" value={formData.suites} onChange={handleChange} min="0" max="10" className="w-full h-12 bg-gray-50 rounded-xl px-4 border border-gray-200 focus:ring-2 focus:ring-secondary-500 outline-none" required />
+                                </div>
                                 <div className="col-span-full pt-6 flex justify-between">
                                     <Button type="button" variant="outline" onClick={prevStep} className="h-14 px-8 rounded-full">Voltar</Button>
                                     <Button type="button" onClick={nextStep} disabled={!isStep2Valid} className="h-14 px-10 rounded-full bg-primary-900">Próxima Etapa ➔</Button>
@@ -276,6 +284,10 @@ export default function CohousingForm({ isModal, onClose }: Props) {
                                             </div>
                                         ))}
                                     </div>
+                                </div>
+                                <div className="space-y-4">
+                                    <label className="text-sm font-bold text-gray-700">Observações ou Mensagem (Opcional)</label>
+                                    <textarea name="observacoes" value={formData.observacoes} onChange={(e: any) => handleChange(e)} rows={3} className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-secondary-500 outline-none resize-none" placeholder="Conte-nos algo mais que devemos saber..."></textarea>
                                 </div>
                                 <div className="pt-6 flex justify-between items-center border-t border-gray-100">
                                     <Button type="button" variant="outline" onClick={prevStep} className="h-14 px-8 rounded-full">Voltar</Button>
