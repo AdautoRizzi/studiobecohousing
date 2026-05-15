@@ -12,9 +12,15 @@ export default async function CRMPage({ searchParams }: { searchParams: { tab?: 
     // Reverse leads to show newest first
     const sortedLeads = [...leads].reverse();
 
+    // Limpa aspas caso o valor padrão no Supabase tenha sido criado com aspas simples/duplas
+    const getCleanCategory = (cat: string | null | undefined) => {
+        if (!cat) return 'Lead Site';
+        return cat.replace(/['"]/g, '').trim();
+    };
+
     // Filtra com base na aba
     const filteredLeads = sortedLeads.filter(lead => {
-        const cat = lead.categoria || 'Lead Site';
+        const cat = getCleanCategory(lead.categoria);
         if (currentTab === 'leads') return cat === 'Lead Site';
         if (currentTab === 'pesquisa') return cat === 'Pesquisa Antiga';
         if (currentTab === 'stakeholders') return cat !== 'Lead Site' && cat !== 'Pesquisa Antiga';
@@ -59,13 +65,16 @@ export default async function CRMPage({ searchParams }: { searchParams: { tab?: 
             {/* Abas de Navegação */}
             <div className="flex space-x-2 mb-6 bg-white p-2 rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
                 <Link href="/admin/crm?tab=leads" className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'leads' ? 'bg-secondary-50 text-secondary-600 shadow-sm border border-secondary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
-                    🚀 Leads Site ({sortedLeads.filter(l => (l.categoria || 'Lead Site') === 'Lead Site').length})
+                    🚀 Leads Site ({sortedLeads.filter(l => getCleanCategory(l.categoria) === 'Lead Site').length})
                 </Link>
                 <Link href="/admin/crm?tab=pesquisa" className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'pesquisa' ? 'bg-primary-50 text-primary-700 shadow-sm border border-primary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
-                    📊 Pesquisa Antiga ({sortedLeads.filter(l => l.categoria === 'Pesquisa Antiga').length})
+                    📊 Pesquisa Antiga ({sortedLeads.filter(l => getCleanCategory(l.categoria) === 'Pesquisa Antiga').length})
                 </Link>
                 <Link href="/admin/crm?tab=stakeholders" className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'stakeholders' ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}>
-                    🤝 Stakeholders ({sortedLeads.filter(l => l.categoria && l.categoria !== 'Lead Site' && l.categoria !== 'Pesquisa Antiga').length})
+                    🤝 Stakeholders ({sortedLeads.filter(l => {
+                        const cat = getCleanCategory(l.categoria);
+                        return cat !== 'Lead Site' && cat !== 'Pesquisa Antiga';
+                    }).length})
                 </Link>
             </div>
 
