@@ -254,6 +254,28 @@ export async function createMessageTemplate(title: string, content: string) {
     return data;
 }
 
+export async function updateMessageTemplate(id: string, title: string, content: string) {
+    const { data, error } = await supabase
+        .from('message_templates')
+        .update({ title, content })
+        .eq('id', id)
+        .select()
+        .single();
+    
+    if (error) throw new Error(error.message);
+    return data;
+}
+
+export async function deleteMessageTemplate(id: string) {
+    const { error } = await supabase
+        .from('message_templates')
+        .delete()
+        .eq('id', id);
+    
+    if (error) throw new Error(error.message);
+    return true;
+}
+
 // Funções de Fila de Mensagens
 export async function addToMessageQueue(leadId: string, message: string) {
     const { data, error } = await supabase

@@ -3,7 +3,7 @@
 import { 
     registerUser, approveUser, getUserByEmail, getAllUsers, 
     saveLead, updateLeadStatus, getInteractionsByLead, 
-    getMessageTemplates, createMessageTemplate, addToMessageQueue,
+    getMessageTemplates, createMessageTemplate, updateMessageTemplate, deleteMessageTemplate, addToMessageQueue,
     deleteLead
 } from '@/lib/db';
 import { cookies } from 'next/headers';
@@ -203,6 +203,26 @@ export async function queueMessageAction(leadId: string, message: string) {
 export async function createTemplateAction(title: string, content: string) {
     try {
         await createMessageTemplate(title, content);
+        revalidatePath('/admin/crm/templates');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function updateTemplateAction(id: string, title: string, content: string) {
+    try {
+        await updateMessageTemplate(id, title, content);
+        revalidatePath('/admin/crm/templates');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function deleteTemplateAction(id: string) {
+    try {
+        await deleteMessageTemplate(id);
         revalidatePath('/admin/crm/templates');
         return { success: true };
     } catch (error: any) {
