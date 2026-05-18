@@ -2,14 +2,16 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Lead } from '@/lib/db';
+import { Lead, MessageTemplate } from '@/lib/db';
 import { sendEmailAction } from '@/app/actions';
 
 interface Props {
     lead: Lead;
+    templates: MessageTemplate[];
 }
 
-export default function EmailSender({ lead }: Props) {
+export default function EmailSender({ lead, templates }: Props) {
+    const [selectedTemplate, setSelectedTemplate] = useState('');
     const [subject, setSubject] = useState('');
     const [content, setContent] = useState('');
     const [loading, setLoading] = useState(false);
@@ -58,6 +60,31 @@ export default function EmailSender({ lead }: Props) {
                 </div>
             ) : (
                 <div className="space-y-4">
+                    {templates && templates.length > 0 && (
+                        <div>
+                            <label className="text-xs font-bold text-gray-500 uppercase">Usar Template (Opcional)</label>
+                            <select 
+                                value={selectedTemplate}
+                                onChange={(e) => {
+                                    const tId = e.target.value;
+                                    setSelectedTemplate(tId);
+                                    if (tId) {
+                                        const t = templates.find(x => x.id.toString() === tId);
+                                        if (t) {
+                                            setSubject(t.title);
+                                            setContent(t.content);
+                                        }
+                                    }
+                                }}
+                                className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+                            >
+                                <option value="">Selecione um template rápido...</option>
+                                {templates.map(t => (
+                                    <option key={t.id} value={t.id}>{t.title}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
                     <div>
                         <label className="text-xs font-bold text-gray-500 uppercase">Assunto</label>
                         <input 
