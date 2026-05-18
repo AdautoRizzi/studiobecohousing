@@ -120,34 +120,34 @@ export default function ManualLeadForm() {
                     </div>
                     <div className="md:col-span-2 lg:col-span-1">
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Nome Completo</label>
-                        <input name="nome" value={formData.nome} onChange={handleChange} required className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <input name="nome" value={formData.nome} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">E-mail</label>
-                        <input name="email" value={formData.email} onChange={handleChange} required={isLeadSite} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <input name="email" value={formData.email} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Telefone / WhatsApp</label>
-                        <input name="telefone" value={formData.telefone} onChange={handleChange} placeholder="(00) 00000-0000" required={isLeadSite} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <input name="telefone" value={formData.telefone} onChange={handleChange} placeholder="(00) 00000-0000" className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Moradia Atual (Cidade/UF)</label>
-                        <input name="moradiaAtual" value={formData.moradiaAtual} onChange={handleChange} required={isLeadSite} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <input name="moradiaAtual" value={formData.moradiaAtual} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Profissão Principal</label>
-                        <input name="profissao" value={formData.profissao} onChange={handleChange} required={isLeadSite} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <input name="profissao" value={formData.profissao} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Faixa Etária</label>
-                        <select name="idade" value={formData.idade} onChange={handleChange} required={isLeadSite} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <select name="idade" value={formData.idade} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {FAIXAS_ETARIAS.map(f => <option key={f} value={f}>{f}</option>)}
                         </select>
                     </div>
                     <div>
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Gênero</label>
-                        <select name="genero" value={formData.genero} onChange={handleChange} required={isLeadSite} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <select name="genero" value={formData.genero} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {GENEROS.map(g => <option key={g} value={g}>{g}</option>)}
                         </select>
