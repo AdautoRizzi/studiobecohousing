@@ -15,8 +15,8 @@ export default function CohousingPreview() {
             <div className="bg-white rounded-[2.5rem] p-8 md:p-14 shadow-2xl border border-secondary-100 hover:border-secondary-300 transition-all hover:shadow-secondary-500/20 relative overflow-hidden">
                 
                 {/* Overlay de clique visual */}
-                <div className="absolute inset-0 bg-secondary-50/0 group-hover:bg-secondary-50/50 transition-colors z-10 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <span className="bg-secondary-600 text-white font-bold px-8 py-4 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all flex items-center gap-2">
+                <div className="absolute inset-0 bg-secondary-50/20 md:bg-secondary-50/0 group-hover:bg-secondary-50/50 transition-colors z-10 flex items-center justify-center opacity-100 md:opacity-0 group-hover:opacity-100">
+                    <span className="bg-secondary-600 text-white font-bold px-8 py-4 rounded-full shadow-lg transform translate-y-0 md:translate-y-4 group-hover:translate-y-0 transition-all flex items-center gap-2">
                         Preencher Agora
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                     </span>
