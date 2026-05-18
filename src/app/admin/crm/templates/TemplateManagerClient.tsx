@@ -5,14 +5,14 @@ import { Button } from '@/components/ui/Button';
 import { createTemplateAction, updateTemplateAction, deleteTemplateAction } from '@/app/actions';
 
 interface Template {
-    id: string;
+    id: number;
     title: string;
     content: string;
 }
 
 export default function TemplateManagerClient({ initialTemplates }: { initialTemplates: Template[] }) {
     const [templates, setTemplates] = useState<Template[]>(initialTemplates);
-    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editingId, setEditingId] = useState<number | null>(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ export default function TemplateManagerClient({ initialTemplates }: { initialTem
         setContent('');
     };
 
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (id: number) => {
         if (!confirm('Tem certeza que deseja excluir este template?')) return;
         setLoading(true);
         const res = await deleteTemplateAction(id);

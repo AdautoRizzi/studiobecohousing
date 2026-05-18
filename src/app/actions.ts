@@ -210,7 +210,7 @@ export async function createTemplateAction(title: string, content: string) {
     }
 }
 
-export async function updateTemplateAction(id: string, title: string, content: string) {
+export async function updateTemplateAction(id: number, title: string, content: string) {
     try {
         await updateMessageTemplate(id, title, content);
         revalidatePath('/admin/crm/templates');
@@ -220,7 +220,7 @@ export async function updateTemplateAction(id: string, title: string, content: s
     }
 }
 
-export async function deleteTemplateAction(id: string) {
+export async function deleteTemplateAction(id: number) {
     try {
         await deleteMessageTemplate(id);
         revalidatePath('/admin/crm/templates');

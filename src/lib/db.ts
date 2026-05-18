@@ -254,7 +254,7 @@ export async function createMessageTemplate(title: string, content: string) {
     return data;
 }
 
-export async function updateMessageTemplate(id: string, title: string, content: string) {
+export async function updateMessageTemplate(id: number, title: string, content: string) {
     const { data, error } = await supabase
         .from('message_templates')
         .update({ title, content })
@@ -266,7 +266,7 @@ export async function updateMessageTemplate(id: string, title: string, content: 
     return data;
 }
 
-export async function deleteMessageTemplate(id: string) {
+export async function deleteMessageTemplate(id: number) {
     const { error } = await supabase
         .from('message_templates')
         .delete()
