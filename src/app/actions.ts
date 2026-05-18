@@ -2,12 +2,13 @@
 
 import { 
     registerUser, approveUser, getUserByEmail, getAllUsers, 
-    saveLead, updateLeadStatus, getInteractionsByLead, 
+    saveLead, updateLeadStatus, getInteractionsByLead, logManualInteraction,
     getMessageTemplates, createMessageTemplate, updateMessageTemplate, deleteMessageTemplate, addToMessageQueue,
     deleteLead
 } from '@/lib/db';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
+import nodemailer from 'nodemailer';
 
 export async function loginAction(email: string) {
     const user = await getUserByEmail(email);
@@ -236,6 +237,40 @@ export async function deleteLeadAction(id: string) {
         revalidatePath('/admin/crm');
         return { success: true };
     } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function sendEmailAction(leadId: string, emailTo: string, subject: string, content: string) {
+    try {
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            throw new Error('Configurações de e-mail não definidas no servidor (EMAIL_USER e EMAIL_PASS).');
+        }
+
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+
+        await transporter.sendMail({
+            from: `"Studio Be" <${process.env.EMAIL_USER}>`,
+            to: emailTo,
+            subject: subject,
+            text: content,
+            html: content.replace(/\n/g, '<br>')
+        });
+
+        // Registrar no histórico
+        await logManualInteraction(leadId, `Assunto: ${subject}\n\nMensagem: ${content}`, 'email');
+        revalidatePath(`/admin/crm/lead/${leadId}`);
+        return { success: true };
+    } catch (error: any) {
+        console.error("Erro ao enviar email:", error);
         return { success: false, error: error.message };
     }
 }

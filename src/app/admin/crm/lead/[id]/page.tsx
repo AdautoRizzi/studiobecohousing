@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { updateLeadStatusAction } from '@/app/actions';
 import { MessageSender } from '@/components/crm/MessageSender';
+import EmailSender from '@/components/crm/EmailSender';
 import LogInteractionForm from '@/components/LogInteractionForm';
 import DeleteLeadButton from '@/components/crm/DeleteLeadButton';
 
@@ -316,6 +317,9 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                 <div className="space-y-6">
                     {/* Componente de Envio de Mensagem */}
                     <MessageSender leadId={lead.id} leadNome={lead.nome} templates={templates} />
+
+                    {/* Componente de Envio de E-mail */}
+                    <EmailSender lead={lead} />
 
                     <form action={updateLeadStatusAction} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
                         <h3 className="font-bold text-gray-900 mb-4">Atualizar Lead</h3>
