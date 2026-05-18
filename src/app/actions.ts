@@ -266,7 +266,7 @@ export async function sendEmailAction(leadId: string, emailTo: string, subject: 
         });
 
         // Registrar no histórico
-        await logManualInteraction(leadId, `Assunto: ${subject}\n\nMensagem: ${content}`, 'email');
+        await logManualInteraction(leadId, `Assunto: ${subject}\n\nMensagem: ${content}`, 'E-mail');
         revalidatePath(`/admin/crm/lead/${leadId}`);
         return { success: true };
     } catch (error: any) {
