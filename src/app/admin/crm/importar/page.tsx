@@ -34,14 +34,35 @@ export default function ImportLeadsPage() {
                 continue;
             }
 
-            // Mapeamento básico assumindo: Nome | Email | Telefone | Idade | Observações
-            // Se tiver mais colunas, joga em observações
-            const nome = columns[0] || '';
-            if (!nome) continue; // Pula linha vazia sem nome
+            let nome = '';
+            let email = '';
+            let telefone = '';
+            let observacoesArr: string[] = [];
 
-            const email = columns[1] || '';
-            const telefone = columns[2] || '';
-            const observacoes = columns.length > 3 ? columns.slice(3).join(' | ') : '';
+            for (let j = 0; j < columns.length; j++) {
+                const val = columns[j].trim();
+                if (!val) continue;
+
+                const isEmail = val.includes('@') && val.includes('.');
+                const isPhone = /^[\d\s\-\+\(\)]+$/.test(val) && val.replace(/\D/g, '').length >= 8;
+
+                if (isEmail && !email) {
+                    email = val;
+                } else if (isPhone && !telefone) {
+                    telefone = val;
+                } else if (!nome && !isEmail && !isPhone) {
+                    nome = val;
+                } else {
+                    observacoesArr.push(val);
+                }
+            }
+
+            if (!nome && email) nome = email.split('@')[0];
+            if (!nome && telefone) nome = 'Contato Importado';
+
+            if (!nome && !email && !telefone) continue;
+
+            const observacoes = observacoesArr.length > 0 ? observacoesArr.join(' | ') : '';
 
             leads.push({
                 nome: nome.trim(),
