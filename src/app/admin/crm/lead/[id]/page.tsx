@@ -64,12 +64,22 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
         l.ondeMorar.toLowerCase().trim() === lead.ondeMorar.toLowerCase().trim()
     );
 
+    const getCleanCategory = (cat: string | null | undefined) => {
+        if (!cat) return 'Lead Site';
+        return cat.replace(/['"]/g, '').trim();
+    };
+    
+    const cat = getCleanCategory(lead.categoria);
+    let tab = 'leads';
+    if (cat === 'Pesquisa Antiga') tab = 'pesquisa';
+    else if (cat !== 'Lead Site') tab = 'stakeholders';
+
     return (
         <div className="max-w-6xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">
-                    <BackButton />
+                    <BackButton fallbackUrl={`/admin/crm?tab=${tab}#lead-${lead.id}`} />
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{lead.nome}</h1>
                         <p className="text-gray-500 mt-1">Cadastrado em {new Date(lead.createdAt).toLocaleDateString('pt-BR')}</p>

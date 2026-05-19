@@ -3,12 +3,18 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
-export function BackButton() {
+export function BackButton({ fallbackUrl }: { fallbackUrl?: string }) {
     const router = useRouter();
     
     return (
         <button 
-            onClick={() => router.back()} 
+            onClick={() => {
+                if (fallbackUrl) {
+                    router.push(fallbackUrl);
+                } else {
+                    router.back();
+                }
+            }} 
             className="w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors"
             title="Voltar"
         >

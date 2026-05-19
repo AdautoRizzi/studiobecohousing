@@ -100,7 +100,7 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
                             </tr>
                         ) : (
                             filteredLeads.map(lead => (
-                                <tr key={lead.id} className="hover:bg-gray-50 transition-colors">
+                                <tr key={lead.id} id={`lead-${lead.id}`} className="hover:bg-gray-50 transition-colors scroll-mt-24">
                                     <td className="px-6 py-4">
                                         <div className="font-bold text-gray-900">{lead.nome}</div>
                                         <div className="text-sm text-gray-500">{lead.email}</div>
