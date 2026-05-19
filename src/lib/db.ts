@@ -228,6 +228,14 @@ export async function logManualInteraction(leadId: string, content: string, type
 }
 
 // Funções de Interação e Histórico
+export async function getAllInteractions(): Promise<Interaction[]> {
+    const { data, error } = await supabase
+        .from('lead_interactions')
+        .select('*');
+    
+    if (error) return [];
+    return data as Interaction[];
+}
 export async function getInteractionsByLead(leadId: string): Promise<Interaction[]> {
     const { data, error } = await supabase
         .from('lead_interactions')

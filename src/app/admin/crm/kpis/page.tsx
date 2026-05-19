@@ -1,5 +1,5 @@
 import React from 'react';
-import { getAllLeads } from '@/lib/db';
+import { getAllLeads, getAllInteractions } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +17,41 @@ export default async function KpisPage() {
     // Na fase 2, isso pode vir do Google Analytics API
     const estimatedVisits = 1250; 
     const conversionRate = totalLeads > 0 ? ((totalLeads / estimatedVisits) * 100).toFixed(1) : '0.0';
+
+    // ======== CÁLCULO DE CONVERSÃO DE ABORDAGENS ========
+    const allInteractions = await getAllInteractions();
+    
+    // Identificar contatos que preencheram o form atual ("Lead Site")
+    const formFillers = leads.filter(l => l.categoria === 'Lead Site');
+    const formFillerEmails = new Set(formFillers.map(l => l.email?.toLowerCase().trim()).filter(Boolean));
+    const formFillerPhones = new Set(formFillers.map(l => l.telefone?.replace(/\D/g, '')).filter(Boolean));
+
+    const checkConversion = (leadId: string) => {
+        const lead = leads.find(l => l.id === leadId);
+        if (!lead) return false;
+        if (lead.categoria === 'Lead Site') return true; // Ele próprio já é um preenchimento recente
+        
+        const em = lead.email?.toLowerCase().trim();
+        const tel = lead.telefone?.replace(/\D/g, '');
+        
+        if (em && formFillerEmails.has(em)) return true;
+        if (tel && formFillerPhones.has(tel)) return true;
+        return false;
+    };
+
+    // Filtra IDs únicos que receberam email e whatsapp
+    const emailSentLeadIds = [...new Set(allInteractions.filter(i => i.type === 'E-mail').map(i => i.lead_id))];
+    const whatsSentLeadIds = [...new Set(allInteractions.filter(i => i.type === 'WhatsApp').map(i => i.lead_id))];
+
+    const emailsSentCount = emailSentLeadIds.length;
+    const whatsSentCount = whatsSentLeadIds.length;
+
+    const emailsConvertedCount = emailSentLeadIds.filter(checkConversion).length;
+    const whatsConvertedCount = whatsSentLeadIds.filter(checkConversion).length;
+
+    const emailConversionRate = emailsSentCount > 0 ? Math.round((emailsConvertedCount / emailsSentCount) * 100) : 0;
+    const whatsConversionRate = whatsSentCount > 0 ? Math.round((whatsConvertedCount / whatsSentCount) * 100) : 0;
+    // =======================================================
 
     return (
         <div className="max-w-6xl mx-auto">
@@ -102,6 +137,71 @@ export default async function KpisPage() {
                             <span className="font-bold">Interior / Litoral</span>
                         </li>
                     </ul>
+                </div>
+            </div>
+
+            {/* Nova Seção de Performance de Canais */}
+            <div className="mt-8 bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
+                <h2 className="text-xl font-bold text-gray-900 mb-6">Performance de Canais (Conversão de Pesquisas Antigas)</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* E-mail Performance */}
+                    <div className="border border-gray-100 p-6 rounded-2xl bg-gray-50">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                            </div>
+                            <h3 className="font-bold text-gray-900 text-lg">E-mails Enviados</h3>
+                        </div>
+                        <div className="flex justify-between items-end mb-2">
+                            <div>
+                                <p className="text-sm text-gray-500 font-medium">Contatos abordados</p>
+                                <p className="text-2xl font-bold text-gray-900">{emailsSentCount}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-sm text-gray-500 font-medium">Retornos (Formulário)</p>
+                                <p className="text-2xl font-bold text-blue-600">{emailsConvertedCount}</p>
+                            </div>
+                        </div>
+                        <div className="mt-4">
+                            <div className="flex justify-between text-xs font-bold text-gray-500 mb-1">
+                                <span>Taxa de Resposta</span>
+                                <span>{emailConversionRate}%</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${emailConversionRate}%` }}></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* WhatsApp Performance */}
+                    <div className="border border-gray-100 p-6 rounded-2xl bg-gray-50">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                            </div>
+                            <h3 className="font-bold text-gray-900 text-lg">WhatsApp Enviados</h3>
+                        </div>
+                        <div className="flex justify-between items-end mb-2">
+                            <div>
+                                <p className="text-sm text-gray-500 font-medium">Contatos abordados</p>
+                                <p className="text-2xl font-bold text-gray-900">{whatsSentCount}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-sm text-gray-500 font-medium">Retornos (Formulário)</p>
+                                <p className="text-2xl font-bold text-green-600">{whatsConvertedCount}</p>
+                            </div>
+                        </div>
+                        <div className="mt-4">
+                            <div className="flex justify-between text-xs font-bold text-gray-500 mb-1">
+                                <span>Taxa de Resposta</span>
+                                <span>{whatsConversionRate}%</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div className="bg-green-500 h-2 rounded-full" style={{ width: `${whatsConversionRate}%` }}></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
