@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "Studio Be",
     images: [
       {
-        url: "https://studiobecohousing.com/logo.png",
+        url: "https://studiobecohousing.com/whatsapp.png",
         width: 1200,
         height: 630,
         alt: "Studio Be Logo",
@@ -32,6 +32,12 @@ export const metadata: Metadata = {
     ],
     locale: "pt_BR",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Studio Be - Soluções em Cohousing",
+    description: "Curadoria e Gestão para Comunidades Intencionais e Cohousing 50+",
+    images: ["https://studiobecohousing.com/whatsapp.png"],
   },
 };
 
