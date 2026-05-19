@@ -4,12 +4,7 @@ import React, { useState } from 'react';
 import { updateLeadDetailsAction } from '@/app/actions';
 
 interface EditLeadModalProps {
-    lead: {
-        id: string;
-        nome: string;
-        email: string;
-        telefone: string;
-    };
+    lead: any;
     onClose: () => void;
 }
 
