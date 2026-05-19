@@ -17,6 +17,22 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Studio Be - Soluções em Cohousing",
   description: "Curadoria e Gestão para Comunidades Intencionais e Cohousing 50+",
+  openGraph: {
+    title: "Studio Be - Soluções em Cohousing",
+    description: "Curadoria e Gestão para Comunidades Intencionais e Cohousing 50+",
+    url: "https://studiobecohousing.com",
+    siteName: "Studio Be",
+    images: [
+      {
+        url: "https://studiobecohousing.com/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Studio Be Logo",
+      },
+    ],
+    locale: "pt_BR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
