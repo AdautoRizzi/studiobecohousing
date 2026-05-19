@@ -77,7 +77,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                 </div>
                 <div className="flex flex-col items-end gap-2">
                     <div className="flex items-center gap-2">
-                        <EditLeadButton lead={{ id: lead.id, nome: lead.nome, email: lead.email, telefone: lead.telefone }} />
+                        <EditLeadButton lead={lead} />
                         <DeleteLeadButton leadId={lead.id} leadName={lead.nome} />
                         <div className="bg-primary-50 px-4 py-2 rounded-xl text-primary-800 font-bold border border-primary-200">
                             Status: {lead.status}

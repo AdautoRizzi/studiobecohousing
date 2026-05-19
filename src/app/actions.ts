@@ -191,11 +191,11 @@ export async function updateLeadStatusAction(formData: FormData) {
     revalidatePath(`/admin/crm/lead/${leadId}`);
 }
 
-export async function updateLeadDetailsAction(id: string, nome: string, email: string, telefone: string) {
+export async function updateLeadDetailsAction(id: string, updates: any) {
     const { supabase } = await import('@/lib/supabase');
     const { error } = await supabase
         .from('leads')
-        .update({ nome, email, telefone })
+        .update(updates)
         .eq('id', id);
 
     if (!error) {

@@ -4,12 +4,7 @@ import React, { useState } from 'react';
 import EditLeadModal from './EditLeadModal';
 
 interface EditLeadButtonProps {
-    lead: {
-        id: string;
-        nome: string;
-        email: string;
-        telefone: string;
-    };
+    lead: any;
 }
 
 export default function EditLeadButton({ lead }: EditLeadButtonProps) {
