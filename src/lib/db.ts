@@ -195,6 +195,13 @@ export async function updateLeadStatus(id: string, status: Lead['status'], notas
 }
 
 export async function deleteLead(id: string) {
+    // 1. Excluir todas as interações primeiro para evitar erro de chave estrangeira
+    await supabase
+        .from('lead_interactions')
+        .delete()
+        .eq('lead_id', id);
+
+    // 2. Excluir o lead
     const { error } = await supabase
         .from('leads')
         .delete()
