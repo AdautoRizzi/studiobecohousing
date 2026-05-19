@@ -55,7 +55,6 @@ export default function EditLeadModal({ lead, onClose }: EditLeadModalProps) {
                             type="text" 
                             value={nome}
                             onChange={(e) => setNome(e.target.value)}
-                            required
                             className="w-full h-12 bg-gray-50 rounded-xl px-4 border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500" 
                         />
                     </div>
