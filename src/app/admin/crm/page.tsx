@@ -6,7 +6,7 @@ import SearchInput from '@/components/crm/SearchInput';
 
 export const dynamic = 'force-dynamic';
 
-export default async function CRMPage({ searchParams }: { searchParams: Promise<{ tab?: string, q?: string }> }) {
+export default async function CRMPage({ searchParams }: { searchParams: Promise<{ tab?: string, q?: string, sort?: string, order?: string }> }) {
     const params = await searchParams;
     const leads = await getAllLeads();
     const currentTab = params.tab || 'leads';
@@ -47,6 +47,66 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
             case 'Descartado': return 'bg-red-100 text-red-800 border-red-200';
             default: return 'bg-gray-100 text-gray-800 border-gray-200';
         }
+    };
+
+    const sortBy = params.sort || 'data';
+    const order = params.order || 'desc';
+
+    const getMissingFields = (lead: any) => {
+        const fields = [lead.telefone, lead.profissao, lead.ondeMorar, lead.tipoCohousing, lead.areaResidencia];
+        const missing = fields.filter(f => !f).length;
+        const interessesLen = (lead.interesses || []).length;
+        const valoresLen = (lead.valores || []).length;
+        const empreenderLen = (lead.empreender || []).length;
+        const arraysMissing = [interessesLen, valoresLen, empreenderLen].filter(l => l === 0).length;
+        return missing + arraysMissing;
+    };
+
+    filteredLeads = filteredLeads.sort((a, b) => {
+        if (sortBy === 'cadastro') {
+            const m1 = getMissingFields(a);
+            const m2 = getMissingFields(b);
+            if (m1 < m2) return order === 'asc' ? -1 : 1;
+            if (m1 > m2) return order === 'asc' ? 1 : -1;
+            return 0;
+        }
+
+        let valA = '';
+        let valB = '';
+
+        if (sortBy === 'contato') {
+            valA = (a.nome || '').toLowerCase();
+            valB = (b.nome || '').toLowerCase();
+        } else if (sortBy === 'idade') {
+            valA = (a.idade || '').toLowerCase();
+            valB = (b.idade || '').toLowerCase();
+        } else if (sortBy === 'local') {
+            valA = (a.ondeMorar || '').toLowerCase();
+            valB = (b.ondeMorar || '').toLowerCase();
+        } else if (sortBy === 'status') {
+            valA = (a.status || '').toLowerCase();
+            valB = (b.status || '').toLowerCase();
+        } else {
+            valA = a.createdAt;
+            valB = b.createdAt;
+        }
+
+        if (valA < valB) return order === 'asc' ? -1 : 1;
+        if (valA > valB) return order === 'asc' ? 1 : -1;
+        return 0;
+    });
+
+    const getSortUrl = (column: string) => {
+        const newOrder = sortBy === column && order === 'asc' ? 'desc' : 'asc';
+        let url = `/admin/crm?tab=${currentTab}`;
+        if (searchQuery) url += `&q=${searchQuery}`;
+        url += `&sort=${column}&order=${newOrder}`;
+        return url;
+    };
+
+    const renderSortIcon = (column: string) => {
+        if (sortBy !== column) return <span className="text-gray-300 ml-1">↕</span>;
+        return order === 'asc' ? <span className="text-primary-600 ml-1">↑</span> : <span className="text-primary-600 ml-1">↓</span>;
     };
 
     return (
@@ -101,11 +161,31 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
-                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Contato</th>
-                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Idade / Perfil</th>
-                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Local / Desejo</th>
-                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Cadastro</th>
-                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                            <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">
+                                <Link href={getSortUrl('contato')} scroll={false} className="flex items-center text-gray-500 hover:text-gray-900 transition-colors">
+                                    Contato {renderSortIcon('contato')}
+                                </Link>
+                            </th>
+                            <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">
+                                <Link href={getSortUrl('idade')} scroll={false} className="flex items-center text-gray-500 hover:text-gray-900 transition-colors">
+                                    Idade / Perfil {renderSortIcon('idade')}
+                                </Link>
+                            </th>
+                            <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">
+                                <Link href={getSortUrl('local')} scroll={false} className="flex items-center text-gray-500 hover:text-gray-900 transition-colors">
+                                    Local / Desejo {renderSortIcon('local')}
+                                </Link>
+                            </th>
+                            <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">
+                                <Link href={getSortUrl('cadastro')} scroll={false} className="flex items-center text-gray-500 hover:text-gray-900 transition-colors">
+                                    Cadastro {renderSortIcon('cadastro')}
+                                </Link>
+                            </th>
+                            <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">
+                                <Link href={getSortUrl('status')} scroll={false} className="flex items-center text-gray-500 hover:text-gray-900 transition-colors">
+                                    Status {renderSortIcon('status')}
+                                </Link>
+                            </th>
                             <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Ação</th>
                         </tr>
                     </thead>
@@ -134,13 +214,7 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
                                     </td>
                                     <td className="px-6 py-4">
                                         {(() => {
-                                            const fields = [lead.telefone, lead.profissao, lead.ondeMorar, lead.tipoCohousing, lead.areaResidencia];
-                                            const missing = fields.filter(f => !f).length;
-                                            const interessesLen = (lead.interesses || []).length;
-                                            const valoresLen = (lead.valores || []).length;
-                                            const empreenderLen = (lead.empreender || []).length;
-                                            const arraysMissing = [interessesLen, valoresLen, empreenderLen].filter(l => l === 0).length;
-                                            const totalMissing = missing + arraysMissing;
+                                            const totalMissing = getMissingFields(lead);
                                             
                                             if (totalMissing === 0) return <span className="text-[10px] font-bold bg-green-50 text-green-600 px-2 py-1 rounded border border-green-100 uppercase">100% Completo</span>;
                                             return <span className="text-[10px] font-bold bg-orange-50 text-orange-600 px-2 py-1 rounded border border-orange-100 uppercase">Incompleto (-{totalMissing})</span>;
