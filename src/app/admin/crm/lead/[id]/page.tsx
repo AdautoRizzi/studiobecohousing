@@ -7,7 +7,6 @@ import { updateLeadStatusAction } from '@/app/actions';
 import { MessageSender } from '@/components/crm/MessageSender';
 import EmailSender from '@/components/crm/EmailSender';
 import LogInteractionForm from '@/components/LogInteractionForm';
-import LogInteractionForm from '@/components/LogInteractionForm';
 import DeleteLeadButton from '@/components/crm/DeleteLeadButton';
 import EditLeadButton from '@/components/crm/EditLeadButton';
 
