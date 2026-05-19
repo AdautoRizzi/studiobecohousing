@@ -46,18 +46,19 @@ export default function EditLeadModal({ lead, onClose }: EditLeadModalProps) {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-3xl shadow-2xl relative my-8">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-3xl shadow-2xl relative max-h-[95vh] flex flex-col">
                 <button 
                     onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"
                 >
                     ✕
                 </button>
                 
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Editar Informações Gerais</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex-shrink-0">Editar Informações Gerais</h3>
                 
-                <form onSubmit={handleSave} className="space-y-6">
+                <div className="overflow-y-auto flex-1 pr-2 -mr-2">
+                    <form onSubmit={handleSave} className="space-y-6">
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="md:col-span-2">
@@ -141,6 +142,7 @@ export default function EditLeadModal({ lead, onClose }: EditLeadModalProps) {
                         </button>
                     </div>
                 </form>
+                </div>
             </div>
         </div>
     );
