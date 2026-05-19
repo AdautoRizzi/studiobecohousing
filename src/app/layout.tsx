@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://studiobecohousing.com"),
   title: "Studio Be - Soluções em Cohousing",
   description: "Curadoria e Gestão para Comunidades Intencionais e Cohousing 50+",
   openGraph: {
