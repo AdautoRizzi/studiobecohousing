@@ -65,18 +65,18 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
 
             {/* Abas de Navegação */}
             <div className="flex space-x-2 mb-6 bg-white p-2 rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
-                <a href="/admin/crm?tab=leads" className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'leads' ? 'bg-secondary-50 text-secondary-600 shadow-sm border border-secondary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
+                <Link href="/admin/crm?tab=leads" scroll={false} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'leads' ? 'bg-secondary-50 text-secondary-600 shadow-sm border border-secondary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
                     🚀 Leads Site ({sortedLeads.filter(l => getCleanCategory(l.categoria) === 'Lead Site').length})
-                </a>
-                <a href="/admin/crm?tab=pesquisa" className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'pesquisa' ? 'bg-primary-50 text-primary-700 shadow-sm border border-primary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
+                </Link>
+                <Link href="/admin/crm?tab=pesquisa" scroll={false} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'pesquisa' ? 'bg-primary-50 text-primary-700 shadow-sm border border-primary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
                     📊 Pesquisa Antiga ({sortedLeads.filter(l => getCleanCategory(l.categoria) === 'Pesquisa Antiga').length})
-                </a>
-                <a href="/admin/crm?tab=stakeholders" className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'stakeholders' ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}>
+                </Link>
+                <Link href="/admin/crm?tab=stakeholders" scroll={false} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'stakeholders' ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}>
                     🤝 Stakeholders ({sortedLeads.filter(l => {
                         const cat = getCleanCategory(l.categoria);
                         return cat !== 'Lead Site' && cat !== 'Pesquisa Antiga';
                     }).length})
-                </a>
+                </Link>
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
