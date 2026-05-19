@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { getAllLeads } from '@/lib/db';
 import Link from 'next/link';
 import DeleteLeadButton from '@/components/crm/DeleteLeadButton';
+import SearchInput from '@/components/crm/SearchInput';
 
 export const dynamic = 'force-dynamic';
 
-export default async function CRMPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+export default async function CRMPage({ searchParams }: { searchParams: Promise<{ tab?: string, q?: string }> }) {
     const params = await searchParams;
     const leads = await getAllLeads();
     const currentTab = params.tab || 'leads';
@@ -20,13 +21,22 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
     };
 
     // Filtra com base na aba
-    const filteredLeads = sortedLeads.filter(lead => {
+    let filteredLeads = sortedLeads.filter(lead => {
         const cat = getCleanCategory(lead.categoria);
         if (currentTab === 'leads') return cat === 'Lead Site';
         if (currentTab === 'pesquisa') return cat === 'Pesquisa Antiga';
         if (currentTab === 'stakeholders') return cat !== 'Lead Site' && cat !== 'Pesquisa Antiga';
         return true;
     });
+
+    const searchQuery = (params.q || '').toLowerCase().trim();
+    if (searchQuery) {
+        filteredLeads = filteredLeads.filter(l => 
+            (l.nome && l.nome.toLowerCase().includes(searchQuery)) ||
+            (l.email && l.email.toLowerCase().includes(searchQuery)) ||
+            (l.telefone && l.telefone.toLowerCase().includes(searchQuery))
+        );
+    }
 
     const getStatusColor = (status: string) => {
         switch(status) {
@@ -63,20 +73,28 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
                 </div>
             </div>
 
-            {/* Abas de Navegação */}
-            <div className="flex space-x-2 mb-6 bg-white p-2 rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
-                <Link href="/admin/crm?tab=leads" scroll={false} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'leads' ? 'bg-secondary-50 text-secondary-600 shadow-sm border border-secondary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
-                    🚀 Leads Site ({sortedLeads.filter(l => getCleanCategory(l.categoria) === 'Lead Site').length})
-                </Link>
-                <Link href="/admin/crm?tab=pesquisa" scroll={false} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'pesquisa' ? 'bg-primary-50 text-primary-700 shadow-sm border border-primary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
-                    📊 Pesquisa Antiga ({sortedLeads.filter(l => getCleanCategory(l.categoria) === 'Pesquisa Antiga').length})
-                </Link>
-                <Link href="/admin/crm?tab=stakeholders" scroll={false} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'stakeholders' ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}>
-                    🤝 Stakeholders ({sortedLeads.filter(l => {
-                        const cat = getCleanCategory(l.categoria);
-                        return cat !== 'Lead Site' && cat !== 'Pesquisa Antiga';
-                    }).length})
-                </Link>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                {/* Abas de Navegação */}
+                <div className="flex space-x-2 bg-white p-2 rounded-2xl shadow-sm border border-gray-100 overflow-x-auto w-full md:w-auto">
+                    <Link href={`/admin/crm?tab=leads${searchQuery ? '&q='+searchQuery : ''}`} scroll={false} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'leads' ? 'bg-secondary-50 text-secondary-600 shadow-sm border border-secondary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
+                        🚀 Leads Site ({sortedLeads.filter(l => getCleanCategory(l.categoria) === 'Lead Site').length})
+                    </Link>
+                    <Link href={`/admin/crm?tab=pesquisa${searchQuery ? '&q='+searchQuery : ''}`} scroll={false} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'pesquisa' ? 'bg-primary-50 text-primary-700 shadow-sm border border-primary-100' : 'text-gray-500 hover:bg-gray-50'}`}>
+                        📊 Pesquisa Antiga ({sortedLeads.filter(l => getCleanCategory(l.categoria) === 'Pesquisa Antiga').length})
+                    </Link>
+                    <Link href={`/admin/crm?tab=stakeholders${searchQuery ? '&q='+searchQuery : ''}`} scroll={false} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${currentTab === 'stakeholders' ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}>
+                        🤝 Stakeholders ({sortedLeads.filter(l => {
+                            const cat = getCleanCategory(l.categoria);
+                            return cat !== 'Lead Site' && cat !== 'Pesquisa Antiga';
+                        }).length})
+                    </Link>
+                </div>
+
+                <div className="w-full md:w-auto">
+                    <Suspense fallback={<div className="w-full md:w-64 h-11 bg-gray-100 animate-pulse rounded-xl mb-6"></div>}>
+                        <SearchInput />
+                    </Suspense>
+                </div>
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
