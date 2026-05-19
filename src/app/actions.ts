@@ -191,6 +191,22 @@ export async function updateLeadStatusAction(formData: FormData) {
     revalidatePath(`/admin/crm/lead/${leadId}`);
 }
 
+export async function updateLeadDetailsAction(id: string, nome: string, email: string, telefone: string) {
+    const { supabase } = await import('@/lib/supabase');
+    const { error } = await supabase
+        .from('leads')
+        .update({ nome, email, telefone })
+        .eq('id', id);
+
+    if (!error) {
+        revalidatePath('/admin/crm');
+        revalidatePath(`/admin/crm/lead/${id}`);
+        return { success: true };
+    } else {
+        return { success: false, error: error.message };
+    }
+}
+
 export async function queueMessageAction(leadId: string, message: string) {
     try {
         await addToMessageQueue(leadId, message);

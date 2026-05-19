@@ -2,11 +2,14 @@ import React from 'react';
 import { getLeadById, getAllLeads, getInteractionsByLead, getMessageTemplates } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { BackButton } from '@/components/crm/BackButton';
 import { updateLeadStatusAction } from '@/app/actions';
 import { MessageSender } from '@/components/crm/MessageSender';
 import EmailSender from '@/components/crm/EmailSender';
 import LogInteractionForm from '@/components/LogInteractionForm';
+import LogInteractionForm from '@/components/LogInteractionForm';
 import DeleteLeadButton from '@/components/crm/DeleteLeadButton';
+import EditLeadButton from '@/components/crm/EditLeadButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -67,9 +70,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/crm" className="w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
-                        <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                    </Link>
+                    <BackButton />
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{lead.nome}</h1>
                         <p className="text-gray-500 mt-1">Cadastrado em {new Date(lead.createdAt).toLocaleDateString('pt-BR')}</p>
@@ -77,6 +78,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                 </div>
                 <div className="flex flex-col items-end gap-2">
                     <div className="flex items-center gap-2">
+                        <EditLeadButton lead={{ id: lead.id, nome: lead.nome, email: lead.email, telefone: lead.telefone }} />
                         <DeleteLeadButton leadId={lead.id} leadName={lead.nome} />
                         <div className="bg-primary-50 px-4 py-2 rounded-xl text-primary-800 font-bold border border-primary-200">
                             Status: {lead.status}
