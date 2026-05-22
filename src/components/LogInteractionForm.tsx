@@ -35,15 +35,15 @@ export default function LogInteractionForm({ leadId }: LogInteractionFormProps) 
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
-            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <form onSubmit={handleSubmit} className="bg-[#0f172a] p-6 rounded-3xl shadow-sm border border-slate-800">
+            <h3 className="font-bold text-slate-50 mb-4 flex items-center gap-2">
                 <svg className="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                 Registrar Atividade Manual
             </h3>
             
             <div className="space-y-4">
                 <div>
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Tipo de Contato</label>
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tipo de Contato</label>
                     <div className="grid grid-cols-2 gap-2 mt-2">
                         {['WhatsApp', 'Ligação', 'Reunião', 'E-mail'].map((t) => (
                             <button
@@ -53,7 +53,7 @@ export default function LogInteractionForm({ leadId }: LogInteractionFormProps) 
                                 className={`py-2 px-3 rounded-xl text-xs font-bold transition-all border ${
                                     type === t 
                                     ? 'bg-primary-900 text-white border-primary-900 shadow-sm' 
-                                    : 'bg-white text-gray-600 border-gray-100 hover:border-primary-200'
+                                    : 'bg-[#0f172a] text-slate-300 border-slate-800 hover:border-primary-200'
                                 }`}
                             >
                                 {t === 'WhatsApp' && '📱 '}
@@ -67,12 +67,12 @@ export default function LogInteractionForm({ leadId }: LogInteractionFormProps) 
                 </div>
 
                 <div>
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">O que foi conversado?</label>
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">O que foi conversado?</label>
                     <textarea 
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                         placeholder="Ex: Liguei para confirmar o meet de amanhã. Ele está animado com a região."
-                        className="w-full mt-2 p-3 rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 text-sm min-h-[100px] resize-none"
+                        className="w-full mt-2 p-3 rounded-xl border border-slate-800 outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 text-sm min-h-[100px] resize-none"
                     />
                 </div>
 

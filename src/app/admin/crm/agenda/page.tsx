@@ -26,10 +26,10 @@ export default async function CRMAgendaPage() {
         <div className="space-y-8">
             <div className="flex justify-between items-end">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Agenda de Contatos</h1>
-                    <p className="text-gray-500 mt-1">Acompanhe seus próximos compromissos e follow-ups.</p>
+                    <h1 className="text-3xl font-bold text-slate-50 tracking-tight">Agenda de Contatos</h1>
+                    <p className="text-slate-400 mt-1">Acompanhe seus próximos compromissos e follow-ups.</p>
                 </div>
-                <Link href="/admin/crm" className="bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all">
+                <Link href="/admin/crm" className="bg-[#0f172a] border border-slate-800 px-4 py-2 rounded-xl text-sm font-bold text-slate-300 hover:bg-[#020617] transition-all">
                     Voltar para Leads
                 </Link>
             </div>
@@ -43,15 +43,15 @@ export default async function CRMAgendaPage() {
                     </h3>
                     <div className="space-y-3">
                         {agenda.filter(l => isPast(l.proximoContato!)).length === 0 ? (
-                            <p className="text-xs text-gray-400 italic">Nenhum contato atrasado.</p>
+                            <p className="text-xs text-slate-500 italic">Nenhum contato atrasado.</p>
                         ) : (
                             agenda.filter(l => isPast(l.proximoContato!)).map(lead => (
-                                <Link href={`/admin/crm/lead/${lead.id}`} key={lead.id} className="block bg-white p-4 rounded-2xl border border-red-100 shadow-sm hover:shadow-md transition-all border-l-4 border-l-red-500">
+                                <Link href={`/admin/crm/lead/${lead.id}`} key={lead.id} className="block bg-[#0f172a] p-4 rounded-2xl border border-red-100 shadow-sm hover:shadow-md transition-all border-l-4 border-l-red-500">
                                     <div className="flex justify-between items-start">
-                                        <span className="font-bold text-gray-900 text-sm">{lead.nome}</span>
+                                        <span className="font-bold text-slate-50 text-sm">{lead.nome}</span>
                                         <span className="text-[10px] font-bold text-red-600">{new Date(lead.proximoContato!).toLocaleDateString('pt-BR')}</span>
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-1 truncate">{lead.notasCrm || 'Sem observações.'}</p>
+                                    <p className="text-xs text-slate-400 mt-1 truncate">{lead.notasCrm || 'Sem observações.'}</p>
                                 </Link>
                             ))
                         )}
@@ -66,15 +66,15 @@ export default async function CRMAgendaPage() {
                     </h3>
                     <div className="space-y-3">
                         {agenda.filter(l => isToday(l.proximoContato!)).length === 0 ? (
-                            <p className="text-xs text-gray-400 italic">Nenhum contato para hoje.</p>
+                            <p className="text-xs text-slate-500 italic">Nenhum contato para hoje.</p>
                         ) : (
                             agenda.filter(l => isToday(l.proximoContato!)).map(lead => (
-                                <Link href={`/admin/crm/lead/${lead.id}`} key={lead.id} className="block bg-white p-4 rounded-2xl border border-orange-100 shadow-sm hover:shadow-md transition-all border-l-4 border-l-orange-500">
+                                <Link href={`/admin/crm/lead/${lead.id}`} key={lead.id} className="block bg-[#0f172a] p-4 rounded-2xl border border-orange-100 shadow-sm hover:shadow-md transition-all border-l-4 border-l-orange-500">
                                     <div className="flex justify-between items-start">
-                                        <span className="font-bold text-gray-900 text-sm">{lead.nome}</span>
+                                        <span className="font-bold text-slate-50 text-sm">{lead.nome}</span>
                                         <span className="text-[10px] font-bold text-orange-600">HOJE</span>
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-1 truncate">{lead.notasCrm || 'Sem observações.'}</p>
+                                    <p className="text-xs text-slate-400 mt-1 truncate">{lead.notasCrm || 'Sem observações.'}</p>
                                 </Link>
                             ))
                         )}
@@ -89,15 +89,15 @@ export default async function CRMAgendaPage() {
                     </h3>
                     <div className="space-y-3">
                         {agenda.filter(l => !isToday(l.proximoContato!) && !isPast(l.proximoContato!)).length === 0 ? (
-                            <p className="text-xs text-gray-400 italic">Sem agendamentos futuros.</p>
+                            <p className="text-xs text-slate-500 italic">Sem agendamentos futuros.</p>
                         ) : (
                             agenda.filter(l => !isToday(l.proximoContato!) && !isPast(l.proximoContato!)).map(lead => (
-                                <Link href={`/admin/crm/lead/${lead.id}`} key={lead.id} className="block bg-white p-4 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all border-l-4 border-l-primary-500">
+                                <Link href={`/admin/crm/lead/${lead.id}`} key={lead.id} className="block bg-[#0f172a] p-4 rounded-2xl border border-slate-800 shadow-sm hover:shadow-md transition-all border-l-4 border-l-primary-500">
                                     <div className="flex justify-between items-start">
-                                        <span className="font-bold text-gray-900 text-sm">{lead.nome}</span>
-                                        <span className="text-[10px] font-bold text-gray-400">{new Date(lead.proximoContato!).toLocaleDateString('pt-BR')}</span>
+                                        <span className="font-bold text-slate-50 text-sm">{lead.nome}</span>
+                                        <span className="text-[10px] font-bold text-slate-500">{new Date(lead.proximoContato!).toLocaleDateString('pt-BR')}</span>
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-1 truncate">{lead.notasCrm || 'Sem observações.'}</p>
+                                    <p className="text-xs text-slate-400 mt-1 truncate">{lead.notasCrm || 'Sem observações.'}</p>
                                 </Link>
                             ))
                         )}

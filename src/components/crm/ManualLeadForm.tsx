@@ -12,7 +12,7 @@ const TIPOS_COHOUSING = ['Urbano em grandes metrópoles', 'Urbano em cidades do 
 const TIPOLOGIAS = ['Casas', 'Apartamentos', 'Loft', 'Indiferente'];
 const AREAS_RESIDENCIA = ['Até 50 m2', 'de 50 m2 a 80 m2', 'de 80 m2 a 120 m2', 'acima de 120 m2'];
 const COM_QUEM = ['sozinha/o', 'com cônjuge ou companheira/o', 'com amigos e/ou familiares'];
-const TOT_PESSOAS = ['1 pessoa', '2 pessoas', '3 pessoas', '4 pessoas'];
+const TOT_PESSOAS = ['1 pessoa', '2 pessoas', '3 pessoas', '4 pessoas', 'mais de 4 pessoas'];
 const QTD_DORMITORIOS = [
     { label: '1 dormitório', value: '1' },
     { label: '2 dormitórios', value: '2' },
@@ -106,48 +106,48 @@ export default function ManualLeadForm() {
     return (
         <form onSubmit={handleSubmit} className="max-w-5xl mx-auto space-y-10 pb-24">
             {/* 1. Dados Pessoais */}
-            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-gray-200">
+            <div className="bg-[#0f172a] p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-800">
                 <h3 className="text-xl font-bold text-primary-900 mb-8 flex items-center gap-2">
                     <span className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm">1</span>
                     Identificação e Perfil
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div className="md:col-span-2 lg:col-span-1">
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Categoria / Tipo</label>
-                        <select name="categoria" value={formData.categoria} onChange={handleChange} required className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Categoria / Tipo</label>
+                        <select name="categoria" value={formData.categoria} onChange={handleChange} required className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             {CATEGORIAS.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>
                     <div className="md:col-span-2 lg:col-span-1">
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Nome Completo</label>
-                        <input name="nome" value={formData.nome} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Nome Completo</label>
+                        <input name="nome" value={formData.nome} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">E-mail</label>
-                        <input name="email" value={formData.email} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">E-mail</label>
+                        <input name="email" value={formData.email} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Telefone / WhatsApp</label>
-                        <input name="telefone" value={formData.telefone} onChange={handleChange} placeholder="(00) 00000-0000" className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Telefone / WhatsApp</label>
+                        <input name="telefone" value={formData.telefone} onChange={handleChange} placeholder="(00) 00000-0000" className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Moradia Atual (Cidade/UF)</label>
-                        <input name="moradiaAtual" value={formData.moradiaAtual} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Moradia Atual (Cidade/UF)</label>
+                        <input name="moradiaAtual" value={formData.moradiaAtual} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Profissão Principal</label>
-                        <input name="profissao" value={formData.profissao} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Profissão Principal</label>
+                        <input name="profissao" value={formData.profissao} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Faixa Etária</label>
-                        <select name="idade" value={formData.idade} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Faixa Etária</label>
+                        <select name="idade" value={formData.idade} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {FAIXAS_ETARIAS.map(f => <option key={f} value={f}>{f}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Gênero</label>
-                        <select name="genero" value={formData.genero} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Gênero</label>
+                        <select name="genero" value={formData.genero} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {GENEROS.map(g => <option key={g} value={g}>{g}</option>)}
                         </select>
@@ -156,61 +156,61 @@ export default function ManualLeadForm() {
             </div>
 
             {/* 2. Preferências */}
-            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-gray-200">
+            <div className="bg-[#0f172a] p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-800">
                 <h3 className="text-xl font-bold text-primary-900 mb-8 flex items-center gap-2">
                     <span className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm">2</span>
                     A Casa e Localização
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div className="md:col-span-2">
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Onde deseja morar?</label>
-                        <input name="ondeMorar" value={formData.ondeMorar} onChange={handleChange} placeholder="Ex: Interior de SP" className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Onde deseja morar?</label>
+                        <input name="ondeMorar" value={formData.ondeMorar} onChange={handleChange} placeholder="Ex: Interior de SP" className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500" />
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Tipo de Cohousing</label>
-                        <select name="tipoCohousing" value={formData.tipoCohousing} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tipo de Cohousing</label>
+                        <select name="tipoCohousing" value={formData.tipoCohousing} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {TIPOS_COHOUSING.map(t => <option key={t} value={t}>{t}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Tipologia</label>
-                        <select name="tipologia" value={formData.tipologia} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tipologia</label>
+                        <select name="tipologia" value={formData.tipologia} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {TIPOLOGIAS.map(t => <option key={t} value={t}>{t}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Área Residência</label>
-                        <select name="areaResidencia" value={formData.areaResidencia} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Área Residência</label>
+                        <select name="areaResidencia" value={formData.areaResidencia} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {AREAS_RESIDENCIA.map(a => <option key={a} value={a}>{a}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Com quem irá morar?</label>
-                        <select name="comQuem" value={formData.comQuem} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Com quem irá morar?</label>
+                        <select name="comQuem" value={formData.comQuem} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {COM_QUEM.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Total de Pessoas</label>
-                        <select name="totalPessoas" value={formData.totalPessoas} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total de Pessoas</label>
+                        <select name="totalPessoas" value={formData.totalPessoas} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {TOT_PESSOAS.map(p => <option key={p} value={p}>{p}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Dormitórios</label>
-                        <select name="dormitorios" value={formData.dormitorios} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Dormitórios</label>
+                        <select name="dormitorios" value={formData.dormitorios} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {QTD_DORMITORIOS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Suítes</label>
-                        <select name="suites" value={formData.suites} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Suítes</label>
+                        <select name="suites" value={formData.suites} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                             <option value="">Selecione...</option>
                             {QTD_SUITES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                         </select>
@@ -219,7 +219,7 @@ export default function ManualLeadForm() {
             </div>
 
             {/* 3. Afinidade */}
-            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-gray-200">
+            <div className="bg-[#0f172a] p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-800">
                 <h3 className="text-xl font-bold text-primary-900 mb-8 flex items-center gap-2">
                     <span className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm">3</span>
                     Afinidades e Valores
@@ -227,10 +227,10 @@ export default function ManualLeadForm() {
                 
                 <div className="space-y-8">
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase block mb-4">Interesses Coletivos</label>
+                        <label className="text-xs font-bold text-slate-400 uppercase block mb-4">Interesses Coletivos</label>
                         <div className="flex flex-wrap gap-2">
                             {INTERESSES.map(i => (
-                                <button key={i} type="button" onClick={() => handleCheckboxChange('interesses', i)} className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${formData.interesses.includes(i) ? 'bg-primary-600 text-white border-primary-600 shadow-md' : 'bg-gray-50 text-gray-600 border-gray-100 hover:border-primary-200'}`}>
+                                <button key={i} type="button" onClick={() => handleCheckboxChange('interesses', i)} className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${formData.interesses.includes(i) ? 'bg-primary-600 text-white border-primary-600 shadow-md' : 'bg-[#020617] text-slate-300 border-slate-800 hover:border-primary-200'}`}>
                                     {i}
                                 </button>
                             ))}
@@ -238,10 +238,10 @@ export default function ManualLeadForm() {
                     </div>
 
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase block mb-4">Disponibilidade para Empreender</label>
+                        <label className="text-xs font-bold text-slate-400 uppercase block mb-4">Disponibilidade para Empreender</label>
                         <div className="flex flex-wrap gap-2">
                             {EMPREENDER.map(e => (
-                                <button key={e} type="button" onClick={() => handleCheckboxChange('empreender', e)} className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${formData.empreender.includes(e) ? 'bg-blue-600 text-white border-blue-600 shadow-md' : 'bg-gray-50 text-gray-600 border-gray-100 hover:border-blue-200'}`}>
+                                <button key={e} type="button" onClick={() => handleCheckboxChange('empreender', e)} className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${formData.empreender.includes(e) ? 'bg-blue-600 text-white border-blue-600 shadow-md' : 'bg-[#020617] text-slate-300 border-slate-800 hover:border-blue-200'}`}>
                                     {e}
                                 </button>
                             ))}
@@ -249,10 +249,10 @@ export default function ManualLeadForm() {
                     </div>
 
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase block mb-4">Valores Motivacionais</label>
+                        <label className="text-xs font-bold text-slate-400 uppercase block mb-4">Valores Motivacionais</label>
                         <div className="flex flex-wrap gap-2">
                             {VALORES.map(v => (
-                                <button key={v} type="button" onClick={() => handleCheckboxChange('valores', v)} className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${formData.valores.includes(v) ? 'bg-secondary-600 text-white border-secondary-600 shadow-md' : 'bg-gray-50 text-gray-600 border-gray-100 hover:border-secondary-200'}`}>
+                                <button key={v} type="button" onClick={() => handleCheckboxChange('valores', v)} className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${formData.valores.includes(v) ? 'bg-secondary-600 text-white border-secondary-600 shadow-md' : 'bg-[#020617] text-slate-300 border-slate-800 hover:border-secondary-200'}`}>
                                     {v}
                                 </button>
                             ))}
@@ -261,27 +261,27 @@ export default function ManualLeadForm() {
                 </div>
             </div>
 
-            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-gray-200">
+            <div className="bg-[#0f172a] p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-800">
                 <h3 className="text-xl font-bold text-primary-900 mb-6 flex items-center gap-2">
                     <span className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm">4</span>
                     Observações e Considerações
                 </h3>
                 <div className="mb-6">
-                    <label className="text-xs font-bold text-gray-500 uppercase block mb-3">Participou de Apresentação?</label>
-                    <select name="participouApresentacao" value={formData.participouApresentacao} onChange={handleChange} className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 outline-none focus:ring-2 focus:ring-primary-500">
+                    <label className="text-xs font-bold text-slate-400 uppercase block mb-3">Participou de Apresentação?</label>
+                    <select name="participouApresentacao" value={formData.participouApresentacao} onChange={handleChange} className="w-full h-12 bg-[#020617] border border-slate-800 rounded-xl px-4 outline-none focus:ring-2 focus:ring-primary-500">
                         <option value="">Selecione...</option>
                         <option value="Sim">Sim</option>
                         <option value="Não">Não</option>
                     </select>
                 </div>
                 <div>
-                    <label className="text-xs font-bold text-gray-500 uppercase block mb-3">Observações Adicionais</label>
+                    <label className="text-xs font-bold text-slate-400 uppercase block mb-3">Observações Adicionais</label>
                     <textarea 
                         name="observacoes"
                         value={formData.observacoes}
                         onChange={handleChange as any}
                         placeholder="Observações importantes sobre o lead..."
-                        className="w-full h-32 bg-gray-50 border border-gray-100 rounded-xl px-4 py-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500 resize-none font-medium"
+                        className="w-full h-32 bg-[#020617] border border-slate-800 rounded-xl px-4 py-4 mt-1 outline-none focus:ring-2 focus:ring-primary-500 resize-none font-medium"
                     />
                 </div>
             </div>
@@ -290,7 +290,7 @@ export default function ManualLeadForm() {
                 <Button type="submit" disabled={loading} className="flex-1 h-16 rounded-[1.5rem] text-lg font-bold shadow-lg shadow-primary-900/10 active:scale-[0.98]">
                     {loading ? 'Processando Cadastro...' : 'Salvar no CRM'}
                 </Button>
-                <button type="button" onClick={() => router.back()} className="px-10 h-16 rounded-[1.5rem] border border-gray-200 font-bold text-gray-500 hover:bg-gray-50 transition-colors">Cancelar</button>
+                <button type="button" onClick={() => router.back()} className="px-10 h-16 rounded-[1.5rem] border border-slate-800 font-bold text-slate-400 hover:bg-[#020617] transition-colors">Cancelar</button>
             </div>
         </form>
     );

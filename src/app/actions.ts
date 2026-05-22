@@ -182,7 +182,10 @@ export async function updateLeadStatusAction(formData: FormData) {
     const leadId = formData.get('leadId') as string;
     const status = formData.get('status') as any;
     const notasCrm = formData.get('notasCrm') as string;
-    const proximoContato = formData.get('proximoContato') as string;
+    const data = formData.get('proximoContatoData') as string;
+    const hora = formData.get('proximoContatoHora') as string;
+    const tipo = formData.get('proximoContatoTipo') as string;
+    const proximoContato = data ? ${data}T| : '';
 
     if (!leadId || !status) return;
 

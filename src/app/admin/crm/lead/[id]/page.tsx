@@ -74,6 +74,26 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
     if (cat === 'Pesquisa Antiga') tab = 'pesquisa';
     else if (cat !== 'Lead Site') tab = 'stakeholders';
 
+
+    let defData = '';
+    let defHora = '';
+    let defTipo = 'WhatsApp';
+    if (lead.proximoContato) {
+        if (lead.proximoContato.includes('|')) {
+            const [dt, tp] = lead.proximoContato.split('|');
+            defTipo = tp;
+            if (dt.includes('T')) {
+                [defData, defHora] = dt.split('T');
+            } else {
+                defData = dt;
+            }
+        } else if (lead.proximoContato.includes('T')) {
+            [defData, defHora] = lead.proximoContato.split('T');
+        } else {
+            defData = lead.proximoContato;
+        }
+    }
+
     return (
         <div className="max-w-6xl mx-auto space-y-6">
             {/* Header */}
@@ -81,8 +101,8 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                 <div className="flex items-center gap-4">
                     <BackButton fallbackUrl={`/admin/crm?tab=${tab}#lead-${lead.id}`} />
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{lead.nome}</h1>
-                        <p className="text-gray-500 mt-1">Cadastrado em {new Date(lead.createdAt).toLocaleDateString('pt-BR')}</p>
+                        <h1 className="text-3xl font-bold text-slate-50 tracking-tight">{lead.nome}</h1>
+                        <p className="text-slate-400 mt-1">Cadastrado em {new Date(lead.createdAt).toLocaleDateString('pt-BR')}</p>
                     </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
@@ -94,9 +114,15 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                         </div>
                     </div>
                     {lead.proximoContato && (
-                        <div className="bg-orange-50 px-3 py-1 rounded-lg text-orange-700 text-xs font-bold border border-orange-200 flex items-center gap-1.5 animate-pulse">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            Agendado para: {new Date(lead.proximoContato).toLocaleDateString('pt-BR')}
+                        <div className="bg-slate-800 px-3 py-1.5 rounded-xl text-slate-100 text-[11px] font-bold border border-slate-700 flex items-center gap-2 animate-pulse">
+                            <span className="text-secondary-400">
+                                {defTipo === 'Ligação' && '📞'}
+                                {defTipo === 'Reunião Online' && '💻'}
+                                {defTipo === 'Reunião Presencial' && '👥'}
+                                {defTipo === 'WhatsApp' && '📱'}
+                                {defTipo === 'E-mail' && '✉️'}
+                            </span>
+                            <span>{new Date(defData).toLocaleDateString('pt-BR')} {defHora && `às ${defHora}`}</span>
                         </div>
                     )}
                 </div>
@@ -105,11 +131,11 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Coluna 1: Dados do Cliente */}
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
-                        <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-6">
+                    <div className="bg-[#0f172a] p-8 rounded-3xl shadow-sm border border-slate-800">
+                        <div className="flex justify-between items-center mb-8 border-b border-slate-800 pb-6">
                             <div>
-                                <h2 className="text-2xl font-bold text-gray-900">Dossiê do Candidato</h2>
-                                <p className="text-sm text-gray-500 mt-1">Todas as respostas coletadas no questionário de afinidade.</p>
+                                <h2 className="text-2xl font-bold text-slate-50">Dossiê do Candidato</h2>
+                                <p className="text-sm text-slate-400 mt-1">Todas as respostas coletadas no questionário de afinidade.</p>
                             </div>
                             {(() => {
                                 const fields = [
@@ -135,30 +161,30 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                     <span className="w-2 h-2 bg-secondary-500 rounded-full"></span>
                                     1. Identificação e Perfil
                                 </h3>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-12 bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-12 bg-[#020617]/50 p-6 rounded-2xl border border-slate-800">
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Nome Completo</label>
-                                        <p className="font-bold text-gray-900">{lead.nome}</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Nome Completo</label>
+                                        <p className="font-bold text-slate-50">{lead.nome}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">E-mail</label>
-                                        <p className="font-medium text-gray-900">{lead.email}</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">E-mail</label>
+                                        <p className="font-medium text-slate-50">{lead.email}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">WhatsApp / Telefone</label>
-                                        <p className={`font-bold ${!lead.telefone ? 'text-red-500 italic' : 'text-gray-900'}`}>{lead.telefone || 'Não informado'}</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">WhatsApp / Telefone</label>
+                                        <p className={`font-bold ${!lead.telefone ? 'text-red-500 italic' : 'text-slate-50'}`}>{lead.telefone || 'Não informado'}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Idade</label>
-                                        <p className="font-medium text-gray-900">{lead.idade || 'Não informado'}</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Idade</label>
+                                        <p className="font-medium text-slate-50">{lead.idade || 'Não informado'}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Gênero</label>
-                                        <p className="font-medium text-gray-900">{lead.genero || 'Não informado'}</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Gênero</label>
+                                        <p className="font-medium text-slate-50">{lead.genero || 'Não informado'}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Profissão</label>
-                                        <p className={`font-medium ${!lead.profissao ? 'text-red-500 italic' : 'text-gray-900'}`}>{lead.profissao || 'Não informado'}</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Profissão</label>
+                                        <p className={`font-medium ${!lead.profissao ? 'text-red-500 italic' : 'text-slate-50'}`}>{lead.profissao || 'Não informado'}</p>
                                     </div>
                                 </div>
                             </section>
@@ -169,22 +195,22 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                     <span className="w-2 h-2 bg-secondary-500 rounded-full"></span>
                                     2. Moradia e Localização
                                 </h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12 bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12 bg-[#020617]/50 p-6 rounded-2xl border border-slate-800">
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Onde mora atualmente?</label>
-                                        <p className="font-medium text-gray-900">{lead.moradiaAtual || 'Não informado'}</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Onde mora atualmente?</label>
+                                        <p className="font-medium text-slate-50">{lead.moradiaAtual || 'Não informado'}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Onde deseja morar?</label>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Onde deseja morar?</label>
                                         <p className={`font-bold ${!lead.ondeMorar ? 'text-red-500 italic' : 'text-primary-700'}`}>{lead.ondeMorar || 'Não informado'}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Preferência de Ambiente</label>
-                                        <p className="font-medium text-gray-900">{lead.tipoCohousing || 'Não informado'}</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Preferência de Ambiente</label>
+                                        <p className="font-medium text-slate-50">{lead.tipoCohousing || 'Não informado'}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Tipologia Desejada</label>
-                                        <p className="font-medium text-gray-900">{lead.tipologia || 'Não informado'}</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Tipologia Desejada</label>
+                                        <p className="font-medium text-slate-50">{lead.tipologia || 'Não informado'}</p>
                                     </div>
                                 </div>
                             </section>
@@ -195,26 +221,26 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                     <span className="w-2 h-2 bg-secondary-500 rounded-full"></span>
                                     3. Configuração da Residência
                                 </h3>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-12 bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-12 bg-[#020617]/50 p-6 rounded-2xl border border-slate-800">
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Com quem irá morar?</label>
-                                        <p className="font-medium text-gray-900">{lead.comQuem || 'Não informado'}</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Com quem irá morar?</label>
+                                        <p className="font-medium text-slate-50">{lead.comQuem || 'Não informado'}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Total de Pessoas</label>
-                                        <p className="font-bold text-gray-900">{lead.totalPessoas || '1'} pessoa(s)</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Total de Pessoas</label>
+                                        <p className="font-bold text-slate-50">{lead.totalPessoas || '1'} pessoa(s)</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Área Estimada</label>
-                                        <p className="font-medium text-gray-900">{lead.areaResidencia || 'Não informado'}</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Área Estimada</label>
+                                        <p className="font-medium text-slate-50">{lead.areaResidencia || 'Não informado'}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Quartos</label>
-                                        <p className="font-medium text-gray-900">{lead.dormitorios || '0'} dormitório(s)</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Quartos</label>
+                                        <p className="font-medium text-slate-50">{lead.dormitorios || '0'} dormitório(s)</p>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase">Suítes</label>
-                                        <p className="font-medium text-gray-900">{lead.suites || '0'} suíte(s)</p>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Suítes</label>
+                                        <p className="font-medium text-slate-50">{lead.suites || '0'} suíte(s)</p>
                                     </div>
                                 </div>
                             </section>
@@ -228,7 +254,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                 
                                 <div className="space-y-6 px-2">
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-3">Interesses & Atividades Coletivas</label>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-3">Interesses & Atividades Coletivas</label>
                                         <div className="flex flex-wrap gap-2">
                                             {(lead.interesses || []).length > 0 ? (
                                                 lead.interesses.map(i => <span key={i} className="px-3 py-1.5 bg-primary-50 text-primary-700 font-medium rounded-lg text-sm border border-primary-100">{i}</span>)
@@ -239,7 +265,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                     </div>
 
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-3">Valores Fundamentais no Cohousing</label>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-3">Valores Fundamentais no Cohousing</label>
                                         <div className="flex flex-wrap gap-2">
                                             {(lead.valores || []).length > 0 ? (
                                                 lead.valores.map(v => <span key={v} className="px-3 py-1.5 bg-secondary-50 text-secondary-700 font-medium border border-secondary-100 rounded-lg text-sm">{v}</span>)
@@ -250,7 +276,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                     </div>
 
                                     <div>
-                                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-3">Disponibilidade para Empreender</label>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-3">Disponibilidade para Empreender</label>
                                         <div className="flex flex-wrap gap-2">
                                             {(lead.empreender || []).length > 0 ? (
                                                 lead.empreender.map(e => <span key={e} className="px-3 py-1.5 bg-blue-50 text-blue-700 font-medium border border-blue-100 rounded-lg text-sm">{e}</span>)
@@ -268,13 +294,13 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                     <span className="w-2 h-2 bg-secondary-500 rounded-full"></span>
                                     5. Considerações do Cliente
                                 </h3>
-                                <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                                <div className="bg-[#020617]/50 p-6 rounded-2xl border border-slate-800">
                                     {lead.observacoes ? (
                                         <p className="text-sm text-gray-700 italic leading-relaxed">
                                             &quot;{lead.observacoes}&quot;
                                         </p>
                                     ) : (
-                                        <p className="text-sm text-gray-400 italic">
+                                        <p className="text-sm text-slate-500 italic">
                                             Nenhuma observação informada.
                                         </p>
                                     )}
@@ -287,14 +313,14 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                     <LogInteractionForm leadId={lead.id} />
 
                     {/* Histórico de Mensagens */}
-                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
-                        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <div className="bg-[#0f172a] p-8 rounded-3xl shadow-sm border border-slate-800">
+                        <h2 className="text-xl font-bold text-slate-50 mb-6 flex items-center gap-2">
                             <svg className="w-6 h-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             Histórico de Relacionamento
                         </h2>
                         
                         {interactions.length === 0 ? (
-                            <p className="text-gray-500 text-center py-10 border border-dashed border-gray-200 rounded-2xl">
+                            <p className="text-slate-400 text-center py-10 border border-dashed border-slate-800 rounded-2xl">
                                 Nenhuma mensagem enviada ainda via robô.
                             </p>
                         ) : (
@@ -313,9 +339,9 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                                         {it.type || 'Sistema'}
                                                     </span>
                                                 </div>
-                                                <span className="text-xs text-gray-400">{new Date(it.sent_at).toLocaleString('pt-BR')}</span>
+                                                <span className="text-xs text-slate-500">{new Date(it.sent_at).toLocaleString('pt-BR')}</span>
                                             </div>
-                                            <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-xl border border-gray-100 whitespace-pre-wrap">{it.content}</p>
+                                            <p className="text-sm text-gray-700 bg-[#020617] p-3 rounded-xl border border-slate-800 whitespace-pre-wrap">{it.content}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -332,14 +358,14 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                     {/* Componente de Envio de E-mail */}
                     <EmailSender lead={lead} templates={templates} />
 
-                    <form action={updateLeadStatusAction} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
-                        <h3 className="font-bold text-gray-900 mb-4">Atualizar Lead</h3>
+                    <form action={updateLeadStatusAction} className="bg-[#0f172a] p-6 rounded-3xl shadow-sm border border-slate-800">
+                        <h3 className="font-bold text-slate-50 mb-4">Atualizar Lead</h3>
                         <input type="hidden" name="leadId" value={lead.id} />
                         
                         <div className="space-y-4">
                             <div>
-                                <label className="text-xs font-bold text-gray-500 uppercase">Status do Funil</label>
-                                <select name="status" defaultValue={lead.status} className="w-full h-10 px-3 rounded-lg border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
+                                <label className="text-xs font-bold text-slate-400 uppercase">Status do Funil</label>
+                                <select name="status" defaultValue={lead.status} className="w-full h-10 px-3 rounded-lg border border-slate-800 mt-1 outline-none focus:ring-2 focus:ring-primary-500">
                                     <option value="Novo">Novo</option>
                                     <option value="Contatado">Contatado</option>
                                     <option value="Qualificado">Qualificado</option>
@@ -348,17 +374,22 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                 </select>
                             </div>
                             <div>
-                                <label className="text-xs font-bold text-gray-500 uppercase">Agendar Próximo Contato</label>
-                                <input 
-                                    type="date" 
-                                    name="proximoContato" 
-                                    defaultValue={lead.proximoContato || ''} 
-                                    className="w-full h-10 px-3 rounded-lg border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500"
-                                />
+                                <label className="text-xs font-bold text-slate-400 uppercase">Agendar Próximo Contato</label>
+                                <div className="grid grid-cols-2 gap-2 mt-1">
+                                    <input type="date" name="proximoContatoData" defaultValue={defData} className="w-full h-10 px-3 bg-slate-900 rounded-lg border border-slate-800 outline-none focus:ring-2 focus:ring-primary-500 text-sm text-slate-100" />
+                                    <input type="time" name="proximoContatoHora" defaultValue={defHora} className="w-full h-10 px-3 bg-slate-900 rounded-lg border border-slate-800 outline-none focus:ring-2 focus:ring-primary-500 text-sm text-slate-100" />
+                                    <select name="proximoContatoTipo" defaultValue={defTipo} className="col-span-2 w-full h-10 px-3 bg-slate-900 rounded-lg border border-slate-800 outline-none focus:ring-2 focus:ring-primary-500 text-sm text-slate-100">
+                                        <option value="WhatsApp">📱 WhatsApp</option>
+                                        <option value="Ligação">📞 Ligação</option>
+                                        <option value="E-mail">✉️ E-mail</option>
+                                        <option value="Reunião Online">💻 Reunião Online</option>
+                                        <option value="Reunião Presencial">👥 Reunião Presencial</option>
+                                    </select>
+                                </div>
                             </div>
                             <div>
-                                <label className="text-xs font-bold text-gray-500 uppercase">Notas Adicionais</label>
-                                <textarea name="notasCrm" defaultValue={lead.notasCrm} rows={4} className="w-full p-3 rounded-lg border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500 resize-none text-sm" placeholder="Anote reuniões, chamadas ou impressões gerais..."></textarea>
+                                <label className="text-xs font-bold text-slate-400 uppercase">Notas Adicionais</label>
+                                <textarea name="notasCrm" defaultValue={lead.notasCrm} rows={4} className="w-full p-3 rounded-lg border border-slate-800 mt-1 outline-none focus:ring-2 focus:ring-primary-500 resize-none text-sm" placeholder="Anote reuniões, chamadas ou impressões gerais..."></textarea>
                             </div>
                             <button type="submit" className="w-full bg-primary-600 text-white font-bold h-10 rounded-lg hover:bg-primary-700 transition-colors">
                                 Salvar Atualizações
@@ -374,7 +405,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                         </h3>
                         <div className="space-y-3">
                             {matches.map((m, idx) => (
-                                <div key={idx} className="bg-white/10 p-3 rounded-xl border border-white/10">
+                                <div key={idx} className="bg-[#0f172a]/10 p-3 rounded-xl border border-white/10">
                                     <div className="flex justify-between items-center mb-1">
                                         <span className="font-bold text-sm truncate mr-2">{m.otherLead.nome}</span>
                                         <span className="text-secondary-400 font-extrabold">{m.percentage}%</span>
@@ -386,19 +417,19 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                     </div>
 
                     {/* Mesma Região */}
-                    <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
-                        <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <div className="bg-[#0f172a] p-6 rounded-3xl shadow-sm border border-slate-800">
+                        <h3 className="font-bold text-slate-50 mb-4 flex items-center gap-2">
                             <svg className="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                             Mesma Região ({lead.ondeMorar || 'N/A'})
                         </h3>
                         {sameRegionLeads.length === 0 ? (
-                            <p className="text-xs text-gray-500">Nenhum outro lead encontado para esta região.</p>
+                            <p className="text-xs text-slate-400">Nenhum outro lead encontado para esta região.</p>
                         ) : (
                             <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                                 {sameRegionLeads.map(l => (
-                                    <div key={l.id} className="bg-gray-50 p-3 rounded-xl border border-gray-100 flex flex-col gap-1">
+                                    <div key={l.id} className="bg-[#020617] p-3 rounded-xl border border-slate-800 flex flex-col gap-1">
                                         <div className="flex justify-between items-center">
-                                            <span className="font-bold text-sm text-gray-900 truncate mr-2">{l.nome}</span>
+                                            <span className="font-bold text-sm text-slate-50 truncate mr-2">{l.nome}</span>
                                             <span className="text-[10px] font-bold px-2 py-1 bg-gray-200 text-gray-700 rounded-md truncate max-w-[80px]" title={l.tipologia}>{l.tipologia || 'Indefinida'}</span>
                                         </div>
                                         <Link href={`/admin/crm/lead/${l.id}`} className="text-[10px] uppercase font-bold text-primary-600 hover:text-primary-800 underline">Ver Perfil</Link>

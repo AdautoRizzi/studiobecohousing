@@ -1,2 +1,3 @@
-2026/04/30-15:10:25.856 4954 Creating DB C:\Users\Adauto\.gemini\antigravity\playground\sonic-hawking\.wwebjs_auth\session\Default\shared_proto_db since it was missing.
-2026/04/30-15:10:26.225 4954 Reusing MANIFEST C:\Users\Adauto\.gemini\antigravity\playground\sonic-hawking\.wwebjs_auth\session\Default\shared_proto_db/MANIFEST-000001
+2026/05/18-20:50:28.919 273c Reusing MANIFEST C:\Users\Adauto\.gemini\antigravity\playground\sonic-hawking\.wwebjs_auth\session\Default\shared_proto_db/MANIFEST-000001
+2026/05/18-20:50:28.919 273c Recovering log #3
+2026/05/18-20:50:28.920 273c Reusing old log C:\Users\Adauto\.gemini\antigravity\playground\sonic-hawking\.wwebjs_auth\session\Default\shared_proto_db/000003.log 

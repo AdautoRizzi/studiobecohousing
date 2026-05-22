@@ -11,7 +11,7 @@ const TIPOS_COHOUSING = ['Urbano em grandes metrópoles', 'Urbano em cidades do 
 const TIPOLOGIAS = ['Casas', 'Apartamentos', 'Loft', 'Indiferente'];
 const AREAS_RESIDENCIA = ['Até 50 m2', 'de 50 m2 a 80 m2', 'de 80 m2 a 120 m2', 'acima de 120 m2'];
 const COM_QUEM = ['sozinha/o', 'com cônjuge ou companheira/o', 'com amigos e/ou familiares'];
-const TOT_PESSOAS = ['1 pessoa', '2 pessoas', '3 pessoas', '4 pessoas'];
+const TOT_PESSOAS = ['1 pessoa', '2 pessoas', '3 pessoas', '4 pessoas', 'mais de 4 pessoas'];
 const QTD_DORMITORIOS = [
     { label: '1 dormitório', value: '1' },
     { label: '2 dormitórios', value: '2' },

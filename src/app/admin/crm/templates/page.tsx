@@ -11,8 +11,8 @@ export default async function TemplatesPage() {
         <div className="max-w-4xl mx-auto">
             <div className="flex justify-between items-end mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Templates de Mensagens</h1>
-                    <p className="text-gray-500 mt-1">Crie mensagens padrão para agilizar o contato via WhatsApp.</p>
+                    <h1 className="text-3xl font-bold text-slate-50 tracking-tight">Templates de Mensagens</h1>
+                    <p className="text-slate-400 mt-1">Crie mensagens padrão para agilizar o contato via WhatsApp.</p>
                 </div>
             </div>
 

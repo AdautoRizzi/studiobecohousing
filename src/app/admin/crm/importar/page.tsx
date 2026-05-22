@@ -96,12 +96,12 @@ export default function ImportLeadsPage() {
                     <Link href="/admin/crm?tab=pesquisa" className="text-primary-600 hover:text-primary-900 font-bold mb-4 inline-block">
                         ← Voltar para o CRM
                     </Link>
-                    <h1 className="text-3xl font-bold text-gray-900">Importar Pesquisa Antiga</h1>
-                    <p className="text-gray-500 mt-2">Copie e cole os dados diretamente da sua planilha Excel ou Google Sheets.</p>
+                    <h1 className="text-3xl font-bold text-slate-50">Importar Pesquisa Antiga</h1>
+                    <p className="text-slate-400 mt-2">Copie e cole os dados diretamente da sua planilha Excel ou Google Sheets.</p>
                 </div>
             </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+            <div className="bg-[#0f172a] p-8 rounded-2xl shadow-sm border border-slate-800">
                 <div className="space-y-6">
                     <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
                         <h3 className="font-bold text-blue-900 mb-2">Instruções de Uso:</h3>
@@ -118,7 +118,7 @@ export default function ImportLeadsPage() {
                         <textarea 
                             value={pastedData}
                             onChange={(e) => setPastedData(e.target.value)}
-                            className="w-full h-64 p-4 border border-gray-300 rounded-xl font-mono text-xs whitespace-pre bg-gray-50 focus:ring-2 focus:ring-primary-500 outline-none"
+                            className="w-full h-64 p-4 border border-gray-300 rounded-xl font-mono text-xs whitespace-pre bg-[#020617] focus:ring-2 focus:ring-primary-500 outline-none"
                             placeholder="Nome Completo    email@exemplo.com    (11) 99999-9999    Moradia Atual: Casa, Idade: 50..."
                         ></textarea>
                     </div>
@@ -129,7 +129,7 @@ export default function ImportLeadsPage() {
                         </div>
                     )}
 
-                    <div className="flex justify-end pt-4 border-t border-gray-100">
+                    <div className="flex justify-end pt-4 border-t border-slate-800">
                         <button 
                             onClick={handleImport} 
                             disabled={loading}

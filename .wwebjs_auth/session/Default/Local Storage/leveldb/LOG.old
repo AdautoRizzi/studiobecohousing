@@ -1,2 +1,6 @@
-2026/04/30-15:10:25.792 15e8 Creating DB C:\Users\Adauto\.gemini\antigravity\playground\sonic-hawking\.wwebjs_auth\session\Default\Local Storage\leveldb since it was missing.
-2026/04/30-15:10:26.228 15e8 Reusing MANIFEST C:\Users\Adauto\.gemini\antigravity\playground\sonic-hawking\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
+2026/05/18-20:50:28.799 4be4 Reusing MANIFEST C:\Users\Adauto\.gemini\antigravity\playground\sonic-hawking\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
+2026/05/18-20:50:28.815 4be4 Recovering log #4
+2026/05/18-20:50:28.819 4be4 Reusing old log C:\Users\Adauto\.gemini\antigravity\playground\sonic-hawking\.wwebjs_auth\session\Default\Local Storage\leveldb/000004.log 
+2026/05/18-21:50:38.860 4be4 Level-0 table #6: started
+2026/05/18-21:50:38.893 4be4 Level-0 table #6: 17997 bytes OK
+2026/05/18-21:50:38.904 4be4 Delete type=0 #4

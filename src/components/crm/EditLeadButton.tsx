@@ -14,7 +14,7 @@ export default function EditLeadButton({ lead }: EditLeadButtonProps) {
         <>
             <button 
                 onClick={() => setIsOpen(true)}
-                className="bg-white border border-gray-200 text-gray-700 px-3 py-1 rounded-lg text-sm font-bold hover:bg-gray-50 flex items-center gap-1.5 transition-colors"
+                className="bg-[#0f172a] border border-slate-800 text-gray-700 px-3 py-1 rounded-lg text-sm font-bold hover:bg-[#020617] flex items-center gap-1.5 transition-colors"
                 title="Editar Lead"
             >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

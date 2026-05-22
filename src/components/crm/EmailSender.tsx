@@ -48,8 +48,8 @@ export default function EmailSender({ lead, templates }: Props) {
     };
 
     return (
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+        <div className="bg-[#0f172a] p-6 md:p-8 rounded-3xl shadow-sm border border-slate-800">
+            <h2 className="text-xl font-bold text-slate-50 mb-6 flex items-center gap-2">
                 <span className="w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm">✉️</span>
                 Enviar E-mail
             </h2>
@@ -62,7 +62,7 @@ export default function EmailSender({ lead, templates }: Props) {
                 <div className="space-y-4">
                     {templates && templates.length > 0 && (
                         <div>
-                            <label className="text-xs font-bold text-gray-500 uppercase">Usar Template (Opcional)</label>
+                            <label className="text-xs font-bold text-slate-400 uppercase">Usar Template (Opcional)</label>
                             <select 
                                 value={selectedTemplate}
                                 onChange={(e) => {
@@ -76,7 +76,7 @@ export default function EmailSender({ lead, templates }: Props) {
                                         }
                                     }
                                 }}
-                                className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+                                className="w-full h-12 px-4 rounded-xl border border-slate-800 mt-1 outline-none focus:ring-2 focus:ring-blue-500 bg-[#020617]"
                             >
                                 <option value="">Selecione um template rápido...</option>
                                 {templates.map(t => (
@@ -86,22 +86,22 @@ export default function EmailSender({ lead, templates }: Props) {
                         </div>
                     )}
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase">Assunto</label>
+                        <label className="text-xs font-bold text-slate-400 uppercase">Assunto</label>
                         <input 
                             type="text" 
                             value={subject}
                             onChange={(e) => setSubject(e.target.value)}
-                            className="w-full h-12 px-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-blue-500" 
+                            className="w-full h-12 px-4 rounded-xl border border-slate-800 mt-1 outline-none focus:ring-2 focus:ring-blue-500" 
                             placeholder="Assunto do E-mail..."
                         />
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase">Mensagem (Corpo do E-mail)</label>
+                        <label className="text-xs font-bold text-slate-400 uppercase">Mensagem (Corpo do E-mail)</label>
                         <textarea 
                             rows={6}
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
-                            className="w-full p-4 rounded-xl border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm" 
+                            className="w-full p-4 rounded-xl border border-slate-800 mt-1 outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm" 
                             placeholder={`Escreva sua mensagem aqui...\n\nDica: Use {nome} para inserir o primeiro nome (${lead.nome.split(' ')[0]}) automaticamente.`}
                         ></textarea>
                     </div>

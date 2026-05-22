@@ -48,19 +48,19 @@ export function MessageSender({ leadId, leadNome, templates }: { leadId: string,
     };
 
     return (
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
-            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-[#0f172a] p-6 rounded-3xl shadow-sm border border-slate-800">
+            <h3 className="font-bold text-slate-50 mb-4 flex items-center gap-2">
                 <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.129.332.202.043.073.043.423-.101.827z"/></svg>
                 Enviar WhatsApp via Robô
             </h3>
             
             <div className="space-y-4">
                 <div>
-                    <label className="text-xs font-bold text-gray-500 uppercase">Escolher Template</label>
+                    <label className="text-xs font-bold text-slate-400 uppercase">Escolher Template</label>
                     <select 
                         value={selectedTemplate} 
                         onChange={handleTemplateChange}
-                        className="w-full h-10 px-3 rounded-lg border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500"
+                        className="w-full h-10 px-3 rounded-lg border border-slate-800 mt-1 outline-none focus:ring-2 focus:ring-primary-500"
                     >
                         <option value="">-- Mensagem Personalizada --</option>
                         {templates.map(t => (
@@ -70,12 +70,12 @@ export function MessageSender({ leadId, leadNome, templates }: { leadId: string,
                 </div>
 
                 <div>
-                    <label className="text-xs font-bold text-gray-500 uppercase">Mensagem</label>
+                    <label className="text-xs font-bold text-slate-400 uppercase">Mensagem</label>
                     <textarea 
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         rows={4} 
-                        className="w-full p-3 rounded-lg border border-gray-200 mt-1 outline-none focus:ring-2 focus:ring-primary-500 resize-none text-sm"
+                        className="w-full p-3 rounded-lg border border-slate-800 mt-1 outline-none focus:ring-2 focus:ring-primary-500 resize-none text-sm"
                         placeholder="Escreva sua mensagem aqui..."
                     ></textarea>
                 </div>
@@ -90,7 +90,7 @@ export function MessageSender({ leadId, leadNome, templates }: { leadId: string,
                 >
                     {loading ? 'Enviando...' : 'Adicionar à Fila de Disparo'}
                 </Button>
-                <p className="text-[10px] text-gray-400 text-center uppercase tracking-widest mt-2">
+                <p className="text-[10px] text-slate-500 text-center uppercase tracking-widest mt-2">
                     O Robô no seu PC enviará esta mensagem em instantes.
                 </p>
             </div>
