@@ -185,7 +185,7 @@ export async function updateLeadStatusAction(formData: FormData) {
     const data = formData.get('proximoContatoData') as string;
     const hora = formData.get('proximoContatoHora') as string;
     const tipo = formData.get('proximoContatoTipo') as string;
-    const proximoContato = data ? ${data}T| : '';
+    const proximoContato = data ? `${data}T${hora || '00:00'}|${tipo || 'WhatsApp'}` : '';
 
     if (!leadId || !status) return;
 

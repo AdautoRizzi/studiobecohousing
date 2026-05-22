@@ -44,7 +44,7 @@ export default async function KpisPage() {
 
     // Filtra IDs únicos que receberam email e whatsapp
     const emailSentLeadIds = [...new Set(allInteractions.filter(i => i.type === 'E-mail').map(i => i.lead_id))];
-    const whatsSentLeadIds = [...new Set(allInteractions.filter(i => i.type === 'WhatsApp' || i.type === "'Sistema'").map(i => i.lead_id))];
+    const whatsSentLeadIds = [...new Set(allInteractions.filter(i => i.type === 'WhatsApp' || (i.type as string) === "'Sistema'").map(i => i.lead_id))];
 
     const emailsSentCount = emailSentLeadIds.length;
     const whatsSentCount = whatsSentLeadIds.length;
