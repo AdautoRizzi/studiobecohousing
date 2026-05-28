@@ -1,0 +1,49 @@
+{
+  "circles": [
+    {
+      "id": "c1",
+      "name": "Crculo Geral",
+      "domain": "Vila Botnica",
+      "aim": "Cuidar do bem estar geral",
+      "parentCircleId": null
+    },
+    {
+      "id": "c2",
+      "name": "Crculo de Sustentabilidade",
+      "domain": "Gesto de resduos e energia",
+      "aim": "Zerar pegada de carbono",
+      "parentCircleId": "c1"
+    }
+  ],
+  "roles": [
+    {
+      "id": "r1",
+      "circleId": "c1",
+      "roleType": "Leader",
+      "userId": "u1",
+      "userName": "Adauto Rizzi"
+    },
+    {
+      "id": "r2",
+      "circleId": "c2",
+      "roleType": "Delegate",
+      "userId": "u2",
+      "userName": "Maria Santos"
+    }
+  ],
+  "proposals": [
+    {
+      "id": "p1",
+      "circleId": "c2",
+      "title": "Composteira Comunitria",
+      "driver": "Excesso de lixo orgnico gerando odores",
+      "content": "Instalar 3 composteiras de 100L nos fundos da rea comum.",
+      "status": "Clarification",
+      "createdAt": "2026-05-28T18:20:11.348Z",
+      "authorName": "Joo Carlos"
+    }
+  ],
+  "interactions": [],
+  "elections": [],
+  "nominations": []
+}
