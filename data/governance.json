@@ -10,7 +10,7 @@
     {
       "id": "c2",
       "name": "Círculo de Sustentabilidade",
-      "domain": "Gesto de resíduos e energia",
+      "domain": "Gestão de resíduos e energia",
       "aim": "Zerar pegada de carbono",
       "parentCircleId": "c1"
     }

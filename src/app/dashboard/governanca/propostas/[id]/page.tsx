@@ -6,14 +6,13 @@ export const dynamic = 'force-dynamic';
 export default async function PropostaDetail({ params }: { params: { id: string } }) {
     const { id } = await params;
     const data = getGovData();
-    const currentUser = { id: 'u2', name: 'Maria Santos' }; // Simulando usuário logado (membro do c2)
+    const currentUser = { id: 'u2', name: 'Maria Santos' };
     const userCircles = data.roles.filter((r: any) => r.userId === currentUser.id).map((r: any) => r.circleId);
 
     const p = data.proposals.find((x: any) => x.id === id);
+    if (!p || !userCircles.includes(p.circleId)) return <div className="p-8 text-red-500 font-bold">Acesso Negado: Você não é membro deste círculo.</div>;
+    
     const interactions = data.interactions.filter((x: any) => x.proposalId === id);
-
-    if (!p || !userCircles.includes(p.circleId)) return <div className="p-8 text-red-500 font-bold">Acesso Negado: Vocêê não é membro deste círculo.</div>;
-    if (!p) return <div>Proposta não encontrada</div>;
 
     const phases = ['Clarification', 'Reaction', 'Objection', 'Approved'];
     const currentPhaseIdx = phases.indexOf(p.status);
@@ -48,7 +47,6 @@ export default async function PropostaDetail({ params }: { params: { id: string 
                 </div>
             </div>
 
-            {/* Stepper do Processo Sociocrtico */}
             <div className="bg-white p-6 rounded-xl shadow-sm border border-secondary-200">
                 <h2 className="text-lg font-bold text-gray-900 mb-6">Fluxo de Decisão por Consentimento</h2>
                 
@@ -65,7 +63,6 @@ export default async function PropostaDetail({ params }: { params: { id: string 
                 </div>
             </div>
 
-            {/* Fórum da Fase Atual */}
             <div className="bg-white p-6 rounded-xl shadow-sm border border-secondary-200">
                 <h3 className="text-lg font-bold text-gray-900 mb-4">Interações da Fase: {p.status}</h3>
                 <div className="space-y-4 mb-6">
@@ -86,10 +83,10 @@ export default async function PropostaDetail({ params }: { params: { id: string 
 
                 {p.status !== 'Approved' && p.status !== 'Rejected' && (
                     <div className="border-t border-secondary-100 pt-6">
-                        <textaárea className="w-full border border-secondary-200 rounded-lg p-3 outline-none focus:border-primary-500" rows={3} placeholder={
+                        <textarea className="w-full border border-secondary-200 rounded-lg p-3 outline-none focus:border-primary-500" rows={3} placeholder={
                             p.status === 'Clarification' ? 'Faça perguntas apenas para entender a proposta (sem opiniões)...' :
                             p.status === 'Reaction' ? 'O que você achou? Compartilhe reações rápidas...' :
-                            'Vocêê tem alguma objeção baseada em risco? A proposta não é segura o suficiente para tentar?'
+                            'Você tem alguma objeção baseada em risco? A proposta não é segura o suficiente para tentar?'
                         }></textarea>
                         <div className="mt-3 flex justify-end gap-3">
                             {p.status === 'Objection' && (

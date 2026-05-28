@@ -4,9 +4,8 @@ export const dynamic = 'force-dynamic';
 
 export default function CirculosPage() {
     const data = getGovData();
-    const currentUser = { id: 'u2', name: 'Maria Santos' }; // Simulando usuário logado (membro do c2)
+    const currentUser = { id: 'u2', name: 'Maria Santos' };
     const userCircles = data.roles.filter((r: any) => r.userId === currentUser.id).map((r: any) => r.circleId);
-
     const circles = data.circles.filter((c: any) => userCircles.includes(c.id));
     const roles = data.roles;
 
