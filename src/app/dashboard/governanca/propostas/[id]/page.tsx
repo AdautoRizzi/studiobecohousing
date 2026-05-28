@@ -1,4 +1,5 @@
-import { getGovData } from '@/lib/govStore';
+import { getGovData, approveProposalAction } from '@/lib/govStore';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
@@ -90,7 +91,13 @@ export default async function PropostaDetail({ params }: { params: { id: string 
                         }></textarea>
                         <div className="mt-3 flex justify-end gap-3">
                             {p.status === 'Objection' && (
-                                <button className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700">Consentir (Sem Objeções)</button>
+                                <form action={async () => {
+                                    'use server';
+                                    await approveProposalAction(id);
+                                    redirect('/dashboard/governanca');
+                                }}>
+                                    <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700">Consentir (Sem Objeções)</button>
+                                </form>
                             )}
                             <button className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium">Enviar</button>
                         </div>

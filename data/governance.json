@@ -38,12 +38,26 @@
       "title": "Composteira Comunitária",
       "driver": "Excesso de lixo orgânico gerando odores",
       "content": "Instalar 3 composteiras de 100L nos fundos da área comum.",
-      "status": "Clarification",
+      "status": "Objection",
       "createdAt": "2026-05-28T18:20:11.348Z",
       "authorName": "João Carlos"
     }
   ],
   "interactions": [],
   "elections": [],
-  "nominations": []
+  "nominations": [],
+  "tensions": [
+    {
+      "id": "t1",
+      "circleId": "c1",
+      "title": "Aviso: Composteira Aprovada",
+      "content": "Decisão tomada pelo círculo de sustentabilidade. Necessário ciência.",
+      "sourceCircleId": "c2",
+      "assignedToRole": "r2",
+      "status": "Open",
+      "createdAt": "2026-05-28T19:11:07.554Z"
+    }
+  ],
+  "notifications": [],
+  "logbook": []
 }

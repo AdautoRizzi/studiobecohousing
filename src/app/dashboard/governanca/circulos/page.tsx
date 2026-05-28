@@ -8,6 +8,8 @@ export default function CirculosPage() {
     const userCircles = data.roles.filter((r: any) => r.userId === currentUser.id).map((r: any) => r.circleId);
     const circles = data.circles.filter((c: any) => userCircles.includes(c.id));
     const roles = data.roles;
+    const tensions = data.tensions;
+    
 
     return (
         <div className="space-y-6">
@@ -32,7 +34,12 @@ export default function CirculosPage() {
                                 {roles.filter((r: any) => r.circleId === c.id).map((r: any) => (
                                     <div key={r.id} className="flex justify-between text-sm">
                                         <span className="text-gray-500">{r.roleType}</span>
-                                        <span className="font-medium">{r.userName}</span>
+                                        <span className="font-medium flex items-center gap-2">
+                                            {r.userName}
+                                            {tensions.some((t: any) => t.assignedToRole === r.id && t.status === 'Open') && (
+                                                <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" title="Tensão Pendente"></span>
+                                            )}
+                                        </span>
                                     </div>
                                 ))}
                             </div>
