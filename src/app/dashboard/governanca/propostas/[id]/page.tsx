@@ -6,13 +6,13 @@ export const dynamic = 'force-dynamic';
 export default async function PropostaDetail({ params }: { params: { id: string } }) {
     const { id } = await params;
     const data = getGovData();
-    const currentUser = { id: 'u2', name: 'Maria Santos' }; // Simulando usurio logado (membro do c2)
+    const currentUser = { id: 'u2', name: 'Maria Santos' }; // Simulando usuário logado (membro do c2)
     const userCircles = data.roles.filter((r: any) => r.userId === currentUser.id).map((r: any) => r.circleId);
 
     const p = data.proposals.find((x: any) => x.id === id);
     const interactions = data.interactions.filter((x: any) => x.proposalId === id);
 
-    if (!p || !userCircles.includes(p.circleId)) return <div className="p-8 text-red-500 font-bold">Acesso Negado: Voc no  membro deste crculo.</div>;
+    if (!p || !userCircles.includes(p.circleId)) return <div className="p-8 text-red-500 font-bold">Acesso Negado: Vocêê não é membro deste círculo.</div>;
     if (!p) return <div>Proposta não encontrada</div>;
 
     const phases = ['Clarification', 'Reaction', 'Objection', 'Approved'];
@@ -26,7 +26,7 @@ export default async function PropostaDetail({ params }: { params: { id: string 
                 <div className="flex justify-between items-start mb-6">
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900">{p.title}</h1>
-                        <p className="text-gray-500 mt-2">Proposto por {p.authorName} &bull; Crculo ID: {p.circleId}</p>
+                        <p className="text-gray-500 mt-2">Proposto por {p.authorName} &bull; Círculo ID: {p.circleId}</p>
                     </div>
                     <span className="bg-blue-100 text-blue-800 text-sm px-4 py-1.5 rounded-full font-bold uppercase tracking-wide">
                         Fase: {p.status}
@@ -86,10 +86,10 @@ export default async function PropostaDetail({ params }: { params: { id: string 
 
                 {p.status !== 'Approved' && p.status !== 'Rejected' && (
                     <div className="border-t border-secondary-100 pt-6">
-                        <textarea className="w-full border border-secondary-200 rounded-lg p-3 outline-none focus:border-primary-500" rows={3} placeholder={
+                        <textaárea className="w-full border border-secondary-200 rounded-lg p-3 outline-none focus:border-primary-500" rows={3} placeholder={
                             p.status === 'Clarification' ? 'Faça perguntas apenas para entender a proposta (sem opiniões)...' :
                             p.status === 'Reaction' ? 'O que você achou? Compartilhe reações rápidas...' :
-                            'Você tem alguma objeção baseada em risco? A proposta não é segura o suficiente para tentar?'
+                            'Vocêê tem alguma objeção baseada em risco? A proposta não é segura o suficiente para tentar?'
                         }></textarea>
                         <div className="mt-3 flex justify-end gap-3">
                             {p.status === 'Objection' && (

@@ -2,15 +2,15 @@
   "circles": [
     {
       "id": "c1",
-      "name": "Crculo Geral",
-      "domain": "Vila Botnica",
+      "name": "Círculo Geral",
+      "domain": "Vila Botânica",
       "aim": "Cuidar do bem estar geral",
       "parentCircleId": null
     },
     {
       "id": "c2",
-      "name": "Crculo de Sustentabilidade",
-      "domain": "Gesto de resduos e energia",
+      "name": "Círculo de Sustentabilidade",
+      "domain": "Gesto de resíduos e energia",
       "aim": "Zerar pegada de carbono",
       "parentCircleId": "c1"
     }
@@ -35,12 +35,12 @@
     {
       "id": "p1",
       "circleId": "c2",
-      "title": "Composteira Comunitria",
-      "driver": "Excesso de lixo orgnico gerando odores",
-      "content": "Instalar 3 composteiras de 100L nos fundos da rea comum.",
+      "title": "Composteira Comunitária",
+      "driver": "Excesso de lixo orgânico gerando odores",
+      "content": "Instalar 3 composteiras de 100L nos fundos da área comum.",
       "status": "Clarification",
       "createdAt": "2026-05-28T18:20:11.348Z",
-      "authorName": "Joo Carlos"
+      "authorName": "João Carlos"
     }
   ],
   "interactions": [],

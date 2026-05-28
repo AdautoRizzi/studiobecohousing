@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export default function PropostasPage() {
     const data = getGovData();
-    const currentUser = { id: 'u2', name: 'Maria Santos' }; // Simulando usurio logado (membro do c2)
+    const currentUser = { id: 'u2', name: 'Maria Santos' }; // Simulando usuário logado (membro do c2)
     const userCircles = data.roles.filter((r: any) => r.userId === currentUser.id).map((r: any) => r.circleId);
 
     const proposals = data.proposals.filter((p: any) => userCircles.includes(p.circleId));
