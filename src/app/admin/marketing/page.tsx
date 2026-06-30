@@ -8,6 +8,7 @@ export default async function MarketingDashboard() {
     const leads = await getAllLeads();
 
     // Lógica para separar leads por Source (Google, Facebook, Instagram, Orgânico)
+    const campaigns: any = {};
     const metrics = {
         google: { count: 0, qualificados: 0, aiScoreTotal: 0 },
         facebook: { count: 0, qualificados: 0, aiScoreTotal: 0 },
@@ -28,6 +29,13 @@ export default async function MarketingDashboard() {
         if (scoreMatch) aiScore = parseInt(scoreMatch[1], 10);
 
         metrics[source as keyof typeof metrics].count++;
+        
+        const campMatch = obs.match(/Campaign: ([^|]+)/);
+        const camp = campMatch && campMatch[1].trim() !== "" ? campMatch[1].trim() : "N/A";
+        
+        if (!campaigns[camp]) campaigns[camp] = { source, count: 0, qualificados: 0 };
+        campaigns[camp].count++;
+        if (lead.status === 'Qualificado') campaigns[camp].qualificados++;
         metrics[source as keyof typeof metrics].aiScoreTotal += aiScore;
         if (lead.status === 'Qualificado') {
             metrics[source as keyof typeof metrics].qualificados++;
@@ -65,6 +73,30 @@ export default async function MarketingDashboard() {
                         </div>
                     );
                 })}
+            </div>
+
+            <div className="bg-[#0f172a] rounded-xl p-6 border border-slate-800 mb-8">
+                <h2 className="text-xl font-bold text-slate-50 mb-4">Performance por Post / Campanha</h2>
+                <table className="w-full text-left">
+                    <thead>
+                        <tr className="text-slate-400 border-b border-slate-800">
+                            <th className="pb-2 font-medium">Nome do Post / Campanha</th>
+                            <th className="pb-2 font-medium">Plataforma</th>
+                            <th className="pb-2 font-medium text-center">Volume (Leads)</th>
+                            <th className="pb-2 font-medium text-center">Conversão (Qualificados)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Object.entries(campaigns).sort((a: any, b: any) => b[1].count - a[1].count).map(([campName, data]: any) => (
+                            <tr key={campName} className="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
+                                <td className="py-3 text-slate-200 font-medium">{campName}</td>
+                                <td className="py-3 text-slate-400 uppercase text-xs">{data.source}</td>
+                                <td className="py-3 text-slate-50 text-center font-bold">{data.count}</td>
+                                <td className="py-3 text-green-400 text-center font-medium">{Math.round((data.qualificados / data.count)*100)}% ({data.qualificados})</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
