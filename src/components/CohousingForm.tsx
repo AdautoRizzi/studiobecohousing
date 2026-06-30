@@ -36,6 +36,17 @@ interface Props {
 export default function CohousingForm({ isModal, onClose }: Props) {
     const [step, setStep] = useState(1);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [utms, setUtms] = useState({ source: '', medium: '', campaign: '', term: '' });
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        setUtms({
+            source: params.get('utm_source') || '',
+            medium: params.get('utm_medium') || '',
+            campaign: params.get('utm_campaign') || '',
+            term: params.get('utm_term') || ''
+        });
+    }, []);
     const formRef = useRef<HTMLDivElement>(null);
 
     // Estado do Mega Formulário
@@ -104,7 +115,18 @@ export default function CohousingForm({ isModal, onClose }: Props) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await submitCohousingFormAction(formData);
+            const res = 
+        // MÓDULO DE MARKETING: Anexando UTMs nas observações
+        const utmString = `[UTM] Source: ${utms.source || 'Orgânico'} | Medium: ${utms.medium} | Campaign: ${utms.campaign} | Term: ${utms.term}`;
+        formData.observacoes = formData.observacoes ? `${utmString}\n\n${formData.observacoes}` : utmString;
+        
+        // AI LEAD SCORING: Nota aleatória simulada para o MVP baseado na profissão e idade
+        let aiScore = 50;
+        if (formData.idade.includes('60') || formData.idade.includes('50')) aiScore += 20;
+        if (formData.profissao.toLowerCase().includes('eng') || formData.profissao.toLowerCase().includes('med')) aiScore += 15;
+        formData.observacoes = `[AI SCORE] ${aiScore}/100\n${formData.observacoes}`;
+
+        await submitCohousingFormAction(formData);
             if (res.success) {
                 setIsSubmitted(true);
                 scrollToForm();
