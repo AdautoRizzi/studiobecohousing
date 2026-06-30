@@ -115,7 +115,6 @@ export default function CohousingForm({ isModal, onClose }: Props) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = 
         // MÓDULO DE MARKETING: Anexando UTMs nas observações
         const utmString = `[UTM] Source: ${utms.source || 'Orgânico'} | Medium: ${utms.medium} | Campaign: ${utms.campaign} | Term: ${utms.term}`;
         formData.observacoes = formData.observacoes ? `${utmString}\n\n${formData.observacoes}` : utmString;
@@ -126,7 +125,7 @@ export default function CohousingForm({ isModal, onClose }: Props) {
         if (formData.profissao.toLowerCase().includes('eng') || formData.profissao.toLowerCase().includes('med')) aiScore += 15;
         formData.observacoes = `[AI SCORE] ${aiScore}/100\n${formData.observacoes}`;
 
-        await submitCohousingFormAction(formData);
+        const res = await submitCohousingFormAction(formData);
             if (res.success) {
                 setIsSubmitted(true);
                 scrollToForm();
