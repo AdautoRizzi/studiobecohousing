@@ -367,7 +367,7 @@ export default function CohousingForm({ isModal, onClose }: Props) {
                         Enviar para o WhatsApp
                     </a>
                     
-                    {isModal && <div className="mt-4"><Button onClick={onClose} variant="ghost" className="rounded-full text-gray-400 text-sm">Fechar Janela</Button></div>}
+                    {isModal && <div className="mt-4"><Button onClick={onClose} variant="outline" className="rounded-full text-gray-400 text-sm">Fechar Janela</Button></div>}
                 </div>
             )}
         </div>
