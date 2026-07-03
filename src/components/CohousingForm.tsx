@@ -129,6 +129,11 @@ export default function CohousingForm({ isModal, onClose }: Props) {
             if (res.success) {
                 setIsSubmitted(true);
                 scrollToForm();
+
+                // Redirecionamento automático para o WhatsApp do Studio Be
+                const msg = `Olá! Acabei de preencher o questionário de afinidade do Studio Be.\n\n*Nome:* ${formData.nome}\n*Celular:* ${formData.telefone}\n*Perfil:* ${formData.idade}\n*Local de Interesse:* ${formData.ondeMorar} (${formData.tipoCohousing})\n*Cadastro Completo:* Sim (100%)`;
+                const whatsappUrl = `https://wa.me/5511934898990?text=${encodeURIComponent(msg)}`;
+                window.open(whatsappUrl, '_blank');
             } else {
                 alert(`Erro ao salvar interesse: ${res.error}\n\nDetalhes: ${res.details || 'Sem detalhes adicionais'}`);
             }
