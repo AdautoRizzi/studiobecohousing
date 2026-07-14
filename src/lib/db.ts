@@ -313,3 +313,50 @@ export async function updateLeadNotes(id: string, notasCrm: string) {
         throw error;
     }
 }
+
+// --- HACK MVP: TAREFAS GLOBAIS ---
+// Para evitar migrações complexas de banco de dados neste MVP, 
+// as tarefas globais são salvas como JSON no notasCrm de um "usuário fantasma" (SYSTEM_TASKS)
+
+const SYSTEM_TASKS_EMAIL = 'system_tasks_global_board@studiobe.com';
+
+async function ensureSystemTasksUser() {
+    const { data } = await supabase.from('users').select('id, notasCrm').eq('email', SYSTEM_TASKS_EMAIL).single();
+    if (data) return data;
+    
+    // Create it
+    const { data: newData, error } = await supabase.from('users').insert([{
+        nome: 'SYSTEM TASKS',
+        email: SYSTEM_TASKS_EMAIL,
+        telefone: '00000000000',
+        idade: '0',
+        cidade: 'System',
+        profissao: 'System',
+        comoNosConheceu: 'System',
+        status: 'Descartado', // So it doesn't show in CRM lists
+        notasCrm: '[]'
+    }]).select('id, notasCrm').single();
+    
+    return newData;
+}
+
+export interface GlobalTask {
+    id: string;
+    title: string;
+    column_id: 'todo' | 'doing' | 'done';
+    created_at: string;
+}
+
+export async function getGlobalTasks(): Promise<GlobalTask[]> {
+    const sysUser = await ensureSystemTasksUser();
+    try {
+        return JSON.parse(sysUser.notasCrm || '[]');
+    } catch(e) {
+        return [];
+    }
+}
+
+export async function saveGlobalTasks(tasks: GlobalTask[]) {
+    const sysUser = await ensureSystemTasksUser();
+    await supabase.from('users').update({ notasCrm: JSON.stringify(tasks) }).eq('id', sysUser.id);
+}
