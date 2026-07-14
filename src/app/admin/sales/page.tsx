@@ -59,7 +59,7 @@ export default async function SalesDashboard() {
                         </div>
                         <div className="p-3 overflow-y-auto flex-1 space-y-3">
                             {leadsByStep[step.id].map(lead => (
-                                <Link href={`/admin/crm/${lead.id}`} key={lead.id} className="block bg-[#1e293b] p-3 rounded-lg border border-slate-700 hover:border-primary-500 transition-colors group">
+                                <Link href={`/admin/crm/lead/${lead.id}`} key={lead.id} className="block bg-[#1e293b] p-3 rounded-lg border border-slate-700 hover:border-primary-500 transition-colors group">
                                     <div className="font-bold text-sm text-slate-100 truncate group-hover:text-primary-400">{lead.nome}</div>
                                     <div className="text-xs text-slate-400 mt-1 truncate">{lead.email}</div>
                                     <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-700/50">
