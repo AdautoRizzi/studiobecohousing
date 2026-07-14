@@ -25,6 +25,16 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
     const templates = await getMessageTemplates();
 
     // Algoritmo de Match Simples
+    
+    const getRegionGroup = (region: string | null | undefined) => {
+        if (!region) return '';
+        const r = region.toLowerCase().trim();
+        if (r.includes('santos') || r.includes('praia') || r.includes('litoral')) {
+            return 'litoral_santos';
+        }
+        return r;
+    };
+
     const calculateMatch = (otherLead: any) => {
         let score = 0;
         
@@ -45,7 +55,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
         myValores.forEach(v => { if (otherValores.includes(v)) { score++; matches.push(v); } });
         myEmpreender.forEach(e => { if (otherEmpreender.includes(e)) { score++; matches.push(e); } });
 
-        if (lead.ondeMorar && lead.ondeMorar === otherLead.ondeMorar) score += 2;
+        if (lead.ondeMorar && otherLead.ondeMorar && getRegionGroup(lead.ondeMorar) === getRegionGroup(otherLead.ondeMorar)) score += 2;
         if (lead.tipologia && lead.tipologia === otherLead.tipologia) score += 1;
         maxScore += 3;
 
@@ -59,9 +69,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
     const matches = allLeads.map(calculateMatch).sort((a, b) => b.percentage - a.percentage).slice(0, 10);
 
     const sameRegionLeads = allLeads.filter(l => 
-        l.ondeMorar && 
-        lead.ondeMorar && 
-        l.ondeMorar.toLowerCase().trim() === lead.ondeMorar.toLowerCase().trim()
+        l.ondeMorar && lead.ondeMorar && getRegionGroup(l.ondeMorar) === getRegionGroup(lead.ondeMorar)
     );
 
     const getCleanCategory = (cat: string | null | undefined) => {
