@@ -350,7 +350,7 @@ export interface GlobalTask {
 export async function getGlobalTasks(): Promise<GlobalTask[]> {
     const sysUser = await ensureSystemTasksUser();
     try {
-        return JSON.parse(sysUser.notasCrm || '[]');
+        return JSON.parse(sysUser?.notasCrm || '[]');
     } catch(e) {
         return [];
     }
@@ -358,5 +358,5 @@ export async function getGlobalTasks(): Promise<GlobalTask[]> {
 
 export async function saveGlobalTasks(tasks: GlobalTask[]) {
     const sysUser = await ensureSystemTasksUser();
-    await supabase.from('users').update({ notasCrm: JSON.stringify(tasks) }).eq('id', sysUser.id);
+    await supabase.from('users').update({ notasCrm: JSON.stringify(tasks) }).eq('id', sysUser?.id);
 }
