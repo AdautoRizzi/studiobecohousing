@@ -46,7 +46,7 @@ export default async function SalesDashboard() {
                     <h1 className="text-3xl font-bold text-slate-50 flex items-center gap-3">
                         <span className="text-4xl">🚀</span> Máquina de Vendas
                     </h1>
-                    <p className="text-slate-400 mt-2">Painel estratgico diǭrio: Leads aguardando próxima ação.</p>
+                    <p className="text-slate-400 mt-2">Painel estratégico diário: Leads aguardando próxima ação.</p>
                 </div>
             </div>
 
