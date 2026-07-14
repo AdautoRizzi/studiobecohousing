@@ -7,14 +7,14 @@ export const dynamic = 'force-dynamic';
 export default async function SalesDashboard() {
     const leads = await getAllLeads();
 
-    // Filtra leads que nǜo estǜo Descartados ou Turma Atribuda
+    // Filtra leads que não estão Descartados ou Turma Atribuda
     const activeLeads = leads.filter(l => l.status !== 'Descartado' && l.status !== 'Turma Atribuída');
 
     // Mtodo Studio Be steps
     const STEPS = [
         { id: 'step1', name: 'Passo 1: Kit Boas-Vindas' },
-        { id: 'step2', name: 'Passo 2: Ligaǜo de Descoberta' },
-        { id: 'step3', name: 'Passo 3: Reuniǜo (Meet)' },
+        { id: 'step2', name: 'Passo 2: Ligação de Descoberta' },
+        { id: 'step3', name: 'Passo 3: Reunião (Meet)' },
         { id: 'step4', name: 'Passo 4: Follow-up & Materiais' },
         { id: 'step5', name: 'Passo 5: Convite Oficial' },
     ];
@@ -44,9 +44,9 @@ export default async function SalesDashboard() {
             <div className="flex justify-between items-center mb-8">
                 <div>
                     <h1 className="text-3xl font-bold text-slate-50 flex items-center gap-3">
-                        <span className="text-4xl">🚀</span> Mǭquina de Vendas
+                        <span className="text-4xl">🚀</span> Máquina de Vendas
                     </h1>
-                    <p className="text-slate-400 mt-2">Painel estratgico diǭrio: Leads aguardando prxima aǜo.</p>
+                    <p className="text-slate-400 mt-2">Painel estratgico diǭrio: Leads aguardando próxima ação.</p>
                 </div>
             </div>
 
