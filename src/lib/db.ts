@@ -302,3 +302,14 @@ export async function addToMessageQueue(leadId: string, message: string) {
     if (error) throw new Error(error.message);
     return data;
 }
+
+export async function updateLeadNotes(id: string, notasCrm: string) {
+    const { error } = await supabase
+        .from('users')
+        .update({ notasCrm })
+        .eq('id', id);
+    if (error) {
+        console.error('Error updating lead notes:', error);
+        throw error;
+    }
+}
