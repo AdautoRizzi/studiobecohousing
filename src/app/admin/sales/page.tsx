@@ -8,7 +8,7 @@ export default async function SalesDashboard() {
     const leads = await getAllLeads();
 
     // Filtra leads que nǜo estǜo Descartados ou Turma Atribuda
-    const activeLeads = leads.filter(l => l.status !== 'Descartado' && l.status !== 'Turma Atribuda');
+    const activeLeads = leads.filter(l => l.status !== 'Descartado' && l.status !== 'Turma Atribuída');
 
     // Mtodo Studio Be steps
     const STEPS = [
