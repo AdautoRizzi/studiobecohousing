@@ -1,5 +1,5 @@
 import React from 'react';
-import { getLeadById, getAllLeads, getInteractionsByLead, getMessageTemplates } from '@/lib/db';
+import { getLeadById, getAllLeads, getInteractionsByLead, getMessageTemplates, getMethodSteps } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { BackButton } from '@/components/crm/BackButton';
@@ -23,6 +23,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
     const allLeads = (await getAllLeads()).filter(l => l.id !== lead.id);
     const interactions = await getInteractionsByLead(lead.id);
     const templates = await getMessageTemplates();
+    const methodSteps = await getMethodSteps();
 
     // Algoritmo de Match Simples
     

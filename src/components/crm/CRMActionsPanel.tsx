@@ -2,19 +2,21 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function CRMActionsPanel({ leadId, initialNotes, leadEmail, leadPhone, leadName }: { leadId: string, initialNotes: string, leadEmail: string, leadPhone: string, leadName: string }) {
+export default function CRMActionsPanel({ leadId, initialNotes, leadEmail, leadPhone, leadName, globalSteps = [] }: { leadId: string, initialNotes: string, leadEmail: string, leadPhone: string, leadName: string, globalSteps?: {id: string, name: string}[] }) {
     const router = useRouter();
     
-    let initialState = { step1: false, step2: false, step3: false, step4: false, step5: false };
+    
+    let initialState: Record<string, boolean> = {};
     const match = initialNotes?.match(/__CHECKLIST_STATE__: ({.*})/);
     if (match) {
         try { initialState = JSON.parse(match[1]); } catch(e) {}
     }
+
     
     const [state, setState] = useState(initialState);
     const [saving, setSaving] = useState(false);
 
-    const toggleStep = async (step: keyof typeof state) => {
+    const toggleStep = async (step: string) => {
         setSaving(true);
         const newState = { ...state, [step]: !state[step] };
         setState(newState);
@@ -57,22 +59,34 @@ export default function CRMActionsPanel({ leadId, initialNotes, leadEmail, leadP
                 </button>
             </div>
 
-            <h3 className="text-lg font-bold text-slate-300 mb-4">Método Studio Be (Checklist)</h3>
+            
+            <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-slate-300">Método Studio Be (Checklist)</h3>
+                <button onClick={async () => {
+                    const newStepName = prompt("Qual o nome do novo Passo/Tarefa que você quer adicionar na jornada de TODOS os clientes?");
+                    if (newStepName) {
+                        const newStep = { id: 'step_' + Date.now(), name: newStepName };
+                        await fetch('/api/method-steps', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'add', step: newStep })
+                        });
+                        router.refresh();
+                    }
+                }} className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition-colors">
+                    + Novo Passo para Todos
+                </button>
+            </div>
             <div className="space-y-3">
-                {[
-                    { id: 'step1', name: 'Passo 1: Envio do Kit Boas-Vindas (em até 24h)' },
-                    { id: 'step2', name: 'Passo 2: Ligação de Descoberta / Qualificação' },
-                    { id: 'step3', name: 'Passo 3: Reunião de Apresentação (Meet)' },
-                    { id: 'step4', name: 'Passo 4: Follow-up & Envio de Materiais' },
-                    { id: 'step5', name: 'Passo 5: Convite Oficial para Turma' },
-                ].map((step) => (
-                    <label key={step.id} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${state[step.id as keyof typeof state] ? 'bg-green-500/10 border-green-500/30 text-green-400' : 'bg-[#020617] border-slate-700 text-slate-300 hover:border-slate-500'}`}>
+                {globalSteps.map((step) => (
+
+                    <label key={step.id} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${state[step.id] ? 'bg-green-500/10 border-green-500/30 text-green-400' : 'bg-[#020617] border-slate-700 text-slate-300 hover:border-slate-500'}`}>
                         <input type="checkbox" className="w-5 h-5 rounded bg-slate-800 border-slate-600 text-green-500 focus:ring-green-500 focus:ring-offset-slate-900" 
-                            checked={state[step.id as keyof typeof state]} 
-                            onChange={() => toggleStep(step.id as keyof typeof state)}
+                            checked={state[step.id]} 
+                            onChange={() => toggleStep(step.id)}
                             disabled={saving}
                         />
-                        <span className={`font-medium ${state[step.id as keyof typeof state] ? 'line-through opacity-70' : ''}`}>{step.name}</span>
+                        <span className={`font-medium ${state[step.id] ? 'line-through opacity-70' : ''}`}>{step.name}</span>
                     </label>
                 ))}
             </div>

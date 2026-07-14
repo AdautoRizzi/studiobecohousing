@@ -1,42 +1,41 @@
 import React from 'react';
 import Link from 'next/link';
-import { getAllLeads } from '@/lib/db';
+import { getAllLeads, getMethodSteps } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
 export default async function SalesDashboard() {
     const leads = await getAllLeads();
 
-    // Filtra leads que não estão Descartados ou Turma Atribuda
+    // Filtra leads que não estão Descartados ou Turma Atribuída
     const activeLeads = leads.filter(l => l.status !== 'Descartado' && l.status !== 'Turma Atribuída');
 
-    // Mtodo Studio Be steps
-    const STEPS = [
-        { id: 'step1', name: 'Passo 1: Kit Boas-Vindas' },
-        { id: 'step2', name: 'Passo 2: Ligação de Descoberta' },
-        { id: 'step3', name: 'Passo 3: Reunião (Meet)' },
-        { id: 'step4', name: 'Passo 4: Follow-up & Materiais' },
-        { id: 'step5', name: 'Passo 5: Convite Oficial' },
-    ];
+    const STEPS = await getMethodSteps();
 
-    // Classifica leads por qual passo eles estǜo aguardando
-    const leadsByStep: Record<string, typeof leads> = {
-        step1: [], step2: [], step3: [], step4: [], step5: [], done: []
-    };
+    // Classifica leads por qual passo eles estão aguardando
+    const leadsByStep: Record<string, typeof leads> = { done: [] };
+    STEPS.forEach(s => leadsByStep[s.id] = []);
 
     activeLeads.forEach(lead => {
-        let state = { step1: false, step2: false, step3: false, step4: false, step5: false };
+        let state: Record<string, boolean> = {};
         const match = lead.notasCrm?.match(/__CHECKLIST_STATE__: ({.*})/);
         if (match) {
             try { state = JSON.parse(match[1]); } catch(e) {}
         }
         
-        if (!state.step1) leadsByStep.step1.push(lead);
-        else if (!state.step2) leadsByStep.step2.push(lead);
-        else if (!state.step3) leadsByStep.step3.push(lead);
-        else if (!state.step4) leadsByStep.step4.push(lead);
-        else if (!state.step5) leadsByStep.step5.push(lead);
-        else leadsByStep.done.push(lead);
+        let currentPendingStep = null;
+        for (const step of STEPS) {
+            if (!state[step.id]) {
+                currentPendingStep = step.id;
+                break;
+            }
+        }
+        
+        if (currentPendingStep) {
+            leadsByStep[currentPendingStep].push(lead);
+        } else {
+            leadsByStep.done.push(lead);
+        }
     });
 
     return (
@@ -44,20 +43,20 @@ export default async function SalesDashboard() {
             <div className="flex justify-between items-center mb-8">
                 <div>
                     <h1 className="text-3xl font-bold text-slate-50 flex items-center gap-3">
-                        <span className="text-4xl">🚀</span> Máquina de Vendas
+                        <span className="text-4xl">🚀</span> Jornada do Cliente
                     </h1>
                     <p className="text-slate-400 mt-2">Painel estratégico diário: Leads aguardando próxima ação.</p>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 overflow-x-auto pb-4 custom-scrollbar">
                 {STEPS.map((step, idx) => (
-                    <div key={step.id} className="bg-[#0f172a] rounded-xl border border-slate-800 flex flex-col h-[600px]">
+                    <div key={step.id} className="bg-[#0f172a] rounded-xl border border-slate-800 flex flex-col h-[600px] min-w-[250px]">
                         <div className="p-4 border-b border-slate-800 bg-slate-900/50 rounded-t-xl">
                             <h3 className="font-bold text-slate-200 text-sm">{step.name}</h3>
                             <div className="text-xs text-slate-500 mt-1">{leadsByStep[step.id].length} leads aguardando</div>
                         </div>
-                        <div className="p-3 overflow-y-auto flex-1 space-y-3">
+                        <div className="p-3 overflow-y-auto flex-1 space-y-3 custom-scrollbar">
                             {leadsByStep[step.id].map(lead => (
                                 <Link href={`/admin/crm/lead/${lead.id}`} key={lead.id} className="block bg-[#1e293b] p-3 rounded-lg border border-slate-700 hover:border-primary-500 transition-colors group">
                                     <div className="font-bold text-sm text-slate-100 truncate group-hover:text-primary-400">{lead.nome}</div>

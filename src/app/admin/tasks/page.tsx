@@ -67,7 +67,7 @@ export default function GlobalTasksBoard() {
         <div className="p-8 max-w-7xl mx-auto">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-slate-50 flex items-center gap-3">
-                    <span className="text-4xl">📋</span> Gestor de Tarefas Globais
+                    <span className="text-4xl">📋</span> Pendências do Projeto
                 </h1>
                 <p className="text-slate-400 mt-2">Controle as pendências gerais da Studio Be que não estão atreladas a um Lead específico.</p>
             </div>

@@ -360,3 +360,44 @@ export async function saveGlobalTasks(tasks: GlobalTask[]) {
     const sysUser = await ensureSystemTasksUser();
     await supabase.from('users').update({ notasCrm: JSON.stringify(tasks) }).eq('id', sysUser?.id);
 }
+
+// --- HACK MVP: PASSOS DO METODO ---
+const SYSTEM_METHOD_STEPS_EMAIL = 'system_method_steps@studiobe.com';
+async function ensureSystemMethodUser() {
+    const { data } = await supabase.from('users').select('id, notasCrm').eq('email', SYSTEM_METHOD_STEPS_EMAIL).single();
+    if (data) return data;
+    
+    const defaultSteps = [
+        { id: 'step1', name: 'Passo 1: Envio do Kit Boas-Vindas (em até 24h)' },
+        { id: 'step2', name: 'Passo 2: Ligação de Descoberta / Qualificação' },
+        { id: 'step3', name: 'Passo 3: Reunião de Apresentação (Meet)' },
+        { id: 'step4', name: 'Passo 4: Follow-up & Envio de Materiais' },
+        { id: 'step5', name: 'Passo 5: Convite Oficial para Turma' }
+    ];
+
+    const { data: newData } = await supabase.from('users').insert([{
+        nome: 'SYSTEM METHOD STEPS',
+        email: SYSTEM_METHOD_STEPS_EMAIL,
+        telefone: '00000000000',
+        idade: '0',
+        cidade: 'System',
+        profissao: 'System',
+        comoNosConheceu: 'System',
+        status: 'Descartado',
+        notasCrm: JSON.stringify(defaultSteps)
+    }]).select('id, notasCrm').single();
+    
+    return newData;
+}
+
+export interface MethodStep { id: string; name: string; }
+
+export async function getMethodSteps(): Promise<MethodStep[]> {
+    const sysUser = await ensureSystemMethodUser();
+    try { return JSON.parse(sysUser?.notasCrm || '[]'); } catch(e) { return []; }
+}
+
+export async function saveMethodSteps(steps: MethodStep[]) {
+    const sysUser = await ensureSystemMethodUser();
+    await supabase.from('users').update({ notasCrm: JSON.stringify(steps) }).eq('id', sysUser?.id);
+}
