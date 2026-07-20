@@ -48,6 +48,15 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         await savePlan(newPlan);
     };
 
+    
+    const updateStartDate = async (weekNum: number, date: string) => {
+        const newPlan = { ...plan };
+        if (!newPlan.weeks) newPlan.weeks = {};
+        if (!newPlan.weeks[weekNum]) newPlan.weeks[weekNum] = { weekNumber: weekNum, tasks: [] };
+        newPlan.weeks[weekNum].startDate = date;
+        await savePlan(newPlan);
+    };
+
     const removeTask = async (weekNum: number, taskId: string) => {
         if (!confirm("Remover esta tática?")) return;
         const newPlan = { ...plan };
@@ -108,12 +117,22 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     const isSuccess = score >= 85;
                     return (
                         <div key={week.weekNumber} className="bg-[#0f172a] rounded-xl border border-slate-800 flex flex-col h-[400px]">
+                            
                             {/* Header do Card */}
-                            <div className="p-4 border-b border-slate-800 bg-slate-900/50 rounded-t-xl flex justify-between items-center">
+                            <div className="p-4 border-b border-slate-800 bg-slate-900/50 rounded-t-xl flex justify-between items-center relative">
                                 <div>
                                     <h3 className="font-bold text-slate-200">Semana {week.weekNumber}</h3>
+                                    <div className="mt-1">
+                                        <input 
+                                            type="date" 
+                                            value={week.startDate || ''}
+                                            onChange={(e) => updateStartDate(week.weekNumber, e.target.value)}
+                                            className="bg-transparent border-none text-[10px] text-slate-400 focus:ring-0 p-0 cursor-pointer outline-none uppercase font-bold"
+                                        />
+                                    </div>
                                 </div>
                                 <div className={`text-xs font-bold px-2 py-1 rounded-full ${week.tasks.length === 0 ? 'bg-slate-800 text-slate-500' : isSuccess ? 'bg-green-500/20 text-green-400' : 'bg-orange-500/20 text-orange-400'}`}>
+
                                     {score}%
                                 </div>
                             </div>
