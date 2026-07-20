@@ -26,6 +26,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
 
     const toggleTask = async (weekNum: number, taskId: string) => {
         const newPlan = { ...plan };
+        if (!newPlan.weeks || !newPlan.weeks[weekNum] || !newPlan.weeks[weekNum].tasks) return;
         const task = newPlan.weeks[weekNum].tasks.find((t: any) => t.id === taskId);
         if (task) {
             task.completed = !task.completed;
@@ -36,6 +37,9 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const addTask = async (weekNum: number, desc: string) => {
         if (!desc.trim()) return;
         const newPlan = { ...plan };
+        if (!newPlan.weeks) newPlan.weeks = {};
+        if (!newPlan.weeks[weekNum]) newPlan.weeks[weekNum] = { weekNumber: weekNum, tasks: [] };
+        if (!newPlan.weeks[weekNum].tasks) newPlan.weeks[weekNum].tasks = [];
         newPlan.weeks[weekNum].tasks.push({
             id: 'task_' + Date.now(),
             description: desc,
@@ -47,6 +51,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const removeTask = async (weekNum: number, taskId: string) => {
         if (!confirm("Remover esta tática?")) return;
         const newPlan = { ...plan };
+        if (!newPlan.weeks || !newPlan.weeks[weekNum] || !newPlan.weeks[weekNum].tasks) return;
         newPlan.weeks[weekNum].tasks = newPlan.weeks[weekNum].tasks.filter((t: any) => t.id !== taskId);
         await savePlan(newPlan);
     };
@@ -60,7 +65,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     // Converter objeto weeks em array 1..12
     const weeksArray = [];
     for (let i = 1; i <= 12; i++) {
-        weeksArray.push(plan.weeks[i] || { weekNumber: i, tasks: [] });
+        weeksArray.push((plan && plan.weeks && plan.weeks[i]) || { weekNumber: i, tasks: [] });
     }
 
     return (
