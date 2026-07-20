@@ -414,7 +414,7 @@ export interface TwelveWeekTask {
 }
 
 export interface TwelveWeekSlot {
-    weekNumber: parseInt;
+    weekNumber: number;
     startDate: string;
     endDate: string;
     tasks: TwelveWeekTask[];
