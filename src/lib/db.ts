@@ -401,3 +401,74 @@ export async function saveMethodSteps(steps: MethodStep[]) {
     const sysUser = await ensureSystemMethodUser();
     await supabase.from('users').update({ notasCrm: JSON.stringify(steps) }).eq('id', sysUser?.id);
 }
+
+
+// --- HACK MVP: 12 WEEK YEAR PLAN ---
+const SYS_12WEEK_PLAN_EMAIL = 'sys_12week_plan@studiobe.com';
+
+export interface TwelveWeekTask {
+    id: string;
+    description: string;
+    completed: boolean;
+    owner?: string;
+}
+
+export interface TwelveWeekSlot {
+    weekNumber: parseInt;
+    startDate: string;
+    endDate: string;
+    tasks: TwelveWeekTask[];
+}
+
+export interface TwelveWeekPlan {
+    vision: string;
+    weeks: Record<number, TwelveWeekSlot>;
+}
+
+async function ensureSystem12WeekUser() {
+    const { data } = await supabase.from('users').select('id, notasCrm').eq('email', SYS_12WEEK_PLAN_EMAIL).single();
+    if (data) return data;
+    
+    // Build initial blank plan
+    const initialPlan: TwelveWeekPlan = {
+        vision: 'Aceleração e Qualificação Profunda',
+        weeks: {}
+    };
+    for(let i=1; i<=12; i++) {
+        initialPlan.weeks[i] = {
+            weekNumber: i,
+            startDate: '',
+            endDate: '',
+            tasks: []
+        };
+    }
+
+    const { data: newData } = await supabase.from('users').insert([{
+        nome: 'SYSTEM 12WEEK PLAN',
+        email: SYS_12WEEK_PLAN_EMAIL,
+        telefone: '00000000000',
+        idade: '0',
+        cidade: 'System',
+        profissao: 'System',
+        comoNosConheceu: 'System',
+        status: 'Descartado',
+        notasCrm: JSON.stringify(initialPlan)
+    }]).select('id, notasCrm').single();
+    
+    return newData;
+}
+
+export async function getTwelveWeeksPlan(): Promise<TwelveWeekPlan> {
+    const sysUser = await ensureSystem12WeekUser();
+    try { 
+        return JSON.parse(sysUser?.notasCrm || '{}'); 
+    } catch(e) { 
+        const dummy: TwelveWeekPlan = { vision: 'Erro', weeks: {} };
+        return dummy;
+    }
+}
+
+export async function saveTwelveWeeksPlan(plan: TwelveWeekPlan) {
+    const sysUser = await ensureSystem12WeekUser();
+    await supabase.from('users').update({ notasCrm: JSON.stringify(plan) }).eq('id', sysUser?.id);
+}
