@@ -99,6 +99,96 @@ export default async function MarketingDashboard() {
                 </table>
             </div>
 
+            {/* NOVO BLOCO: LTV (Mina de Ouro) */}
+            <div className="bg-[#0f172a]/80 rounded-2xl p-6 border border-primary-900 shadow-[0_0_20px_rgba(16,185,129,0.05)] mb-8 relative overflow-hidden">
+                <div className="absolute -right-10 -top-10 text-primary-500/10 z-0">
+                    <svg width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                </div>
+                <div className="relative z-10">
+                    <h2 className="text-xl font-bold text-slate-50 mb-2 flex items-center gap-2">
+                        <span className="text-primary-500">🧠</span> Inteligência de Marketing: Mina de Ouro (LTV)
+                    </h2>
+                    <p className="text-sm text-slate-400 mb-6">
+                        Baseado no histórico real de compradores, calculamos o valor médio que um cliente traz em 1 ano de fidelidade.
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div className="bg-[#020617] rounded-xl p-4 border border-slate-800">
+                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ticket Médio</div>
+                            <div className="text-2xl font-black text-slate-100">R$ 102,67</div>
+                        </div>
+                        <div className="bg-[#020617] rounded-xl p-4 border border-slate-800">
+                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Frequência (Compras/Ano)</div>
+                            <div className="text-2xl font-black text-slate-100">3.7x</div>
+                        </div>
+                        <div className="bg-primary-900/30 rounded-xl p-4 border border-primary-500/50 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                            <div className="text-[10px] font-bold text-primary-400 uppercase tracking-wider mb-1">Valor do Cliente (LTV Anual)</div>
+                            <div className="text-2xl font-black text-primary-400">R$ 377,80</div>
+                        </div>
+                        <div className="bg-[#020617] rounded-xl p-4 border border-slate-600 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                            <div className="text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Teto Máximo do CAC (33%)</div>
+                            <div className="text-2xl font-black text-slate-100">R$ 125,93</div>
+                        </div>
+                    </div>
+                    
+                    <div className="text-xs text-primary-400/80 italic font-medium">
+                        Regra de Ouro: Enquanto o CAC (Custo por Cliente Novo) de uma campanha for MENOR que o Teto Máximo, você está lucrando e deve investir mais!
+                    </div>
+                </div>
+            </div>
+
+            {/* NOVO BLOCO: Configuração Rastreamento */}
+            <div className="bg-[#0f172a] rounded-2xl p-6 border border-slate-800 mb-8">
+                <h2 className="text-xl font-bold text-slate-50 mb-2 flex items-center gap-2">
+                    <span className="text-slate-400">&lt;&gt;</span> Configuração da Vitrine & Rastreamento
+                </h2>
+                <p className="text-sm text-slate-400 mb-6">
+                    Insira seus códigos para a <strong>Página Vitrine</strong>. Todo o tráfego gerado pelo Google/Face cairá nela e será rastreado automaticamente.
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Coluna 1 */}
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">ID do Google Ads (AW-XXXXXXX)</label>
+                            <input type="text" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2.5 text-slate-200 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all" defaultValue="AW-18288080010" />
+                        </div>
+                        <div>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="block text-[11px] font-bold text-slate-400 uppercase">ID do Google Analytics 4 (G-XXXXXXX)</label>
+                                <a href="#" className="text-[10px] text-blue-400 hover:underline">Abrir Painel Oficial 🔗</a>
+                            </div>
+                            <input type="text" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2.5 text-slate-200 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all" defaultValue="G-ENVKWL4C6L" />
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Pixel do Facebook</label>
+                            <input type="text" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2.5 text-slate-200 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all" defaultValue="1286357459906125" />
+                        </div>
+                    </div>
+                    {/* Coluna 2 */}
+                    <div className="space-y-4 flex flex-col justify-between">
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Link do seu Catálogo Completo (Kyte/Outro)</label>
+                                <input type="text" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2.5 text-slate-200 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all" defaultValue="https://ifzenda-comida-de-verdade.kyte.site/pt-BR" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">WhatsApp para Vendas (Vitrine)</label>
+                                <input type="text" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2.5 text-slate-200 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all" defaultValue="5511955985054" />
+                                <p className="text-[10px] text-slate-500 mt-1">Isso ativará um botão flutuante na Vitrine.</p>
+                            </div>
+                        </div>
+                        
+                        <div className="flex justify-end pt-4">
+                            <button className="bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold py-2.5 px-6 rounded-lg transition-colors flex items-center gap-2">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                Salvar Configurações
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="bg-[#0f172a] rounded-xl p-6 border border-slate-800">
                     <h2 className="text-xl font-bold text-slate-50 mb-4">Custos de Campanha (Controle Manual)</h2>
