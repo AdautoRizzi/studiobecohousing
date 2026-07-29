@@ -358,8 +358,7 @@ export async function getGlobalTasks(): Promise<GlobalTask[]> {
 
 export async function saveGlobalTasks(tasks: GlobalTask[]) {
     const sysUser = await ensureSystemTasksUser();
-    await supabase.from('users').update({ notasCrm: JSON.stringify(tasks) }).eq('id', sysUser?.id);
-}
+    await supabase.from('users').update({ notasCrm: JSON.stringify(tasks) 
 
 // --- HACK MVP: PASSOS DO METODO ---
 const SYSTEM_METHOD_STEPS_EMAIL = 'system_method_steps@studiobe.com';

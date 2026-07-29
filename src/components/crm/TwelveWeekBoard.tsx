@@ -285,7 +285,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                             })}
                         </div>
                         <div className="flex justify-between text-xs text-slate-500 mt-4">
-                            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-green-500 rounded-sm"></div> >= 85% (Sucesso)</div>
+                            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-green-500 rounded-sm"></div> {">="} 85% (Sucesso)</div>
                             <div className="flex items-center gap-1"><div className="w-3 h-3 bg-orange-500 rounded-sm"></div> &lt; 85% (Atenção)</div>
                         </div>
                     </div>
