@@ -372,7 +372,8 @@ async function ensureSystemMethodUser() {
         { id: 'step2', name: 'Passo 2: Ligação de Descoberta / Qualificação' },
         { id: 'step3', name: 'Passo 3: Reunião de Apresentação (Meet)' },
         { id: 'step4', name: 'Passo 4: Follow-up & Envio de Materiais' },
-        { id: 'step5', name: 'Passo 5: Convite Oficial para Turma' }
+        { id: 'step5', name: 'Passo 5: Convite Oficial para Turma' },
+        { id: 'step6', name: 'Passo 6: Aculturamento (Sociocracia, Match, Custos, Contratos, Administração)' }
     ];
 
     const { data: newData } = await supabase.from('users').insert([{
@@ -404,7 +405,8 @@ export async function getMethodSteps(): Promise<MethodStep[]> {
         { id: 'step2', name: 'Passo 2: Ligação de Descoberta / Qualificação' },
         { id: 'step3', name: 'Passo 3: Reunião de Apresentação (Meet)' },
         { id: 'step4', name: 'Passo 4: Follow-up & Envio de Materiais' },
-        { id: 'step5', name: 'Passo 5: Convite Oficial para Turma' }
+        { id: 'step5', name: 'Passo 5: Convite Oficial para Turma' },
+        { id: 'step6', name: 'Passo 6: Aculturamento (Sociocracia, Match, Custos, Contratos, Administração)' }
     ];
 }
 

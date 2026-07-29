@@ -43,10 +43,16 @@ export default async function MarketingDashboard() {
     });
 
     return (
-        <div className="p-8">
-            <div className="flex justify-between items-center mb-8">
+        <div className="p-8 bg-[#020617] min-h-screen">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-50">Marketing & Perfomance (Ads)</h1>
+                    <div className="flex items-center gap-4 mb-2">
+                        <a href="/admin/crm" className="text-slate-400 hover:text-white transition-colors bg-slate-800/50 p-2 rounded-lg flex items-center gap-2 text-sm font-bold">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                            Voltar
+                        </a>
+                        <h1 className="text-3xl font-bold text-slate-50">Marketing & Perfomance (Ads)</h1>
+                    </div>
                     <p className="text-slate-400 mt-2">Métricas de tráfego pago, funil de conversão e AI Lead Scoring.</p>
                 </div>
             </div>
