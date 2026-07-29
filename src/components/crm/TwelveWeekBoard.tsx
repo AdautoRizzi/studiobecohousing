@@ -6,6 +6,9 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [saving, setSaving] = useState(false);
     const [activeTab, setActiveTab] = useState<'vision' | 'kanban' | 'analytics'>('kanban');
     const [editingVision, setEditingVision] = useState(false);
+    const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+    const [editTaskDesc, setEditTaskDesc] = useState('');
+    const [editTaskObj, setEditTaskObj] = useState<string | undefined>(undefined);
     const [visionInput, setVisionInput] = useState(initialPlan.vision3Years || '');
     
     // Fallbacks para garantir que a estrutura exista
@@ -85,6 +88,24 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         }
     };
 
+    
+    const saveTaskEdit = async (taskId: string) => {
+        const newPlan = { ...plan };
+        const task = newPlan.sprints[currentWeek].tasks.find((t: any) => t.id === taskId);
+        if (task) {
+            task.description = editTaskDesc;
+            task.objectiveId = editTaskObj;
+            await savePlan(newPlan);
+        }
+        setEditingTaskId(null);
+    };
+
+    const startEditingTask = (task: any) => {
+        setEditTaskDesc(task.description);
+        setEditTaskObj(task.objectiveId);
+        setEditingTaskId(task.id);
+    };
+
     const removeTask = async (taskId: string) => {
         if(!confirm("Remover esta tática?")) return;
         const newPlan = { ...plan };
@@ -103,6 +124,35 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
 
     const renderTaskCard = (task: any) => {
         const obj = plan.objectives.find((o:any) => o.id === task.objectiveId);
+        const isEditing = editingTaskId === task.id;
+
+        if (isEditing) {
+            return (
+                <div key={task.id} className="bg-[#0f172a] p-3 rounded-lg border border-blue-500 shadow-sm relative mb-3">
+                    <input 
+                        type="text" 
+                        value={editTaskDesc}
+                        onChange={e => setEditTaskDesc(e.target.value)}
+                        className="w-full bg-[#020617] border border-slate-700 rounded p-1 mb-2 text-sm text-slate-200 focus:outline-none"
+                    />
+                    {plan.objectives.length > 0 && (
+                        <select 
+                            value={editTaskObj || ''}
+                            onChange={e => setEditTaskObj(e.target.value)}
+                            className="w-full bg-[#020617] border border-slate-700 rounded p-1 text-xs text-slate-400 mb-2 focus:outline-none"
+                        >
+                            <option value="">(Sem vínculo trimestral)</option>
+                            {plan.objectives.map((o:any) => <option key={o.id} value={o.id}>{o.name}</option>)}
+                        </select>
+                    )}
+                    <div className="flex gap-2 justify-end">
+                        <button onClick={() => setEditingTaskId(null)} className="text-xs text-slate-500 hover:text-slate-300">Cancelar</button>
+                        <button onClick={() => saveTaskEdit(task.id)} className="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700">Salvar</button>
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div key={task.id} className="bg-[#0f172a] p-3 rounded-lg border border-slate-700 shadow-sm relative group mb-3 hover:border-slate-500 transition-colors">
                 <p className="text-sm text-slate-200 mb-2">{task.description}</p>
@@ -118,9 +168,14 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         {task.status !== 'doing' && <button onClick={() => changeTaskStatus(task.id, 'doing')} className="text-[10px] bg-blue-900/30 text-blue-400 border border-blue-900/50 px-2 py-1 rounded hover:bg-blue-900/50 transition">Doing</button>}
                         {task.status !== 'done' && <button onClick={() => changeTaskStatus(task.id, 'done')} className="text-[10px] bg-green-900/30 text-green-400 border border-green-900/50 px-2 py-1 rounded hover:bg-green-900/50 transition">Done</button>}
                     </div>
-                    <button onClick={() => removeTask(task.id)} className="text-slate-600 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onClick={() => startEditingTask(task)} className="text-slate-500 hover:text-blue-400">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                        </button>
+                        <button onClick={() => removeTask(task.id)} className="text-slate-600 hover:text-red-400">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         );
