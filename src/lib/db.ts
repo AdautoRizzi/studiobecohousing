@@ -321,11 +321,11 @@ export async function updateLeadNotes(id: string, notasCrm: string) {
 const SYSTEM_TASKS_EMAIL = 'system_tasks_global_board@studiobe.com';
 
 async function ensureSystemTasksUser() {
-    const { data } = await supabase.from('users').select('id, notasCrm').eq('email', SYSTEM_TASKS_EMAIL).single();
+    const { data } = await supabase.from('leads').select('id, notasCrm').eq('email', SYSTEM_TASKS_EMAIL).single();
     if (data) return data;
     
     // Create it
-    const { data: newData, error } = await supabase.from('users').insert([{
+    const { data: newData, error } = await supabase.from('leads').insert([{
         nome: 'SYSTEM TASKS',
         email: SYSTEM_TASKS_EMAIL,
         telefone: '00000000000',
@@ -358,13 +358,13 @@ export async function getGlobalTasks(): Promise<GlobalTask[]> {
 
 export async function saveGlobalTasks(tasks: GlobalTask[]) {
     const sysUser = await ensureSystemTasksUser();
-    await supabase.from('users').update({ notasCrm: JSON.stringify(tasks) }).eq('id', sysUser?.id);
+    await supabase.from('leads').update({ notasCrm: JSON.stringify(tasks) }).eq('id', sysUser?.id);
 }
 
 // --- HACK MVP: PASSOS DO METODO ---
 const SYSTEM_METHOD_STEPS_EMAIL = 'system_method_steps@studiobe.com';
 async function ensureSystemMethodUser() {
-    const { data } = await supabase.from('users').select('id, notasCrm').eq('email', SYSTEM_METHOD_STEPS_EMAIL).single();
+    const { data } = await supabase.from('leads').select('id, notasCrm').eq('email', SYSTEM_METHOD_STEPS_EMAIL).single();
     if (data) return data;
     
     const defaultSteps = [
@@ -376,7 +376,7 @@ async function ensureSystemMethodUser() {
         { id: 'step6', name: 'Passo 6: Aculturamento (Sociocracia, Match, Custos, Contratos, Administração)' }
     ];
 
-    const { data: newData } = await supabase.from('users').insert([{
+    const { data: newData } = await supabase.from('leads').insert([{
         nome: 'SYSTEM METHOD STEPS',
         email: SYSTEM_METHOD_STEPS_EMAIL,
         telefone: '00000000000',
@@ -412,7 +412,7 @@ export async function getMethodSteps(): Promise<MethodStep[]> {
 
 export async function saveMethodSteps(steps: MethodStep[]) {
     const sysUser = await ensureSystemMethodUser();
-    await supabase.from('users').update({ notasCrm: JSON.stringify(steps) }).eq('id', sysUser?.id);
+    await supabase.from('leads').update({ notasCrm: JSON.stringify(steps) }).eq('id', sysUser?.id);
 }
 
 
@@ -447,7 +447,7 @@ export interface TwelveWeekPlan {
 }
 
 async function ensureSystem12WeekUser() {
-    const { data } = await supabase.from('users').select('id, notasCrm').eq('email', SYS_12WEEK_PLAN_EMAIL).single();
+    const { data } = await supabase.from('leads').select('id, notasCrm').eq('email', SYS_12WEEK_PLAN_EMAIL).single();
     if (data) return data;
     
     // Build initial blank plan
@@ -468,7 +468,7 @@ async function ensureSystem12WeekUser() {
         };
     }
 
-    const { data: newData } = await supabase.from('users').insert([{
+    const { data: newData } = await supabase.from('leads').insert([{
         nome: 'SYSTEM 12WEEK PLAN',
         email: SYS_12WEEK_PLAN_EMAIL,
         telefone: '00000000000',
@@ -495,5 +495,5 @@ export async function getTwelveWeeksPlan(): Promise<TwelveWeekPlan> {
 
 export async function saveTwelveWeeksPlan(plan: TwelveWeekPlan) {
     const sysUser = await ensureSystem12WeekUser();
-    await supabase.from('users').update({ notasCrm: JSON.stringify(plan) }).eq('id', sysUser?.id);
+    await supabase.from('leads').update({ notasCrm: JSON.stringify(plan) }).eq('id', sysUser?.id);
 }
