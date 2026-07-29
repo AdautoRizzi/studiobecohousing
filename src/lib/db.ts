@@ -394,7 +394,18 @@ export interface MethodStep { id: string; name: string; }
 
 export async function getMethodSteps(): Promise<MethodStep[]> {
     const sysUser = await ensureSystemMethodUser();
-    try { return JSON.parse(sysUser?.notasCrm || '[]'); } catch(e) { return []; }
+    try { 
+        const steps = JSON.parse(sysUser?.notasCrm || '[]'); 
+        if (steps && steps.length > 0) return steps;
+    } catch(e) { }
+    
+    return [
+        { id: 'step1', name: 'Passo 1: Envio do Kit Boas-Vindas (em até 24h)' },
+        { id: 'step2', name: 'Passo 2: Ligação de Descoberta / Qualificação' },
+        { id: 'step3', name: 'Passo 3: Reunião de Apresentação (Meet)' },
+        { id: 'step4', name: 'Passo 4: Follow-up & Envio de Materiais' },
+        { id: 'step5', name: 'Passo 5: Convite Oficial para Turma' }
+    ];
 }
 
 export async function saveMethodSteps(steps: MethodStep[]) {
