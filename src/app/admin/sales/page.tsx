@@ -39,19 +39,25 @@ export default async function SalesDashboard() {
     });
 
     return (
-        <div className="p-8 max-w-7xl mx-auto">
-            <div className="flex justify-between items-center mb-8">
+        <div className="p-4 md:p-8 w-full">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-50 flex items-center gap-3">
-                        <span className="text-4xl">🚀</span> Jornada do Cliente
-                    </h1>
+                    <div className="flex items-center gap-4 mb-2">
+                        <Link href="/admin/crm" className="text-slate-400 hover:text-white transition-colors bg-slate-800/50 p-2 rounded-lg flex items-center gap-2 text-sm font-bold">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                            Voltar
+                        </Link>
+                        <h1 className="text-3xl font-bold text-slate-50 flex items-center gap-3">
+                            <span className="text-4xl">🚀</span> Jornada do Cliente
+                        </h1>
+                    </div>
                     <p className="text-slate-400 mt-2">Painel estratégico diário: Leads aguardando próxima ação.</p>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 overflow-x-auto pb-4 custom-scrollbar">
+            <div className="flex gap-4 overflow-x-auto pb-6 custom-scrollbar items-start">
                 {STEPS.map((step, idx) => (
-                    <div key={step.id} className="bg-[#0f172a] rounded-xl border border-slate-800 flex flex-col h-[600px] min-w-[250px]">
+                    <div key={step.id} className="bg-[#0f172a] rounded-xl border border-slate-800 flex flex-col h-[70vh] min-w-[280px] max-w-[320px] flex-1 shrink-0">
                         <div className="p-4 border-b border-slate-800 bg-slate-900/50 rounded-t-xl">
                             <h3 className="font-bold text-slate-200 text-sm">{step.name}</h3>
                             <div className="text-xs text-slate-500 mt-1">{leadsByStep[step.id].length} leads aguardando</div>
