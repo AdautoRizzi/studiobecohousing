@@ -358,7 +358,8 @@ export async function getGlobalTasks(): Promise<GlobalTask[]> {
 
 export async function saveGlobalTasks(tasks: GlobalTask[]) {
     const sysUser = await ensureSystemTasksUser();
-    await supabase.from('users').update({ notasCrm: JSON.stringify(tasks) 
+    await supabase.from('users').update({ notasCrm: JSON.stringify(tasks) }).eq('id', sysUser?.id);
+}
 
 // --- HACK MVP: PASSOS DO METODO ---
 const SYSTEM_METHOD_STEPS_EMAIL = 'system_method_steps@studiobe.com';
@@ -482,5 +483,4 @@ export async function getTwelveWeeksPlan(): Promise<TwelveWeekPlan> {
 export async function saveTwelveWeeksPlan(plan: TwelveWeekPlan) {
     const sysUser = await ensureSystem12WeekUser();
     await supabase.from('users').update({ notasCrm: JSON.stringify(plan) }).eq('id', sysUser?.id);
-}).eq('id', sysUser?.id);
 }
