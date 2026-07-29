@@ -4,4 +4,13 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = 'https://bofadzmsbciwxsyiidfk.supabase.co';
 const supabaseAnonKey = 'sb_publishable_E88MUL1_aXZ0RqSwxfDpdQ_VMCkQFHe';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: false,
+  },
+  global: {
+    fetch: (url, options) => {
+      return fetch(url, { ...options, cache: 'no-store' });
+    }
+  }
+});
