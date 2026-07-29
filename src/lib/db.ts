@@ -403,26 +403,34 @@ export async function saveMethodSteps(steps: MethodStep[]) {
 }
 
 
-// --- HACK MVP: 12 WEEK YEAR PLAN ---
+// --- HACK MVP: 12 WEEK YEAR + SCRUM PLAN ---
 const SYS_12WEEK_PLAN_EMAIL = 'sys_12week_plan@studiobe.com';
 
-export interface TwelveWeekTask {
+export interface TrimestralObjective {
+    id: string;
+    name: string;
+}
+
+export interface ScrumTask {
     id: string;
     description: string;
-    completed: boolean;
+    status: 'todo' | 'doing' | 'done';
+    objectiveId?: string;
     owner?: string;
 }
 
-export interface TwelveWeekSlot {
+export interface ScrumSprint {
     weekNumber: number;
     startDate: string;
     endDate: string;
-    tasks: TwelveWeekTask[];
+    tasks: ScrumTask[];
 }
 
 export interface TwelveWeekPlan {
-    vision: string;
-    weeks: Record<number, TwelveWeekSlot>;
+    vision3Years: string;
+    objectives: TrimestralObjective[];
+    sprints: Record<number, ScrumSprint>;
+    currentSprintWeek: number;
 }
 
 async function ensureSystem12WeekUser() {
@@ -431,11 +439,15 @@ async function ensureSystem12WeekUser() {
     
     // Build initial blank plan
     const initialPlan: TwelveWeekPlan = {
-        vision: 'Aceleração e Qualificação Profunda',
-        weeks: {}
+        vision3Years: 'Construir o Ecossistema Líder em Cohousing no Brasil',
+        objectives: [
+            { id: 'obj1', name: 'Aceleração e Qualificação Profunda' }
+        ],
+        currentSprintWeek: 1,
+        sprints: {}
     };
     for(let i=1; i<=12; i++) {
-        initialPlan.weeks[i] = {
+        initialPlan.sprints[i] = {
             weekNumber: i,
             startDate: '',
             endDate: '',
@@ -463,7 +475,7 @@ export async function getTwelveWeeksPlan(): Promise<TwelveWeekPlan> {
     try { 
         return JSON.parse(sysUser?.notasCrm || '{}'); 
     } catch(e) { 
-        const dummy: TwelveWeekPlan = { vision: 'Erro', weeks: {} };
+        const dummy: TwelveWeekPlan = { vision3Years: 'Erro', objectives: [], currentSprintWeek: 1, sprints: {} };
         return dummy;
     }
 }
@@ -471,4 +483,5 @@ export async function getTwelveWeeksPlan(): Promise<TwelveWeekPlan> {
 export async function saveTwelveWeeksPlan(plan: TwelveWeekPlan) {
     const sysUser = await ensureSystem12WeekUser();
     await supabase.from('users').update({ notasCrm: JSON.stringify(plan) }).eq('id', sysUser?.id);
+}).eq('id', sysUser?.id);
 }
