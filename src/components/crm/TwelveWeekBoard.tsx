@@ -127,10 +127,14 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     };
 
     return (
-        <div className="max-w-7xl mx-auto p-4 md:p-8">
+        <div className="w-full p-4 md:p-8 bg-[#020617] min-h-screen">
             {/* Cabecalho Principal */}
-            <div className="flex justify-between items-center mb-6">
-                <div>
+            <div className="flex justify-between items-start md:items-center mb-6">
+                <div className="flex items-center gap-4">
+                    <a href="/admin/crm" className="text-slate-400 hover:text-white transition-colors bg-slate-800/50 p-2 rounded-lg flex items-center gap-2 text-sm font-bold">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                        Voltar
+                    </a>
                     <h1 className="text-3xl font-bold text-slate-50 flex items-center gap-3">
                         <span className="text-4xl">🚀</span> Motor Tático: Scrum + 12 Week Year
                     </h1>
