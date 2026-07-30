@@ -326,6 +326,7 @@ async function ensureSystemTasksUser() {
     
     // Create it
     const { data: newData, error } = await supabase.from('leads').insert([{
+        id: 'sys_' + Date.now() + '_' + Math.random().toString(36).substring(2),
         nome: 'SYSTEM TASKS',
         email: SYSTEM_TASKS_EMAIL,
         telefone: '00000000000',
@@ -377,6 +378,7 @@ async function ensureSystemMethodUser() {
     ];
 
     const { data: newData } = await supabase.from('leads').insert([{
+        id: 'sys_' + Date.now() + '_' + Math.random().toString(36).substring(2),
         nome: 'SYSTEM METHOD STEPS',
         email: SYSTEM_METHOD_STEPS_EMAIL,
         telefone: '00000000000',
@@ -469,6 +471,7 @@ async function ensureSystem12WeekUser() {
     }
 
     const { data: newData } = await supabase.from('leads').insert([{
+        id: 'sys_' + Date.now() + '_' + Math.random().toString(36).substring(2),
         nome: 'SYSTEM 12WEEK PLAN',
         email: SYS_12WEEK_PLAN_EMAIL,
         telefone: '00000000000',
