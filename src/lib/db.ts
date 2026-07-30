@@ -330,11 +330,8 @@ async function ensureSystemTasksUser() {
         nome: 'SYSTEM TASKS',
         email: SYSTEM_TASKS_EMAIL,
         telefone: '00000000000',
-        idade: '0',
-        cidade: 'System',
-        profissao: 'System',
-        comoNosConheceu: 'System',
-        status: 'Descartado', // So it doesn't show in CRM lists
+        status: 'Novo', // Fallback status
+        // So it doesn't show in CRM lists
         notasCrm: '[]'
     }]).select('id, notasCrm').single();
     
@@ -382,11 +379,7 @@ async function ensureSystemMethodUser() {
         nome: 'SYSTEM METHOD STEPS',
         email: SYSTEM_METHOD_STEPS_EMAIL,
         telefone: '00000000000',
-        idade: '0',
-        cidade: 'System',
-        profissao: 'System',
-        comoNosConheceu: 'System',
-        status: 'Descartado',
+        status: 'Novo', // Fallback status
         notasCrm: JSON.stringify(defaultSteps)
     }]).select('id, notasCrm').single();
     
@@ -475,11 +468,7 @@ async function ensureSystem12WeekUser() {
         nome: 'SYSTEM 12WEEK PLAN',
         email: SYS_12WEEK_PLAN_EMAIL,
         telefone: '00000000000',
-        idade: '0',
-        cidade: 'System',
-        profissao: 'System',
-        comoNosConheceu: 'System',
-        status: 'Descartado',
+        status: 'Novo', // Fallback status
         notasCrm: JSON.stringify(initialPlan)
     }]).select('id, notasCrm').single();
     
