@@ -92,10 +92,27 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     
     const saveTaskEdit = async (taskId: string) => {
         const newPlan = { ...plan };
-        const task = newPlan.sprints[currentWeek].tasks.find((t: any) => t.id === taskId);
-        if (task) {
+        const taskIndex = newPlan.sprints[currentWeek].tasks.findIndex((t: any) => t.id === taskId);
+        
+        if (taskIndex !== -1) {
+            const task = newPlan.sprints[currentWeek].tasks[taskIndex];
             task.description = editTaskDesc;
             task.objectiveId = editTaskObj;
+            
+            if (editTaskTargetSprint !== currentWeek) {
+                // Move task to target sprint
+                newPlan.sprints[currentWeek].tasks.splice(taskIndex, 1);
+                
+                if (!newPlan.sprints[editTaskTargetSprint]) {
+                    newPlan.sprints[editTaskTargetSprint] = { weekNumber: editTaskTargetSprint, tasks: [] };
+                }
+                if (!newPlan.sprints[editTaskTargetSprint].tasks) {
+                    newPlan.sprints[editTaskTargetSprint].tasks = [];
+                }
+                
+                newPlan.sprints[editTaskTargetSprint].tasks.push(task);
+            }
+            
             await savePlan(newPlan);
         }
         setEditingTaskId(null);
@@ -172,6 +189,13 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                             {plan.objectives.map((o:any) => <option key={o.id} value={o.id}>{o.name}</option>)}
                         </select>
                     )}
+                    <select 
+                        value={editTaskTargetSprint}
+                        onChange={e => setEditTaskTargetSprint(parseInt(e.target.value))}
+                        className="w-full bg-[#020617] border border-slate-700 rounded p-1 text-xs text-slate-400 mb-3 focus:outline-none"
+                    >
+                        {[1,2,3,4,5,6,7,8,9,10,11,12].map(w => <option key={w} value={w}>Mover para Sprint {w}</option>)}
+                    </select>
                     <div className="flex gap-2 justify-end">
                         <button onClick={() => setEditingTaskId(null)} className="text-xs text-slate-500 hover:text-slate-300">Cancelar</button>
                         <button onClick={() => saveTaskEdit(task.id)} className="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700">Salvar</button>
