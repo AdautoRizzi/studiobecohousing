@@ -154,19 +154,19 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         }
 
         return (
-            <div key={task.id} className="bg-[#0f172a] p-3 rounded-lg border border-slate-700 shadow-sm relative group mb-3 hover:border-slate-500 transition-colors">
+            <div key={task.id} className="bg-slate-800/80 p-4 rounded-lg border border-slate-600 shadow-sm relative group mb-3 hover:border-slate-400 transition-colors">
                 <p className="text-sm text-slate-200 mb-2">{task.description}</p>
                 {obj && (
-                    <div className="inline-block bg-primary-900/30 text-primary-400 border border-primary-900/50 text-[10px] px-2 py-0.5 rounded-full font-bold truncate max-w-full">
+                    <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-[10px] px-2 py-1 rounded-md font-semibold truncate max-w-full mt-1">
                         {obj.name}
                     </div>
                 )}
                 
                 <div className="flex gap-2 mt-3 pt-3 border-t border-slate-800 justify-between items-center">
                     <div className="flex gap-1">
-                        {task.status !== 'todo' && <button onClick={() => changeTaskStatus(task.id, 'todo')} className="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded hover:bg-slate-700 transition">Todo</button>}
-                        {task.status !== 'doing' && <button onClick={() => changeTaskStatus(task.id, 'doing')} className="text-[10px] bg-blue-900/30 text-blue-400 border border-blue-900/50 px-2 py-1 rounded hover:bg-blue-900/50 transition">Doing</button>}
-                        {task.status !== 'done' && <button onClick={() => changeTaskStatus(task.id, 'done')} className="text-[10px] bg-green-900/30 text-green-400 border border-green-900/50 px-2 py-1 rounded hover:bg-green-900/50 transition">Done</button>}
+                        {task.status !== 'todo' && <button onClick={() => changeTaskStatus(task.id, 'todo')} className="text-[10px] bg-slate-700 text-slate-200 px-2 py-1 rounded hover:bg-slate-600 transition font-medium">Todo</button>}
+                        {task.status !== 'doing' && <button onClick={() => changeTaskStatus(task.id, 'doing')} className="text-[10px] bg-blue-900/50 text-blue-200 border border-blue-700/50 px-2 py-1 rounded hover:bg-blue-800 transition font-medium">Doing</button>}
+                        {task.status !== 'done' && <button onClick={() => changeTaskStatus(task.id, 'done')} className="text-[10px] bg-emerald-900/50 text-emerald-200 border border-emerald-700/50 px-2 py-1 rounded hover:bg-emerald-800 transition font-medium">Done</button>}
                     </div>
                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onClick={() => startEditingTask(task)} className="text-slate-500 hover:text-blue-400">
