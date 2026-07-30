@@ -18,7 +18,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     for (let i = 1; i <= 12; i++) {
         if (!plan.sprints[i]) plan.sprints[i] = { weekNumber: i, tasks: [] };
         if (!plan.sprints[i].tasks) plan.sprints[i].tasks = [];
-    }
+        }
+        if (!plan.inbox) plan.inbox = [];
 
     const currentWeek = plan.currentSprintWeek || 1;
 
@@ -165,6 +166,67 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
 
     const activeTasks = plan.sprints[currentWeek].tasks;
     const score = calculateScore(activeTasks);
+
+    
+    const moveInboxToSprint = async (taskId: string, targetSprint: number) => {
+        const newPlan = { ...plan };
+        const taskIndex = newPlan.inbox.findIndex((t:any) => t.id === taskId);
+        if (taskIndex > -1) {
+            const task = newPlan.inbox[taskIndex];
+            newPlan.inbox.splice(taskIndex, 1);
+            if (!newPlan.sprints[targetSprint]) newPlan.sprints[targetSprint] = { weekNumber: targetSprint, tasks: [] };
+            newPlan.sprints[targetSprint].tasks.push(task);
+            await savePlan(newPlan);
+        }
+    };
+
+    const addInboxTask = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const input = form.elements.namedItem('taskDesc') as HTMLInputElement;
+        const objSelect = form.elements.namedItem('taskObj') as HTMLSelectElement;
+        if (!input.value.trim()) return;
+        
+        const newPlan = { ...plan };
+        if (!newPlan.inbox) newPlan.inbox = [];
+        newPlan.inbox.push({
+            id: 'inbox_' + Date.now(),
+            description: input.value,
+            status: 'todo',
+            objectiveId: objSelect ? objSelect.value : undefined
+        });
+        await savePlan(newPlan);
+        input.value = '';
+    };
+
+    const removeInboxTask = async (taskId: string) => {
+        if(!confirm("Remover esta ideia?")) return;
+        const newPlan = { ...plan };
+        newPlan.inbox = newPlan.inbox.filter((t: any) => t.id !== taskId);
+        await savePlan(newPlan);
+    };
+
+    const renderInboxCard = (task: any) => {
+        const obj = plan.objectives?.find((o:any) => o.id === task.objectiveId);
+        return (
+            <div key={task.id} className="bg-slate-800/80 p-4 rounded-lg border border-purple-500/50 shadow-sm relative group mb-3 hover:border-purple-400 transition-colors">
+                <p className="text-sm text-slate-200 mb-2">{task.description}</p>
+                {obj && (
+                    <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-[10px] px-2 py-1 rounded-md font-semibold truncate max-w-full mt-1">
+                        {obj.name}
+                    </div>
+                )}
+                <div className="flex gap-2 mt-3 pt-3 border-t border-slate-700 justify-between items-center">
+                    <button onClick={() => moveInboxToSprint(task.id, currentWeek)} className="text-[10px] bg-purple-900/50 text-purple-200 border border-purple-700/50 px-2 py-1 rounded hover:bg-purple-800 transition font-medium w-full flex justify-center gap-1">
+                        Enviar para Sprint {currentWeek} <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                    </button>
+                    <button onClick={() => removeInboxTask(task.id)} className="text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+            </div>
+        );
+    };
 
     const renderTaskCard = (task: any) => {
         const obj = plan.objectives.find((o:any) => o.id === task.objectiveId);
@@ -339,7 +401,31 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+                        {/* BACKLOG (CAIXA DE ENTRADA) */}
+                        <div className="bg-[#020617]/50 rounded-xl border border-slate-800 flex flex-col h-[600px] md:h-[70vh]">
+                            <div className="p-3 border-b border-slate-800 flex justify-between items-center bg-purple-950/20 rounded-t-xl">
+                                <h3 className="font-bold text-purple-400 uppercase text-xs tracking-wider">📥 Caixa de Entrada</h3>
+                                <span className="text-xs bg-purple-900/50 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700/50">{(plan.inbox || []).length}</span>
+                            </div>
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar">
+                                {(plan.inbox || []).map(renderInboxCard)}
+                            </div>
+                            <div className="p-3 border-t border-slate-800 bg-slate-900/50 rounded-b-xl">
+                                <form onSubmit={addInboxTask} className="space-y-2">
+                                    <input name="taskDesc" type="text" placeholder="+ Nova Ideia (Backlog)" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:border-purple-500 focus:outline-none" autoComplete="off" />
+                                    {plan.objectives?.length > 0 && (
+                                        <select name="taskObj" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-xs text-slate-400 focus:border-purple-500 focus:outline-none">
+                                            <option value="">(Sem vínculo trimestral)</option>
+                                            {plan.objectives.map((o:any) => <option key={o.id} value={o.id}>{o.name}</option>)}
+                                        </select>
+                                    )}
+                                    <button type="submit" className="hidden"></button>
+                                </form>
+                            </div>
+                        </div>
+
                         {/* TO DO */}
                         <div className="bg-[#020617]/50 rounded-xl border border-slate-800 flex flex-col h-[600px]">
                             <div className="p-3 border-b border-slate-800 flex justify-between items-center bg-slate-900/50 rounded-t-xl">
