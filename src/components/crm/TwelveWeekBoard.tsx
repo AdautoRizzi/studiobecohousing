@@ -9,6 +9,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
     const [editTaskDesc, setEditTaskDesc] = useState('');
     const [editTaskObj, setEditTaskObj] = useState<string | undefined>(undefined);
+    const [editTaskTargetSprint, setEditTaskTargetSprint] = useState<number>(1);
     const [visionInput, setVisionInput] = useState(initialPlan.vision3Years || '');
     
     // Fallbacks para garantir que a estrutura exista
@@ -128,6 +129,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const startEditingTask = (task: any) => {
         setEditTaskDesc(task.description);
         setEditTaskObj(task.objectiveId);
+        setEditTaskTargetSprint(currentWeek);
         setEditingTaskId(task.id);
     };
 
@@ -279,17 +281,29 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             {activeTab === 'kanban' && (
                 <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
                     <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                        <div className="flex items-center gap-2">
-                            <h2 className="text-xl font-bold text-slate-50">Painel de Táticas:</h2>
-                            <select 
-                                value={currentWeek} 
-                                onChange={(e) => setSprintWeek(parseInt(e.target.value))}
-                                className="bg-[#0f172a] border border-slate-700 rounded-lg px-3 py-1.5 text-slate-200 font-bold focus:border-blue-500 focus:outline-none"
-                            >
-                                {[1,2,3,4,5,6,7,8,9,10,11,12].map(w => (
-                                    <option key={w} value={w}>Sprint {w} (Semana {w})</option>
-                                ))}
-                            </select>
+                        <div className="flex flex-col gap-2">
+                            <div className="flex items-center gap-2">
+                                <h2 className="text-xl font-bold text-slate-50">Painel de Táticas:</h2>
+                                <select 
+                                    value={currentWeek} 
+                                    onChange={(e) => setSprintWeek(parseInt(e.target.value))}
+                                    className="bg-[#0f172a] border border-slate-700 rounded-lg px-3 py-1.5 text-slate-200 font-bold focus:border-blue-500 focus:outline-none"
+                                >
+                                    {[1,2,3,4,5,6,7,8,9,10,11,12].map(w => (
+                                        <option key={w} value={w}>Sprint {w} {getSprintDateRange(w, plan.startDate)}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <label className="text-xs text-slate-400 font-medium">Início do Ciclo (12WY):</label>
+                                <input 
+                                    type="date" 
+                                    value={plan.startDate || ''}
+                                    onChange={handleStartDateChange}
+                                    className="bg-[#020617] border border-slate-700 rounded text-xs px-2 py-1 text-slate-300 focus:outline-none focus:border-primary-500 cursor-pointer"
+                                    title="Escolha a segunda-feira que inicia a Semana 1"
+                                />
+                            </div>
                         </div>
                         
                         <div className="flex items-center gap-4 bg-[#0f172a] px-4 py-2 rounded-xl border border-slate-800">
