@@ -100,6 +100,31 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         setEditingTaskId(null);
     };
 
+    
+    const getSprintDateRange = (weekNumber: number, startDateStr?: string) => {
+        if (!startDateStr) return `(Semana ${weekNumber})`;
+        
+        // Ensure we parse the date as local date to avoid timezone shifts
+        // startDateStr is "YYYY-MM-DD"
+        const parts = startDateStr.split('-');
+        if (parts.length !== 3) return `(Semana ${weekNumber})`;
+        
+        const start = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        // Add weeks
+        start.setDate(start.getDate() + (weekNumber - 1) * 7);
+        
+        const end = new Date(start);
+        end.setDate(end.getDate() + 6); // 7 days per sprint, so end is start + 6
+        
+        const fmt = (d: Date) => `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}`;
+        return `(${fmt(start)} a ${fmt(end)})`;
+    };
+
+    const handleStartDateChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newPlan = { ...plan, startDate: e.target.value };
+        await savePlan(newPlan);
+    };
+
     const startEditingTask = (task: any) => {
         setEditTaskDesc(task.description);
         setEditTaskObj(task.objectiveId);
