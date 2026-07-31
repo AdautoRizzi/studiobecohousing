@@ -202,7 +202,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const handleDragStart = (e: React.DragEvent, taskId: string) => {
         setDraggedTask(taskId);
         e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', taskId);
+        e.dataTransfer.setData('application/json', taskId);
         // Add a slight transparency to the dragged item
         setTimeout(() => {
             if(e.target instanceof HTMLElement) e.target.classList.add('opacity-50');
@@ -221,7 +221,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
 
     const handleDrop = async (e: React.DragEvent, targetStatus: string) => {
         e.preventDefault();
-        const taskIdToMove = e.dataTransfer.getData('text/plain') || draggedTask;
+        const taskIdToMove = e.dataTransfer.getData('application/json') || draggedTask;
         if (!taskIdToMove) return;
         
         const newPlan = { ...plan };
@@ -629,12 +629,12 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     <div className="grid grid-cols-1 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 gap-6">
 
                         {/* BACKLOG (CAIXA DE ENTRADA) */}
-                        <div className="bg-[#020617]/50 rounded-xl border border-slate-800 flex flex-col h-[600px] md:h-[70vh]">
+                        <div className="bg-[#020617]/50 rounded-xl border border-slate-800 flex flex-col h-[600px] md:h-[70vh]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'inbox')}>
                             <div className="p-3 border-b border-slate-800 flex justify-between items-center bg-purple-950/20 rounded-t-xl">
                                 <h3 className="font-bold text-purple-400 uppercase text-xs tracking-wider">📥 Caixa de Entrada</h3>
                                 <span className="text-xs bg-purple-900/50 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700/50">{(plan.inbox || []).length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'inbox')}>
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]">
                                 {(plan.inbox || []).map(renderInboxCard)}
                             </div>
                             <div className="p-3 border-t border-slate-800 bg-slate-900/50 rounded-b-xl">
@@ -652,12 +652,12 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         </div>
 
                         {/* TO DO */}
-                        <div className="bg-[#020617]/50 rounded-xl border border-slate-800 flex flex-col h-[600px] md:h-[70vh]">
+                        <div className="bg-[#020617]/50 rounded-xl border border-slate-800 flex flex-col h-[600px] md:h-[70vh]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'todo')}>
                             <div className="p-3 border-b border-slate-800 flex justify-between items-center bg-slate-900/50 rounded-t-xl">
                                 <h3 className="font-bold text-slate-300 uppercase text-xs tracking-wider">To Do (A Fazer)</h3>
                                 <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'todo').length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'todo')}>
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]">
                                 {activeTasks.filter((t:any) => t.status === 'todo').map(renderTaskCard)}
                             </div>
                             <div className="p-3 border-t border-slate-800 bg-slate-900/50 rounded-b-xl">
@@ -687,12 +687,12 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
 
                         
                         {/* CHECAGEM */}
-                        <div className="bg-[#020617]/50 rounded-xl border border-yellow-900/30 flex flex-col h-[600px] md:h-[70vh]">
+                        <div className="bg-[#020617]/50 rounded-xl border border-yellow-900/30 flex flex-col h-[600px] md:h-[70vh]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'check')}>
                             <div className="p-3 border-b border-yellow-900/30 flex justify-between items-center bg-yellow-950/20 rounded-t-xl">
                                 <h3 className="font-bold text-yellow-400 uppercase text-xs tracking-wider">👀 Checagem</h3>
                                 <span className="text-xs bg-yellow-900/50 text-yellow-200 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'check').length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'check')}>
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]">
                                 {activeTasks.filter((t:any) => t.status === 'check').map(renderTaskCard)}
                             </div>
                         </div>
