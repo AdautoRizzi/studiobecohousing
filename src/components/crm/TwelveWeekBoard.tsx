@@ -321,16 +321,34 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         await savePlan(newPlan);
     };
 
+    
+    const renderFormattedText = (text: string) => {
+        if (!text) return null;
+        // Basic markdown formatting for bold and lists
+        let html = text
+            // Escape HTML to prevent XSS
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            // Bold
+            .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
+            // Italic
+            .replace(/\*(.*?)\*/g, '<em class="text-slate-300 italic">$1</em>')
+            // Lists (lines starting with - or *)
+            .replace(/^(\s*)([-*])\s+(.*)$/gm, '$1<span class="text-slate-400 mr-2">•</span>$3');
+            
+        return <div className="text-sm text-slate-200 mb-2 whitespace-pre-wrap leading-relaxed" dangerouslySetInnerHTML={{__html: html}} />;
+    };
+
     const renderInboxCard = (task: any) => {
         const isEditing = editingTaskId === task.id;
         if (isEditing) {
             return (
                 <div key={task.id} className="bg-[#0f172a] p-3 rounded-lg border border-purple-500 shadow-sm relative mb-3">
-                    <input 
-                        type="text" 
+                    <textarea 
                         value={editTaskDesc}
                         onChange={e => setEditTaskDesc(e.target.value)}
-                        className="w-full bg-[#020617] border border-slate-700 rounded p-1 mb-2 text-sm text-slate-200 focus:outline-none"
+                        className="w-full bg-[#020617] border border-slate-700 rounded p-2 mb-2 text-sm text-slate-200 focus:outline-none min-h-[120px] resize-y custom-scrollbar"
                     />
                     {plan.objectives?.length > 0 && (
                         <select 
@@ -378,7 +396,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
                     </div>
                 )}
-                <p className="text-sm text-slate-200 mb-2">{task.description}</p>
+                {renderFormattedText(task.description)}
                 {obj && (
                     <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-[10px] px-2 py-1 rounded-md font-semibold truncate max-w-full mt-1">
                         {obj.name}
@@ -406,11 +424,10 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         if (isEditing) {
             return (
                 <div key={task.id} className="bg-[#0f172a] p-3 rounded-lg border border-blue-500 shadow-sm relative mb-3">
-                    <input 
-                        type="text" 
+                    <textarea 
                         value={editTaskDesc}
                         onChange={e => setEditTaskDesc(e.target.value)}
-                        className="w-full bg-[#020617] border border-slate-700 rounded p-1 mb-2 text-sm text-slate-200 focus:outline-none"
+                        className="w-full bg-[#020617] border border-slate-700 rounded p-2 mb-2 text-sm text-slate-200 focus:outline-none min-h-[120px] resize-y custom-scrollbar"
                     />
                     {plan.objectives.length > 0 && (
                         <select 
@@ -464,7 +481,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
                     </div>
                 )}
-                <p className="text-sm text-slate-200 mb-2">{task.description}</p>
+                {renderFormattedText(task.description)}
                 {obj && (
                     <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-[10px] px-2 py-1 rounded-md font-semibold truncate max-w-full mt-1">
                         {obj.name}
