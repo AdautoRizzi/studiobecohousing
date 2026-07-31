@@ -327,6 +327,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     </button>
                 </div>
             </div>
+            </div>
         );
     };
 
