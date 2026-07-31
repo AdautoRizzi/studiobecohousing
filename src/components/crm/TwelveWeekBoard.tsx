@@ -11,6 +11,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [editTaskObj, setEditTaskObj] = useState<string | undefined>(undefined);
     const [editTaskTargetSprint, setEditTaskTargetSprint] = useState<number>(1);
     const [editTaskImage, setEditTaskImage] = useState<string | undefined>(undefined);
+    const [draggedTask, setDraggedTask] = useState<string | null>(null);
     const [visionInput, setVisionInput] = useState(initialPlan.vision3Years || '');
     
     // Fallbacks para garantir que a estrutura exista
@@ -196,6 +197,75 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         setEditingTaskId(task.id);
     };
 
+    
+    const handleDragStart = (e: React.DragEvent, taskId: string) => {
+        setDraggedTask(taskId);
+        e.dataTransfer.effectAllowed = 'move';
+        // Add a slight transparency to the dragged item
+        setTimeout(() => {
+            if(e.target instanceof HTMLElement) e.target.classList.add('opacity-50');
+        }, 0);
+    };
+
+    const handleDragEnd = (e: React.DragEvent) => {
+        setDraggedTask(null);
+        if(e.target instanceof HTMLElement) e.target.classList.remove('opacity-50');
+    };
+
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault(); // Necessary to allow dropping
+        e.dataTransfer.dropEffect = 'move';
+    };
+
+    const handleDrop = async (e: React.DragEvent, targetStatus: string) => {
+        e.preventDefault();
+        if (!draggedTask) return;
+        
+        const newPlan = { ...plan };
+        
+        // Find task and its current location
+        let taskIndex = -1;
+        let isCurrentlyInbox = false;
+        
+        // Search in Inbox
+        if (newPlan.inbox) {
+            taskIndex = newPlan.inbox.findIndex((t:any) => t.id === draggedTask);
+            if (taskIndex > -1) isCurrentlyInbox = true;
+        }
+        
+        // Search in Current Sprint
+        if (taskIndex === -1 && newPlan.sprints[currentWeek]?.tasks) {
+            taskIndex = newPlan.sprints[currentWeek].tasks.findIndex((t:any) => t.id === draggedTask);
+        }
+        
+        if (taskIndex === -1) return; // Task not found
+        
+        let taskObj;
+        
+        // Splice out of origin
+        if (isCurrentlyInbox) {
+            taskObj = newPlan.inbox[taskIndex];
+            newPlan.inbox.splice(taskIndex, 1);
+        } else {
+            taskObj = newPlan.sprints[currentWeek].tasks[taskIndex];
+            newPlan.sprints[currentWeek].tasks.splice(taskIndex, 1);
+        }
+        
+        // Push to target
+        taskObj.status = targetStatus === 'inbox' ? 'todo' : targetStatus;
+        
+        if (targetStatus === 'inbox') {
+            if (!newPlan.inbox) newPlan.inbox = [];
+            newPlan.inbox.push(taskObj);
+        } else {
+            if (!newPlan.sprints[currentWeek].tasks) newPlan.sprints[currentWeek].tasks = [];
+            newPlan.sprints[currentWeek].tasks.push(taskObj);
+        }
+        
+        await savePlan(newPlan);
+        setDraggedTask(null);
+    };
+
     const removeTask = async (taskId: string) => {
         if(!confirm("Remover esta tática?")) return;
         const newPlan = { ...plan };
@@ -302,7 +372,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         
         const obj = plan.objectives?.find((o:any) => o.id === task.objectiveId);
         return (
-            <div key={task.id} className="bg-slate-800/80 p-4 rounded-lg border border-purple-500/50 shadow-sm relative group mb-3 hover:border-purple-400 transition-colors">
+            <div key={task.id} draggable onDragStart={(e) => handleDragStart(e, task.id)} onDragEnd={handleDragEnd} className="bg-slate-800/80 p-4 rounded-lg border border-purple-500/50 shadow-sm relative group mb-3 hover:border-purple-400 transition-colors cursor-move">
                 {task.imageUrl && (
                     <div className="mb-3 rounded-lg overflow-hidden border border-slate-700 cursor-pointer" onClick={() => window.open(task.imageUrl, '_blank')}>
                         <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
@@ -315,10 +385,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     </div>
                 )}
                 <div className="flex gap-2 mt-3 pt-3 border-t border-slate-700 justify-between items-center">
-                    <button onClick={() => moveInboxToSprint(task.id, currentWeek)} className="text-[10px] bg-purple-900/50 text-purple-200 border border-purple-700/50 px-2 py-1 rounded hover:bg-purple-800 transition font-medium w-full flex justify-center gap-1">
-                        Enviar para Sprint {currentWeek} <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                    </button>
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
+                    
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end">
                         <button onClick={() => startEditingTask(task)} className="text-slate-500 hover:text-blue-400">
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                         </button>
@@ -390,7 +458,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         }
 
         return (
-            <div key={task.id} className="bg-slate-800/80 p-4 rounded-lg border border-slate-600 shadow-sm relative group mb-3 hover:border-slate-400 transition-colors">
+            <div key={task.id} draggable onDragStart={(e) => handleDragStart(e, task.id)} onDragEnd={handleDragEnd} className="bg-slate-800/80 p-4 rounded-lg border border-slate-600 shadow-sm relative group mb-3 hover:border-slate-400 transition-colors cursor-move">
                 {task.imageUrl && (
                     <div className="mb-3 rounded-lg overflow-hidden border border-slate-700 cursor-pointer" onClick={() => window.open(task.imageUrl, '_blank')}>
                         <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
@@ -404,12 +472,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                 )}
                 
                 <div className="flex gap-2 mt-3 pt-3 border-t border-slate-800 justify-between items-center">
-                    <div className="flex gap-1">
-                        {task.status !== 'todo' && <button onClick={() => changeTaskStatus(task.id, 'todo')} className="text-[10px] bg-slate-700 text-slate-200 px-2 py-1 rounded hover:bg-slate-600 transition font-medium">Todo</button>}
-                        {task.status !== 'doing' && <button onClick={() => changeTaskStatus(task.id, 'doing')} className="text-[10px] bg-blue-900/50 text-blue-200 border border-blue-700/50 px-2 py-1 rounded hover:bg-blue-800 transition font-medium">Doing</button>}
-                        {task.status !== 'done' && <button onClick={() => changeTaskStatus(task.id, 'done')} className="text-[10px] bg-emerald-900/50 text-emerald-200 border border-emerald-700/50 px-2 py-1 rounded hover:bg-emerald-800 transition font-medium">Done</button>}
-                    </div>
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end">
                         <button onClick={() => startEditingTask(task)} className="text-slate-500 hover:text-blue-400">
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                         </button>
@@ -529,7 +593,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 gap-6">
 
                         {/* BACKLOG (CAIXA DE ENTRADA) */}
                         <div className="bg-[#020617]/50 rounded-xl border border-slate-800 flex flex-col h-[600px] md:h-[70vh]">
@@ -537,7 +601,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                                 <h3 className="font-bold text-purple-400 uppercase text-xs tracking-wider">📥 Caixa de Entrada</h3>
                                 <span className="text-xs bg-purple-900/50 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700/50">{(plan.inbox || []).length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar">
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'inbox')}>
                                 {(plan.inbox || []).map(renderInboxCard)}
                             </div>
                             <div className="p-3 border-t border-slate-800 bg-slate-900/50 rounded-b-xl">
@@ -555,12 +619,12 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         </div>
 
                         {/* TO DO */}
-                        <div className="bg-[#020617]/50 rounded-xl border border-slate-800 flex flex-col h-[600px]">
+                        <div className="bg-[#020617]/50 rounded-xl border border-slate-800 flex flex-col h-[600px] md:h-[70vh]">
                             <div className="p-3 border-b border-slate-800 flex justify-between items-center bg-slate-900/50 rounded-t-xl">
                                 <h3 className="font-bold text-slate-300 uppercase text-xs tracking-wider">To Do (A Fazer)</h3>
                                 <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'todo').length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar">
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'todo')}>
                                 {activeTasks.filter((t:any) => t.status === 'todo').map(renderTaskCard)}
                             </div>
                             <div className="p-3 border-t border-slate-800 bg-slate-900/50 rounded-b-xl">
@@ -583,8 +647,20 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                                 <h3 className="font-bold text-blue-400 uppercase text-xs tracking-wider flex items-center gap-2"><span className="animate-pulse">●</span> Doing (Em Progresso)</h3>
                                 <span className="text-xs bg-blue-900/50 text-blue-300 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'doing').length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar">
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone">
                                 {activeTasks.filter((t:any) => t.status === 'doing').map(renderTaskCard)}
+                            </div>
+                        </div>
+
+                        
+                        {/* CHECAGEM */}
+                        <div className="bg-[#020617]/50 rounded-xl border border-yellow-900/30 flex flex-col h-[600px] md:h-[70vh]">
+                            <div className="p-3 border-b border-yellow-900/30 flex justify-between items-center bg-yellow-950/20 rounded-t-xl">
+                                <h3 className="font-bold text-yellow-400 uppercase text-xs tracking-wider">👀 Checagem</h3>
+                                <span className="text-xs bg-yellow-900/50 text-yellow-200 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'check').length}</span>
+                            </div>
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'check')}>
+                                {activeTasks.filter((t:any) => t.status === 'check').map(renderTaskCard)}
                             </div>
                         </div>
 
@@ -594,7 +670,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                                 <h3 className="font-bold text-green-400 uppercase text-xs tracking-wider">Done (Concluído)</h3>
                                 <span className="text-xs bg-green-900/50 text-green-300 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'done').length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar">
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone">
                                 {activeTasks.filter((t:any) => t.status === 'done').map(renderTaskCard)}
                             </div>
                         </div>
