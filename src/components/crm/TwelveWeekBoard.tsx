@@ -259,6 +259,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             if (!newPlan.inbox) newPlan.inbox = [];
             newPlan.inbox.push(taskObj);
         } else {
+            if (!newPlan.sprints[currentWeek]) newPlan.sprints[currentWeek] = { weekNumber: currentWeek, tasks: [] };
             if (!newPlan.sprints[currentWeek].tasks) newPlan.sprints[currentWeek].tasks = [];
             newPlan.sprints[currentWeek].tasks.push(taskObj);
         }
@@ -325,22 +326,22 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     
     const renderFormattedText = (text: string, isExpanded: boolean) => {
         if (!text) return null;
-        // Basic markdown formatting for bold and lists
         let html = text
-            // Escape HTML to prevent XSS
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
+            // Line breaks
+            .replace(/\n/g, "<br/>")
             // Bold
             .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
             // Italic
             .replace(/\*(.*?)\*/g, '<em class="text-slate-300 italic">$1</em>')
             // Lists (lines starting with - or *)
-            .replace(/^(\s*)([-*])\s+(.*)$/gm, '$1<span class="text-slate-400 mr-2">•</span>$3');
+            .replace(/^(?:<br\/>)*(\s*)([-*])\s+(.*)$/gm, '$1<span class="text-slate-400 mr-2">•</span>$3');
             
         return (
             <div 
-                className={`text-sm text-slate-200 mb-2 whitespace-pre-wrap leading-relaxed transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3 cursor-pointer'}`} 
+                className={`text-sm text-slate-200 mb-2 leading-relaxed transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3 cursor-pointer'}`} 
                 dangerouslySetInnerHTML={{__html: html}} 
             />
         );
