@@ -675,7 +675,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         </div>
 
                         {/* DOING */}
-                        <div className="bg-blue-950/10 rounded-xl border border-blue-900/30 flex flex-col h-[600px]">
+                        <div className="bg-blue-950/10 rounded-xl border border-blue-900/30 flex flex-col h-[600px]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'doing')}>
                             <div className="p-3 border-b border-blue-900/30 flex justify-between items-center bg-blue-900/20 rounded-t-xl">
                                 <h3 className="font-bold text-blue-400 uppercase text-xs tracking-wider flex items-center gap-2"><span className="animate-pulse">●</span> Doing (Em Progresso)</h3>
                                 <span className="text-xs bg-blue-900/50 text-blue-300 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'doing').length}</span>
