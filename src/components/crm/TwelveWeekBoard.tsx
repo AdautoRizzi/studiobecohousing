@@ -94,25 +94,26 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     
     const saveTaskEdit = async (taskId: string) => {
         const newPlan = { ...plan };
-        const taskIndex = newPlan.sprints[currentWeek].tasks.findIndex((t: any) => t.id === taskId);
+        
+        let isInbox = false;
+        let taskIndex = newPlan.sprints[currentWeek].tasks.findIndex((t: any) => t.id === taskId);
+        
+        if (taskIndex === -1 && newPlan.inbox) {
+            taskIndex = newPlan.inbox.findIndex((t: any) => t.id === taskId);
+            if (taskIndex !== -1) isInbox = true;
+        }
         
         if (taskIndex !== -1) {
-            const task = newPlan.sprints[currentWeek].tasks[taskIndex];
+            const task = isInbox ? newPlan.inbox[taskIndex] : newPlan.sprints[currentWeek].tasks[taskIndex];
             task.description = editTaskDesc;
             task.objectiveId = editTaskObj;
             task.imageUrl = editTaskImage;
             
-            if (editTaskTargetSprint !== currentWeek) {
+            if (!isInbox && editTaskTargetSprint !== currentWeek) {
                 // Move task to target sprint
                 newPlan.sprints[currentWeek].tasks.splice(taskIndex, 1);
-                
-                if (!newPlan.sprints[editTaskTargetSprint]) {
-                    newPlan.sprints[editTaskTargetSprint] = { weekNumber: editTaskTargetSprint, tasks: [] };
-                }
-                if (!newPlan.sprints[editTaskTargetSprint].tasks) {
-                    newPlan.sprints[editTaskTargetSprint].tasks = [];
-                }
-                
+                if (!newPlan.sprints[editTaskTargetSprint]) newPlan.sprints[editTaskTargetSprint] = { weekNumber: editTaskTargetSprint, tasks: [] };
+                if (!newPlan.sprints[editTaskTargetSprint].tasks) newPlan.sprints[editTaskTargetSprint].tasks = [];
                 newPlan.sprints[editTaskTargetSprint].tasks.push(task);
             }
             
@@ -251,6 +252,54 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     };
 
     const renderInboxCard = (task: any) => {
+        const isEditing = editingTaskId === task.id;
+        if (isEditing) {
+            return (
+                <div key={task.id} className="bg-[#0f172a] p-3 rounded-lg border border-purple-500 shadow-sm relative mb-3">
+                    <input 
+                        type="text" 
+                        value={editTaskDesc}
+                        onChange={e => setEditTaskDesc(e.target.value)}
+                        className="w-full bg-[#020617] border border-slate-700 rounded p-1 mb-2 text-sm text-slate-200 focus:outline-none"
+                    />
+                    {plan.objectives?.length > 0 && (
+                        <select 
+                            value={editTaskObj || ''}
+                            onChange={e => setEditTaskObj(e.target.value)}
+                            className="w-full bg-[#020617] border border-slate-700 rounded p-1 text-xs text-slate-400 mb-2 focus:outline-none"
+                        >
+                            <option value="">(Sem vínculo trimestral)</option>
+                            {plan.objectives.map((o:any) => <option key={o.id} value={o.id}>{o.name}</option>)}
+                        </select>
+                    )}
+                    
+                    <div className="mb-3 border border-slate-700 border-dashed rounded p-2 text-center relative group">
+                        {editTaskImage ? (
+                            <div className="relative">
+                                <img src={editTaskImage} alt="Anexo" className="max-h-32 mx-auto rounded" />
+                                <button onClick={() => setEditTaskImage(undefined)} className="absolute top-1 right-1 bg-red-500/80 text-white rounded-full p-1 hover:bg-red-500">
+                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
+                            </div>
+                        ) : (
+                            <div>
+                                <label className="cursor-pointer text-xs text-slate-400 hover:text-slate-200 flex flex-col items-center gap-1">
+                                    <svg className="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                    Anexar Imagem
+                                    <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                                </label>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex gap-2 justify-end">
+                        <button onClick={() => setEditingTaskId(null)} className="text-xs text-slate-500 hover:text-slate-300">Cancelar</button>
+                        <button onClick={() => saveTaskEdit(task.id)} className="text-xs bg-purple-600 text-white px-2 py-1 rounded hover:bg-purple-700">Salvar</button>
+                    </div>
+                </div>
+            );
+        }
+        
         const obj = plan.objectives?.find((o:any) => o.id === task.objectiveId);
         return (
             <div key={task.id} className="bg-slate-800/80 p-4 rounded-lg border border-purple-500/50 shadow-sm relative group mb-3 hover:border-purple-400 transition-colors">
@@ -269,7 +318,11 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     <button onClick={() => moveInboxToSprint(task.id, currentWeek)} className="text-[10px] bg-purple-900/50 text-purple-200 border border-purple-700/50 px-2 py-1 rounded hover:bg-purple-800 transition font-medium w-full flex justify-center gap-1">
                         Enviar para Sprint {currentWeek} <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                     </button>
-                    <button onClick={() => removeInboxTask(task.id)} className="text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
+                        <button onClick={() => startEditingTask(task)} className="text-slate-500 hover:text-blue-400">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                        </button>
+                        <button onClick={() => removeInboxTask(task.id)} className="text-slate-500 hover:text-red-400">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
