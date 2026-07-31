@@ -232,13 +232,13 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         
         // Search in Inbox
         if (newPlan.inbox) {
-            taskIndex = newPlan.inbox.findIndex((t:any) => t.id === taskIdToMove);
+            taskIndex = newPlan.inbox.findIndex((t:any) => String(t.id) === String(taskIdToMove));
             if (taskIndex > -1) isCurrentlyInbox = true;
         }
         
         // Search in Current Sprint
         if (taskIndex === -1 && newPlan.sprints[currentWeek]?.tasks) {
-            taskIndex = newPlan.sprints[currentWeek].tasks.findIndex((t:any) => t.id === taskIdToMove);
+            taskIndex = newPlan.sprints[currentWeek].tasks.findIndex((t:any) => String(t.id) === String(taskIdToMove));
         }
         
         if (taskIndex === -1) return; // Task not found
