@@ -12,6 +12,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [editTaskTargetSprint, setEditTaskTargetSprint] = useState<number>(1);
     const [editTaskImage, setEditTaskImage] = useState<string | undefined>(undefined);
     const [draggedTask, setDraggedTask] = useState<string | null>(null);
+    const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
     const [visionInput, setVisionInput] = useState(initialPlan.vision3Years || '');
     
     // Fallbacks para garantir que a estrutura exista
@@ -322,7 +323,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     };
 
     
-    const renderFormattedText = (text: string) => {
+    const renderFormattedText = (text: string, isExpanded: boolean) => {
         if (!text) return null;
         // Basic markdown formatting for bold and lists
         let html = text
@@ -337,7 +338,19 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             // Lists (lines starting with - or *)
             .replace(/^(\s*)([-*])\s+(.*)$/gm, '$1<span class="text-slate-400 mr-2">•</span>$3');
             
-        return <div className="text-sm text-slate-200 mb-2 whitespace-pre-wrap leading-relaxed" dangerouslySetInnerHTML={{__html: html}} />;
+        return (
+            <div 
+                className={`text-sm text-slate-200 mb-2 whitespace-pre-wrap leading-relaxed transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3 cursor-pointer'}`} 
+                dangerouslySetInnerHTML={{__html: html}} 
+            />
+        );
+    };
+
+    
+    const toggleExpand = (taskId: string, e: React.MouseEvent) => {
+        // Prevent toggle if clicking edit button or dragging
+        if ((e.target as HTMLElement).closest('button')) return;
+        setExpandedTaskId(prev => prev === taskId ? null : taskId);
     };
 
     const renderInboxCard = (task: any) => {
@@ -396,7 +409,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
                     </div>
                 )}
-                {renderFormattedText(task.description)}
+                <div onClick={(e) => toggleExpand(task.id, e)}>{renderFormattedText(task.description, expandedTaskId === task.id)}</div>
                 {obj && (
                     <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-[10px] px-2 py-1 rounded-md font-semibold truncate max-w-full mt-1">
                         {obj.name}
@@ -481,7 +494,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
                     </div>
                 )}
-                {renderFormattedText(task.description)}
+                <div onClick={(e) => toggleExpand(task.id, e)}>{renderFormattedText(task.description, expandedTaskId === task.id)}</div>
                 {obj && (
                     <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-[10px] px-2 py-1 rounded-md font-semibold truncate max-w-full mt-1">
                         {obj.name}
