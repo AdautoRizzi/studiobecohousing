@@ -10,6 +10,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [editTaskDesc, setEditTaskDesc] = useState('');
     const [editTaskObj, setEditTaskObj] = useState<string | undefined>(undefined);
     const [editTaskTargetSprint, setEditTaskTargetSprint] = useState<number>(1);
+    const [editTaskImage, setEditTaskImage] = useState<string | undefined>(undefined);
     const [visionInput, setVisionInput] = useState(initialPlan.vision3Years || '');
     
     // Fallbacks para garantir que a estrutura exista
@@ -99,6 +100,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             const task = newPlan.sprints[currentWeek].tasks[taskIndex];
             task.description = editTaskDesc;
             task.objectiveId = editTaskObj;
+            task.imageUrl = editTaskImage;
             
             if (editTaskTargetSprint !== currentWeek) {
                 // Move task to target sprint
@@ -144,10 +146,52 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         await savePlan(newPlan);
     };
 
+    
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 800;
+                const MAX_HEIGHT = 800;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx?.drawImage(img, 0, 0, width, height);
+                
+                // Compress to JPEG with 0.6 quality to keep JSON size small
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+                setEditTaskImage(dataUrl);
+            };
+            img.src = event.target?.result as string;
+        };
+        reader.readAsDataURL(file);
+    };
+
     const startEditingTask = (task: any) => {
         setEditTaskDesc(task.description);
         setEditTaskObj(task.objectiveId);
         setEditTaskTargetSprint(currentWeek);
+        setEditTaskImage(task.imageUrl);
         setEditingTaskId(task.id);
     };
 
@@ -210,6 +254,11 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         const obj = plan.objectives?.find((o:any) => o.id === task.objectiveId);
         return (
             <div key={task.id} className="bg-slate-800/80 p-4 rounded-lg border border-purple-500/50 shadow-sm relative group mb-3 hover:border-purple-400 transition-colors">
+                {task.imageUrl && (
+                    <div className="mb-3 rounded-lg overflow-hidden border border-slate-700 cursor-pointer" onClick={() => window.open(task.imageUrl, '_blank')}>
+                        <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
+                    </div>
+                )}
                 <p className="text-sm text-slate-200 mb-2">{task.description}</p>
                 {obj && (
                     <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-[10px] px-2 py-1 rounded-md font-semibold truncate max-w-full mt-1">
@@ -258,6 +307,26 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     >
                         {[1,2,3,4,5,6,7,8,9,10,11,12].map(w => <option key={w} value={w}>Mover para Sprint {w}</option>)}
                     </select>
+
+                    <div className="mb-3 border border-slate-700 border-dashed rounded p-2 text-center relative group">
+                        {editTaskImage ? (
+                            <div className="relative">
+                                <img src={editTaskImage} alt="Anexo" className="max-h-32 mx-auto rounded" />
+                                <button onClick={() => setEditTaskImage(undefined)} className="absolute top-1 right-1 bg-red-500/80 text-white rounded-full p-1 hover:bg-red-500">
+                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
+                            </div>
+                        ) : (
+                            <div>
+                                <label className="cursor-pointer text-xs text-slate-400 hover:text-slate-200 flex flex-col items-center gap-1">
+                                    <svg className="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                    Anexar Imagem
+                                    <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                                </label>
+                            </div>
+                        )}
+                    </div>
+
                     <div className="flex gap-2 justify-end">
                         <button onClick={() => setEditingTaskId(null)} className="text-xs text-slate-500 hover:text-slate-300">Cancelar</button>
                         <button onClick={() => saveTaskEdit(task.id)} className="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700">Salvar</button>
@@ -268,6 +337,11 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
 
         return (
             <div key={task.id} className="bg-slate-800/80 p-4 rounded-lg border border-slate-600 shadow-sm relative group mb-3 hover:border-slate-400 transition-colors">
+                {task.imageUrl && (
+                    <div className="mb-3 rounded-lg overflow-hidden border border-slate-700 cursor-pointer" onClick={() => window.open(task.imageUrl, '_blank')}>
+                        <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
+                    </div>
+                )}
                 <p className="text-sm text-slate-200 mb-2">{task.description}</p>
                 {obj && (
                     <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-[10px] px-2 py-1 rounded-md font-semibold truncate max-w-full mt-1">
