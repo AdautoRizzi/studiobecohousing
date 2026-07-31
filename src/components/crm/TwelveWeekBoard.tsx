@@ -202,6 +202,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const handleDragStart = (e: React.DragEvent, taskId: string) => {
         setDraggedTask(taskId);
         e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', taskId);
         // Add a slight transparency to the dragged item
         setTimeout(() => {
             if(e.target instanceof HTMLElement) e.target.classList.add('opacity-50');
@@ -220,7 +221,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
 
     const handleDrop = async (e: React.DragEvent, targetStatus: string) => {
         e.preventDefault();
-        if (!draggedTask) return;
+        const taskIdToMove = e.dataTransfer.getData('text/plain') || draggedTask;
+        if (!taskIdToMove) return;
         
         const newPlan = { ...plan };
         
@@ -230,13 +232,13 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         
         // Search in Inbox
         if (newPlan.inbox) {
-            taskIndex = newPlan.inbox.findIndex((t:any) => t.id === draggedTask);
+            taskIndex = newPlan.inbox.findIndex((t:any) => t.id === taskIdToMove);
             if (taskIndex > -1) isCurrentlyInbox = true;
         }
         
         // Search in Current Sprint
         if (taskIndex === -1 && newPlan.sprints[currentWeek]?.tasks) {
-            taskIndex = newPlan.sprints[currentWeek].tasks.findIndex((t:any) => t.id === draggedTask);
+            taskIndex = newPlan.sprints[currentWeek].tasks.findIndex((t:any) => t.id === taskIdToMove);
         }
         
         if (taskIndex === -1) return; // Task not found
@@ -632,7 +634,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                                 <h3 className="font-bold text-purple-400 uppercase text-xs tracking-wider">📥 Caixa de Entrada</h3>
                                 <span className="text-xs bg-purple-900/50 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700/50">{(plan.inbox || []).length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'inbox')}>
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'inbox')}>
                                 {(plan.inbox || []).map(renderInboxCard)}
                             </div>
                             <div className="p-3 border-t border-slate-800 bg-slate-900/50 rounded-b-xl">
@@ -655,7 +657,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                                 <h3 className="font-bold text-slate-300 uppercase text-xs tracking-wider">To Do (A Fazer)</h3>
                                 <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'todo').length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'todo')}>
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'todo')}>
                                 {activeTasks.filter((t:any) => t.status === 'todo').map(renderTaskCard)}
                             </div>
                             <div className="p-3 border-t border-slate-800 bg-slate-900/50 rounded-b-xl">
@@ -678,7 +680,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                                 <h3 className="font-bold text-blue-400 uppercase text-xs tracking-wider flex items-center gap-2"><span className="animate-pulse">●</span> Doing (Em Progresso)</h3>
                                 <span className="text-xs bg-blue-900/50 text-blue-300 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'doing').length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone">
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]">
                                 {activeTasks.filter((t:any) => t.status === 'doing').map(renderTaskCard)}
                             </div>
                         </div>
@@ -690,7 +692,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                                 <h3 className="font-bold text-yellow-400 uppercase text-xs tracking-wider">👀 Checagem</h3>
                                 <span className="text-xs bg-yellow-900/50 text-yellow-200 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'check').length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'check')}>
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'check')}>
                                 {activeTasks.filter((t:any) => t.status === 'check').map(renderTaskCard)}
                             </div>
                         </div>
@@ -701,7 +703,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                                 <h3 className="font-bold text-green-400 uppercase text-xs tracking-wider">Done (Concluído)</h3>
                                 <span className="text-xs bg-green-900/50 text-green-300 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'done').length}</span>
                             </div>
-                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone">
+                            <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]">
                                 {activeTasks.filter((t:any) => t.status === 'done').map(renderTaskCard)}
                             </div>
                         </div>
