@@ -321,7 +321,8 @@ export async function updateLeadNotes(id: string, notasCrm: string) {
 const SYSTEM_TASKS_EMAIL = 'system_tasks_global_board@studiobe.com';
 
 async function ensureSystemTasksUser() {
-    const { data } = await supabase.from('leads').select('id, notasCrm').eq('email', SYSTEM_TASKS_EMAIL).single();
+    const { data, error } = await supabase.from('leads').select('id, notasCrm').eq('email', SYSTEM_TASKS_EMAIL).single();
+    if (error && error.code !== 'PGRST116') throw new Error('DB Error: ' + error.message);
     if (data) return data;
     
     // Create it
@@ -362,7 +363,8 @@ export async function saveGlobalTasks(tasks: GlobalTask[]) {
 // --- HACK MVP: PASSOS DO METODO ---
 const SYSTEM_METHOD_STEPS_EMAIL = 'system_method_steps@studiobe.com';
 async function ensureSystemMethodUser() {
-    const { data } = await supabase.from('leads').select('id, notasCrm').eq('email', SYSTEM_METHOD_STEPS_EMAIL).single();
+    const { data, error } = await supabase.from('leads').select('id, notasCrm').eq('email', SYSTEM_METHOD_STEPS_EMAIL).single();
+    if (error && error.code !== 'PGRST116') throw new Error('DB Error: ' + error.message);
     if (data) return data;
     
     const defaultSteps = [
@@ -442,7 +444,8 @@ export interface TwelveWeekPlan {
 }
 
 async function ensureSystem12WeekUser() {
-    const { data } = await supabase.from('leads').select('id, notasCrm').eq('email', SYS_12WEEK_PLAN_EMAIL).single();
+    const { data, error } = await supabase.from('leads').select('id, notasCrm').eq('email', SYS_12WEEK_PLAN_EMAIL).single();
+    if (error && error.code !== 'PGRST116') throw new Error('DB Error: ' + error.message);
     if (data) return data;
     
     // Build initial blank plan
