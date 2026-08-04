@@ -13,6 +13,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [editTaskImage, setEditTaskImage] = useState<string | undefined>(undefined);
     const [draggedTask, setDraggedTask] = useState<string | null>(null);
     const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
+    const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
     const [visionInput, setVisionInput] = useState(initialPlan.vision3Years || '');
     
     // Fallbacks para garantir que a estrutura exista
@@ -408,7 +409,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         return (
             <div key={task.id} draggable onDragStart={(e) => handleDragStart(e, task.id)} onDragEnd={handleDragEnd} className="bg-slate-800/80 p-4 rounded-lg border border-purple-500/50 shadow-sm relative group mb-3 hover:border-purple-400 transition-colors cursor-move">
                 {task.imageUrl && (
-                    <div className="mb-3 rounded-lg overflow-hidden border border-slate-700 cursor-pointer" onClick={() => window.open(task.imageUrl, '_blank')}>
+                    <div className="mb-3 rounded-lg overflow-hidden border border-slate-700 cursor-pointer" onClick={() => setFullscreenImage(task.imageUrl)}>
                         <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
                     </div>
                 )}
@@ -493,7 +494,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         return (
             <div key={task.id} draggable onDragStart={(e) => handleDragStart(e, task.id)} onDragEnd={handleDragEnd} className="bg-slate-800/80 p-4 rounded-lg border border-slate-600 shadow-sm relative group mb-3 hover:border-slate-400 transition-colors cursor-move">
                 {task.imageUrl && (
-                    <div className="mb-3 rounded-lg overflow-hidden border border-slate-700 cursor-pointer" onClick={() => window.open(task.imageUrl, '_blank')}>
+                    <div className="mb-3 rounded-lg overflow-hidden border border-slate-700 cursor-pointer" onClick={() => setFullscreenImage(task.imageUrl)}>
                         <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
                     </div>
                 )}
