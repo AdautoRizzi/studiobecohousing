@@ -95,7 +95,7 @@ export async function registerUser(email: string, name: string, phone: string) {
         .select()
         .single();
 
-    if (error) throw new Error(error.message);
+    if (insertError) throw new Error(insertError.message);
     return data;
 }
 
@@ -207,7 +207,7 @@ export async function deleteLead(id: string) {
         .delete()
         .eq('id', id);
 
-    if (error) throw new Error(error.message);
+    if (insertError) throw new Error(insertError.message);
     return true;
 }
 
@@ -223,7 +223,7 @@ export async function logManualInteraction(leadId: string, content: string, type
         .select()
         .single();
     
-    if (error) throw new Error(error.message);
+    if (insertError) throw new Error(insertError.message);
     return data;
 }
 
@@ -265,7 +265,7 @@ export async function createMessageTemplate(title: string, content: string) {
         .select()
         .single();
     
-    if (error) throw new Error(error.message);
+    if (insertError) throw new Error(insertError.message);
     return data;
 }
 
@@ -277,7 +277,7 @@ export async function updateMessageTemplate(id: number, title: string, content: 
         .select()
         .single();
     
-    if (error) throw new Error(error.message);
+    if (insertError) throw new Error(insertError.message);
     return data;
 }
 
@@ -287,7 +287,7 @@ export async function deleteMessageTemplate(id: number) {
         .delete()
         .eq('id', id);
     
-    if (error) throw new Error(error.message);
+    if (insertError) throw new Error(insertError.message);
     return true;
 }
 
@@ -299,7 +299,7 @@ export async function addToMessageQueue(leadId: string, message: string) {
         .select()
         .single();
     
-    if (error) throw new Error(error.message);
+    if (insertError) throw new Error(insertError.message);
     return data;
 }
 
@@ -326,7 +326,7 @@ async function ensureSystemTasksUser() {
     if (data) return data;
     
     // Create it
-    const { data: newData, error } = await supabase.from('leads').insert([{
+    const { data: newData, error: insertError } = await supabase.from('leads').insert([{
         id: 'sys_' + Date.now() + '_' + Math.random().toString(36).substring(2),
         nome: 'SYSTEM TASKS',
         email: SYSTEM_TASKS_EMAIL,
