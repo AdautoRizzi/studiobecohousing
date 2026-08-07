@@ -448,10 +448,15 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <button onClick={() => setEditingTaskId(null)} className="text-xs text-slate-500 hover:text-slate-300">Cancelar</button>
                         <button onClick={() => saveTaskEdit(task.id)} className="text-xs bg-purple-600 text-white px-2 py-1 rounded hover:bg-purple-700">Salvar</button>
                     </div>
+                
+            {fullscreenImage && (
+                <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 cursor-zoom-out" onClick={() => setFullscreenImage(null)}>
+                    <img src={fullscreenImage} alt="Imagem Ampliada" className="max-w-full max-h-[90vh] object-contain" />
                 </div>
-            );
-        }
-        
+            )}
+        </div>
+    );
+}
         const obj = plan.objectives?.find((o:any) => o.id === task.objectiveId);
         return (
             <div key={task.id} draggable onDragStart={(e) => handleDragStart(e, task.id)} onDragEnd={handleDragEnd} onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = "move"; }} onDrop={(e) => handleDrop(e, task.status === 'todo' ? 'todo' : task.status === 'doing' ? 'doing' : task.status === 'check' ? 'check' : task.status === 'done' ? 'done' : 'inbox', task.id)} className="bg-slate-800/60 p-4 rounded-lg border border-purple-500/40 shadow-sm relative group mb-1 hover:border-purple-400 transition-colors cursor-move">
@@ -681,41 +686,6 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             {/* ABA 2: KANBAN DO SPRINT */}
             {activeTab === 'kanban' && (
                 <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                        <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-2">
-                                <h2 className="text-xl font-bold text-slate-50">Painel de Táticas:</h2>
-                                <select 
-                                    value={currentWeek} 
-                                    onChange={(e) => setSprintWeek(parseInt(e.target.value))}
-                                    className="bg-[#0f172a] border border-slate-700 rounded-lg px-3 py-1.5 text-slate-200 font-bold focus:border-blue-500 focus:outline-none"
-                                >
-                                    {[1,2,3,4,5,6,7,8,9,10,11,12].map(w => (
-                                        <option key={w} value={w}>Sprint {w} {getSprintDateRange(w, plan.startDate)}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <label className="text-xs text-slate-400 font-medium">Início do Ciclo (12WY):</label>
-                                <input 
-                                    type="date" 
-                                    value={plan.startDate || ''}
-                                    onChange={handleStartDateChange}
-                                    className="bg-[#020617] border border-slate-700 rounded text-xs px-2 py-1 text-slate-300 focus:outline-none focus:border-primary-500 cursor-pointer"
-                                    title="Escolha a segunda-feira que inicia a Semana 1"
-                                />
-                            </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-4 bg-[#0f172a] px-4 py-2 rounded-xl border border-slate-700/50">
-                            <div className="text-sm font-bold text-slate-400">Scorecard:</div>
-                            <div className="w-32 bg-slate-800 rounded-full h-3 overflow-hidden">
-                                <div className={`h-full transition-all duration-500 ${score >= 85 ? 'bg-green-500' : 'bg-orange-500'}`} style={{width: `${score}%`}}></div>
-                            </div>
-                            <div className={`font-black text-lg ${score >= 85 ? 'text-green-400' : 'text-orange-400'}`}>{score}%</div>
-                        </div>
-                    </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
 
                         {/* BACKLOG (CAIXA DE ENTRADA) */}
