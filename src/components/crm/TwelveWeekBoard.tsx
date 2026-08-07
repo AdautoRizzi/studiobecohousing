@@ -311,7 +311,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             targetArray[tIndex] = targetArray[tIndex + 1];
             targetArray[tIndex + 1] = temp;
         } else {
-            return; // Can't move further
+            return;
         }
         
         await savePlan(newPlan);
@@ -468,16 +468,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                 )}
                 <div className="flex gap-2 mt-3 pt-3 border-t border-slate-700 justify-between items-center">
                     
-                    
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end items-center">
-                        <button onClick={() => moveTask(task.id, 'up')} className="text-slate-500 hover:text-white mr-1" title="Mover para Cima">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
-                        </button>
-                        <button onClick={() => moveTask(task.id, 'down')} className="text-slate-500 hover:text-white mr-2" title="Mover para Baixo">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                        </button>
-                        <button onClick={() => startEditingTask(task)} className="text-slate-500 hover:text-blue-400 mr-1" title="Editar">
-
                         <button onClick={(e) => { e.stopPropagation(); moveTask(task.id, 'up'); }} className="text-slate-500 hover:text-white mr-1" title="Mover para Cima">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
     </button>
@@ -569,16 +560,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                 
                 <div className="flex gap-2 mt-3 pt-3 border-t border-slate-700/50 justify-between items-center">
                     
-                    
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end items-center">
-                        <button onClick={() => moveTask(task.id, 'up')} className="text-slate-500 hover:text-white mr-1" title="Mover para Cima">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
-                        </button>
-                        <button onClick={() => moveTask(task.id, 'down')} className="text-slate-500 hover:text-white mr-2" title="Mover para Baixo">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                        </button>
-                        <button onClick={() => startEditingTask(task)} className="text-slate-500 hover:text-blue-400 mr-1" title="Editar">
-
                         <button onClick={(e) => { e.stopPropagation(); moveTask(task.id, 'up'); }} className="text-slate-500 hover:text-white mr-1" title="Mover para Cima">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
     </button>
