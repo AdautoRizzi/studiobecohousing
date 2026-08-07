@@ -283,6 +283,40 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         setDraggedTask(null);
     };
 
+    
+    const moveTask = async (taskId: string, direction: 'up' | 'down') => {
+        const newPlan = { ...plan };
+        
+        let targetArray = null;
+        let tIndex = -1;
+        
+        if (newPlan.inbox) {
+            tIndex = newPlan.inbox.findIndex((t:any) => String(t.id) === String(taskId));
+            if (tIndex > -1) targetArray = newPlan.inbox;
+        }
+        
+        if (tIndex === -1 && newPlan.sprints[currentWeek]?.tasks) {
+            tIndex = newPlan.sprints[currentWeek].tasks.findIndex((t:any) => String(t.id) === String(taskId));
+            if (tIndex > -1) targetArray = newPlan.sprints[currentWeek].tasks;
+        }
+        
+        if (!targetArray || tIndex === -1) return;
+        
+        if (direction === 'up' && tIndex > 0) {
+            const temp = targetArray[tIndex];
+            targetArray[tIndex] = targetArray[tIndex - 1];
+            targetArray[tIndex - 1] = temp;
+        } else if (direction === 'down' && tIndex < targetArray.length - 1) {
+            const temp = targetArray[tIndex];
+            targetArray[tIndex] = targetArray[tIndex + 1];
+            targetArray[tIndex + 1] = temp;
+        } else {
+            return; // Can't move further
+        }
+        
+        await savePlan(newPlan);
+    };
+
     const removeTask = async (taskId: string) => {
         if(!confirm("Remover esta tática?")) return;
         const newPlan = { ...plan };
@@ -356,7 +390,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             
         return (
             <div 
-                className={`text-xs text-slate-200 mb-1 leading-tight transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3 cursor-pointer'}`} 
+                className={`text-[11px] text-slate-200 mb-1 leading-tight transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3 cursor-pointer'}`} 
                 dangerouslySetInnerHTML={{__html: html}} 
             />
         );
@@ -420,7 +454,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         
         const obj = plan.objectives?.find((o:any) => o.id === task.objectiveId);
         return (
-            <div key={task.id} draggable onDragStart={(e) => handleDragStart(e, task.id)} onDragEnd={handleDragEnd} onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = "move"; }} onDrop={(e) => handleDrop(e, task.status === 'todo' ? 'todo' : task.status === 'doing' ? 'doing' : task.status === 'check' ? 'check' : task.status === 'done' ? 'done' : 'inbox', task.id)} className="bg-slate-800/60 p-2.5 rounded-lg border border-purple-500/40 shadow-sm relative group mb-3 hover:border-purple-400 transition-colors cursor-move">
+            <div key={task.id} draggable onDragStart={(e) => handleDragStart(e, task.id)} onDragEnd={handleDragEnd} onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = "move"; }} onDrop={(e) => handleDrop(e, task.status === 'todo' ? 'todo' : task.status === 'doing' ? 'doing' : task.status === 'check' ? 'check' : task.status === 'done' ? 'done' : 'inbox', task.id)} className="bg-slate-800/60 p-1.5 rounded-lg border border-purple-500/40 shadow-sm relative group mb-1 hover:border-purple-400 transition-colors cursor-move">
                 {task.imageUrl && (
                     <div className="mb-3 rounded-lg overflow-hidden border border-slate-700 cursor-pointer" onClick={() => setFullscreenImage(task.imageUrl)}>
                         <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
@@ -434,8 +468,23 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                 )}
                 <div className="flex gap-2 mt-3 pt-3 border-t border-slate-700 justify-between items-center">
                     
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end">
-                        <button onClick={() => startEditingTask(task)} className="text-slate-500 hover:text-blue-400">
+                    
+                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end items-center">
+                        <button onClick={() => moveTask(task.id, 'up')} className="text-slate-500 hover:text-white mr-1" title="Mover para Cima">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+                        </button>
+                        <button onClick={() => moveTask(task.id, 'down')} className="text-slate-500 hover:text-white mr-2" title="Mover para Baixo">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                        <button onClick={() => startEditingTask(task)} className="text-slate-500 hover:text-blue-400 mr-1" title="Editar">
+
+                        <button onClick={(e) => { e.stopPropagation(); moveTask(task.id, 'up'); }} className="text-slate-500 hover:text-white mr-1" title="Mover para Cima">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+    </button>
+    <button onClick={(e) => { e.stopPropagation(); moveTask(task.id, 'down'); }} className="text-slate-500 hover:text-white mr-2" title="Mover para Baixo">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+    </button>
+    <button onClick={(e) => { e.stopPropagation(); startEditingTask(task); }} className="text-slate-500 hover:text-blue-400 mr-1" title="Editar">
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                         </button>
                         <button onClick={() => removeInboxTask(task.id)} className="text-slate-500 hover:text-red-400">
@@ -505,7 +554,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         }
 
         return (
-            <div key={task.id} draggable onDragStart={(e) => handleDragStart(e, task.id)} onDragEnd={handleDragEnd} onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = "move"; }} onDrop={(e) => handleDrop(e, task.status === 'todo' ? 'todo' : task.status === 'doing' ? 'doing' : task.status === 'check' ? 'check' : task.status === 'done' ? 'done' : 'inbox', task.id)} className="bg-slate-800/60 p-2.5 rounded-lg border border-slate-600 shadow-sm relative group mb-3 hover:border-slate-400 transition-colors cursor-move">
+            <div key={task.id} draggable onDragStart={(e) => handleDragStart(e, task.id)} onDragEnd={handleDragEnd} onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = "move"; }} onDrop={(e) => handleDrop(e, task.status === 'todo' ? 'todo' : task.status === 'doing' ? 'doing' : task.status === 'check' ? 'check' : task.status === 'done' ? 'done' : 'inbox', task.id)} className="bg-slate-800/60 p-1.5 rounded-lg border border-slate-600 shadow-sm relative group mb-1 hover:border-slate-400 transition-colors cursor-move">
                 {task.imageUrl && (
                     <div className="mb-3 rounded-lg overflow-hidden border border-slate-700 cursor-pointer" onClick={() => setFullscreenImage(task.imageUrl)}>
                         <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-48 hover:opacity-90 transition-opacity" />
@@ -520,8 +569,23 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                 
                 <div className="flex gap-2 mt-3 pt-3 border-t border-slate-700/50 justify-between items-center">
                     
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end">
-                        <button onClick={() => startEditingTask(task)} className="text-slate-500 hover:text-blue-400">
+                    
+                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end items-center">
+                        <button onClick={() => moveTask(task.id, 'up')} className="text-slate-500 hover:text-white mr-1" title="Mover para Cima">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+                        </button>
+                        <button onClick={() => moveTask(task.id, 'down')} className="text-slate-500 hover:text-white mr-2" title="Mover para Baixo">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                        <button onClick={() => startEditingTask(task)} className="text-slate-500 hover:text-blue-400 mr-1" title="Editar">
+
+                        <button onClick={(e) => { e.stopPropagation(); moveTask(task.id, 'up'); }} className="text-slate-500 hover:text-white mr-1" title="Mover para Cima">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+    </button>
+    <button onClick={(e) => { e.stopPropagation(); moveTask(task.id, 'down'); }} className="text-slate-500 hover:text-white mr-2" title="Mover para Baixo">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+    </button>
+    <button onClick={(e) => { e.stopPropagation(); startEditingTask(task); }} className="text-slate-500 hover:text-blue-400 mr-1" title="Editar">
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                         </button>
                         <button onClick={() => removeTask(task.id)} className="text-slate-600 hover:text-red-400">
@@ -543,7 +607,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         Voltar
                     </a>
                     <h1 className="text-3xl font-bold text-slate-50 flex items-center gap-3">
-                        <span className="text-4xl">🚀</span> Motor Tático (v2 - Layout Otimizado)
+                        <span className="text-4xl">🚀</span> Motor Tático (v3 - Super Compacto + Setas)
                     </h1>
                 </div>
                 {saving && <div className="text-xs text-primary-400 font-bold animate-pulse">Sincronizando...</div>}
@@ -643,8 +707,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     <div className="grid grid-cols-1 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 gap-6">
 
                         {/* BACKLOG (CAIXA DE ENTRADA) */}
-                        <div className="bg-[#020617]/50 rounded-xl border border-slate-700/50 flex flex-col h-[600px] md:h-[70vh]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'inbox')}>
-                            <div className="p-2 border-b border-slate-700/50 flex justify-between items-center bg-purple-950/20 rounded-t-xl">
+                        <div className="bg-[#020617]/50 rounded-xl border border-slate-700/50 flex flex-col h-[650px] md:h-[80vh]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'inbox')}>
+                            <div className="p-1 border-b border-slate-700/50 flex justify-between items-center bg-purple-950/20 rounded-t-xl">
                                 <h3 className="font-bold text-purple-400 uppercase text-[10px] tracking-wider">📥 Caixa de Entrada</h3>
                                 <span className="text-xs bg-purple-900/50 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700/50">{(plan.inbox || []).length}</span>
                             </div>
@@ -666,8 +730,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         </div>
 
                         {/* TO DO */}
-                        <div className="bg-[#020617]/50 rounded-xl border border-slate-700/50 flex flex-col h-[600px] md:h-[70vh]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'todo')}>
-                            <div className="p-2 border-b border-slate-700/50 flex justify-between items-center bg-slate-900/50 rounded-t-xl">
+                        <div className="bg-[#020617]/50 rounded-xl border border-slate-700/50 flex flex-col h-[650px] md:h-[80vh]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'todo')}>
+                            <div className="p-1 border-b border-slate-700/50 flex justify-between items-center bg-slate-900/50 rounded-t-xl">
                                 <h3 className="font-bold text-slate-300 uppercase text-[10px] tracking-wider">To Do (A Fazer)</h3>
                                 <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'todo').length}</span>
                             </div>
@@ -690,7 +754,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
 
                         {/* DOING */}
                         <div className="bg-blue-950/10 rounded-xl border border-blue-700/40 flex flex-col h-[600px]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'doing')}>
-                            <div className="p-2 border-b border-blue-700/40 flex justify-between items-center bg-blue-900/20 rounded-t-xl">
+                            <div className="p-1 border-b border-blue-700/40 flex justify-between items-center bg-blue-900/20 rounded-t-xl">
                                 <h3 className="font-bold text-blue-400 uppercase text-[10px] tracking-wider flex items-center gap-2"><span className="animate-pulse">●</span> Doing (Em Progresso)</h3>
                                 <span className="text-xs bg-blue-900/50 text-blue-300 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'doing').length}</span>
                             </div>
@@ -701,8 +765,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
 
                         
                         {/* CHECAGEM */}
-                        <div className="bg-[#020617]/50 rounded-xl border border-yellow-700/40 flex flex-col h-[600px] md:h-[70vh]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'check')}>
-                            <div className="p-2 border-b border-yellow-700/40 flex justify-between items-center bg-yellow-950/20 rounded-t-xl">
+                        <div className="bg-[#020617]/50 rounded-xl border border-yellow-700/40 flex flex-col h-[650px] md:h-[80vh]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'check')}>
+                            <div className="p-1 border-b border-yellow-700/40 flex justify-between items-center bg-yellow-950/20 rounded-t-xl">
                                 <h3 className="font-bold text-yellow-400 uppercase text-[10px] tracking-wider">👀 Checagem</h3>
                                 <span className="text-xs bg-yellow-900/50 text-yellow-200 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'check').length}</span>
                             </div>
@@ -713,7 +777,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
 
                         {/* DONE */}
                         <div className="bg-green-950/10 rounded-xl border border-green-700/40 flex flex-col h-[600px]">
-                            <div className="p-2 border-b border-green-700/40 flex justify-between items-center bg-green-900/20 rounded-t-xl">
+                            <div className="p-1 border-b border-green-700/40 flex justify-between items-center bg-green-900/20 rounded-t-xl">
                                 <h3 className="font-bold text-green-400 uppercase text-[10px] tracking-wider">Done (Concluído)</h3>
                                 <span className="text-xs bg-green-900/50 text-green-300 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'done').length}</span>
                             </div>
