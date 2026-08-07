@@ -534,7 +534,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     };
 
     return (
-        <div className="w-full p-4 md:p-8 bg-[#020617] min-h-screen">
+        <div className="w-full p-2 md:p-4 bg-[#01040f] min-h-screen">
             {/* Cabecalho Principal */}
             <div className="flex justify-between items-start md:items-center mb-6">
                 <div className="flex items-center gap-4">
@@ -543,7 +543,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         Voltar
                     </a>
                     <h1 className="text-3xl font-bold text-slate-50 flex items-center gap-3">
-                        <span className="text-4xl">🚀</span> Motor Tático: Scrum + 12 Week Year
+                        <span className="text-4xl">🚀</span> Motor Tático (v2 - Layout Otimizado)
                     </h1>
                 </div>
                 {saving && <div className="text-xs text-primary-400 font-bold animate-pulse">Sincronizando...</div>}
