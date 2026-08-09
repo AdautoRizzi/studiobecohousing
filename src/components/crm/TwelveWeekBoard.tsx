@@ -640,6 +640,24 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             {/* ABA 1: VISÃO */}
             {activeTab === 'vision' && (
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div>
+                        <h2 className="text-xl font-bold text-slate-50 mb-4">Objetivos do Trimestre (12 Semanas)</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                            {plan.objectives.map((obj: any) => (
+                                <div key={obj.id} className="bg-slate-800/50 p-4 rounded-xl border border-slate-600 flex justify-between items-start group hover:bg-slate-800 transition">
+                                    <div className="font-medium text-slate-200 text-base leading-snug pr-2">{obj.name}</div>
+                                    <button onClick={() => removeObjective(obj.id)} className="text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 mt-1">
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        <form onSubmit={addObjective} className="flex gap-2 max-w-md">
+                            <input type="text" name="objName" placeholder="Novo Objetivo Trimestral..." className="flex-1 bg-[#020617] border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none" />
+                            <button type="submit" className="bg-slate-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-700 transition">Adicionar</button>
+                        </form>
+                    </div>
+
                     <div className="bg-[#0f172a] p-6 rounded-2xl border border-slate-700/50 shadow-sm relative overflow-hidden group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-primary-500"></div>
                         <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Visão de 3 Anos (Estrela Guia)</h2>
@@ -663,23 +681,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         )}
                     </div>
 
-                    <div>
-                        <h2 className="text-xl font-bold text-slate-50 mb-4">Objetivos do Trimestre (12 Semanas)</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                            {plan.objectives.map((obj: any) => (
-                                <div key={obj.id} className="bg-slate-800/50 p-4 rounded-xl border border-slate-600 flex justify-between items-start group hover:bg-slate-800 transition">
-                                    <div className="font-medium text-slate-200 text-base leading-snug pr-2">{obj.name}</div>
-                                    <button onClick={() => removeObjective(obj.id)} className="text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 mt-1">
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                        <form onSubmit={addObjective} className="flex gap-2 max-w-md">
-                            <input type="text" name="objName" placeholder="Novo Objetivo Trimestral..." className="flex-1 bg-[#020617] border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none" />
-                            <button type="submit" className="bg-slate-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-700 transition">Adicionar</button>
-                        </form>
-                    </div>
+                    
+                    
                 </div>
             )}
 
