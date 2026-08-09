@@ -565,12 +565,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         );
     };
 
-    const renderTaskCard = (task: any) => {
-        const obj = plan.objectives.find((o:any) => o.id === task.objectiveId);
-        const isEditing = editingTaskId === task.id;
-
-        if (isEditing) {
-            return (
+        return (
                 <div key={task.id} className="bg-[#0f172a] p-3 rounded-lg border border-blue-500 shadow-sm relative mb-3">
                     <textarea 
                         value={editTaskDesc}
