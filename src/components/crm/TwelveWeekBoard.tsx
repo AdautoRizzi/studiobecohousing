@@ -827,6 +827,15 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     </div>
                 </div>
             )}
+        
+            {fullscreenImage && (
+                <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 cursor-zoom-out" onClick={(e) => { e.stopPropagation(); setFullscreenImage(null); }}>
+                    <img src={fullscreenImage} alt="Imagem Ampliada" className="max-w-full max-h-[90vh] object-contain" onClick={(e) => e.stopPropagation()} />
+                    <button className="absolute top-4 right-4 text-white hover:text-gray-300 z-[110]" onClick={() => setFullscreenImage(null)}>
+                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
