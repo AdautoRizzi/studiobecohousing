@@ -14,9 +14,12 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Mensagem é obrigatória' }, { status: 400 });
         }
 
-        // HACK MVP: Pegar o primeiro Lead do banco para usar como contexto real do "cliente"
-        // Em um sistema real, pegaríamos o ID do usuário logado via sessão.
-        const { data: leads, error } = await supabase
+        
+        // Simulando dados de sessão do usuário (já que o login real ainda não está pronto no MVP)
+        // O layout tem a "Maria Silva" fixa.
+        let userContext = `
+[Contexto do Cliente Atual] Nome: Maria Silva (Usuária Teste), Perfil: Interessada em Moradia Sustentável, Cota 12.`;
+ = await supabase
             .from('leads')
             .select('*')
             .limit(1);
