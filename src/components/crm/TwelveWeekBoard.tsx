@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [plan, setPlan] = useState<any>(initialPlan);
     const [saving, setSaving] = useState(false);
-    const [activeTab, setActiveTab] = useState<'vision' | 'kanban' | 'analytics'>('kanban');
+    const [activeTab, setActiveTab] = useState<'vision' | 'kanban' | 'analytics' | 'agents'>('kanban');
     const [editingVision, setEditingVision] = useState(false);
     const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
     const [editTaskDesc, setEditTaskDesc] = useState('');
@@ -616,6 +616,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                 <button onClick={() => setActiveTab('vision')} className={`pb-3 px-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'vision' ? 'border-primary-500 text-primary-400' : 'border-transparent text-slate-500 hover:text-slate-300'}`}>1. Visão Trimestral</button>
                 <button onClick={() => setActiveTab('kanban')} className={`pb-3 px-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'kanban' ? 'border-blue-500 text-blue-400' : 'border-transparent text-slate-500 hover:text-slate-300'}`}>2. Kanban do Sprint</button>
                 <button onClick={() => setActiveTab('analytics')} className={`pb-3 px-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'analytics' ? 'border-purple-500 text-purple-400' : 'border-transparent text-slate-500 hover:text-slate-300'}`}>3. Analytics & Rituais</button>
+                        <button onClick={() => setActiveTab('agents')} className={`pb-3 px-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'agents' ? 'border-green-500 text-green-400' : 'border-transparent text-slate-500 hover:text-slate-300'}`}>4. Agentes (IA)</button>
             </div>
 
             {/* ABA 1: VISÃO */}
@@ -756,6 +757,65 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             )}
 
             {/* ABA 3: ANALYTICS */}
+            {activeTab === 'agents' && (
+                <div className="bg-slate-800 rounded-xl p-6 shadow-xl border border-slate-700/50 mt-6">
+                    <h2 className="text-xl font-bold text-slate-100 mb-6 flex items-center gap-2">
+                        <svg className="w-6 h-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        Inteligência Artificial (Crews)
+                    </h2>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-slate-900 rounded-lg p-5 border border-slate-700">
+                            <h3 className="text-lg font-bold text-slate-200 mb-2">Comunidade & Cohousing</h3>
+                            <p className="text-sm text-slate-400 mb-4">Orquestrador, Treinador e Promotor. Responsáveis por onboarding e conexões de novos membros.</p>
+                            <button onClick={async () => {
+                                try {
+                                    const res = await fetch('http://localhost:8000/api/trigger_crew_community', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ task_type: 'onboarding', context_data: { nome: 'Adauto', interesses: 'Sustentabilidade e Horta' } })
+                                    });
+                                    const data = await res.json();
+                                    if(data.result && data.result.length > 0) {
+                                        alert("Resposta do " + data.result[0].agent + ":\n\n" + data.result[0].result);
+                                    } else {
+                                        alert(JSON.stringify(data));
+                                    }
+                                } catch (e) {
+                                    alert("Erro ao conectar com API de IA. Certifique-se que o servidor está rodando.");
+                                }
+                            }} className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded font-bold transition-colors w-full text-sm">
+                                Acionar Equipe de Comunidade
+                            </button>
+                        </div>
+                        
+                        <div className="bg-slate-900 rounded-lg p-5 border border-slate-700">
+                            <h3 className="text-lg font-bold text-slate-200 mb-2">Tração & Growth</h3>
+                            <p className="text-sm text-slate-400 mb-4">Head of Growth, Social Media e Especialista de Ads. Focados em métricas CAC e redução de custo.</p>
+                            <button onClick={async () => {
+                                try {
+                                    const res = await fetch('http://localhost:8000/api/trigger_crew_traction', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ task_type: 'strategy', context_data: { cac_social: 12.5, cac_ads: 35.0, cac_eventos: 8.0 } })
+                                    });
+                                    const data = await res.json();
+                                    if(data.result && data.result.length > 0) {
+                                        alert("Resposta do " + data.result[0].agent + ":\n\n" + data.result[0].result);
+                                    } else {
+                                        alert(JSON.stringify(data));
+                                    }
+                                } catch (e) {
+                                    alert("Erro ao conectar com API de IA. Certifique-se que o servidor está rodando.");
+                                }
+                            }} className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded font-bold transition-colors w-full text-sm">
+                                Analisar Tração (Estratégia)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {activeTab === 'analytics' && (
                 <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-[#0f172a] p-6 rounded-2xl border border-slate-700/50">
