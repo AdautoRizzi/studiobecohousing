@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import FloatingAssistant from '@/components/chat/FloatingAssistant';
 import { usePathname } from 'next/navigation';
 
 export default function DashboardLayout({
@@ -96,6 +97,7 @@ export default function DashboardLayout({
                 <div className="flex-1 overflow-auto p-8 lg:p-12">
                     {children}
                 </div>
+                <FloatingAssistant />
             </main>
         </div>
     );
