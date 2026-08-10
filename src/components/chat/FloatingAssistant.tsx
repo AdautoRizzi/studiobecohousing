@@ -55,7 +55,7 @@ export default function FloatingAssistant() {
     };
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end relative">
             {isOpen && (
                 <div className="bg-white rounded-2xl shadow-2xl w-[350px] sm:w-[400px] h-[500px] mb-4 flex flex-col border border-slate-200 overflow-hidden transform transition-all duration-300">
                     <div className="bg-primary-900 text-white p-4 flex justify-between items-center">
@@ -115,12 +115,17 @@ export default function FloatingAssistant() {
             <button 
                 onClick={() => setIsOpen(!isOpen)} 
                 className={`${isOpen ? 'bg-slate-700' : 'bg-primary-600'} text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95`}
-                style={{ marginBottom: '60px' }} 
+                style={{ marginBottom: '80px' }} 
             >
                 {isOpen ? (
                     <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                 ) : (
-                    <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                    
+                    <div className="relative flex items-center justify-center w-full h-full">
+                        <div className="absolute right-[60px] bg-white px-3 py-1 rounded-lg shadow-md whitespace-nowrap text-sm font-bold text-primary-700 animate-pulse pointer-events-none before:content-[''] before:absolute before:top-1/2 before:-translate-y-1/2 before:-right-2 before:border-t-[6px] before:border-t-transparent before:border-b-[6px] before:border-b-transparent before:border-l-[8px] before:border-l-white">✨ Fale com a Inteligência Artificial</div>
+                        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                    </div>
+
                 )}
             </button>
         </div>
