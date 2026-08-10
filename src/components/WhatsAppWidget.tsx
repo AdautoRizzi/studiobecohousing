@@ -1,8 +1,12 @@
 "use client";
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function WhatsAppWidget() {
+    const pathname = usePathname();
+    if (pathname && pathname.startsWith('/dashboard')) return null;
+
     return (
         <a
             href="https://wa.me/5511925729548"
