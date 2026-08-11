@@ -17,6 +17,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
     const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
     const [visionInput, setVisionInput] = useState(initialPlan.vision3Years || '');
+    const [bgImage, setBgImage] = useState<string>(initialPlan.bgImage || '');
     
     // Fallbacks para garantir que a estrutura exista
     if (!plan.objectives) plan.objectives = [];
@@ -379,7 +380,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     };
 
     
-    const renderFormattedText = (text: string, isExpanded: boolean) => {
+    const renderFormattedText = (text: string, isExpanded: boolean, isMilestone: boolean = false) => {
         if (!text) return null;
         let html = text
             .replace(/&/g, "&amp;")
@@ -396,7 +397,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             
         return (
             <div 
-                className={`text-sm text-slate-200 mb-2 leading-relaxed mb-1 leading-tight transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3 cursor-pointer'}`} 
+                className={`text-sm ${isMilestone ? \'text-amber-400 font-medium\' : \'text-slate-200\'} mb-2 leading-relaxed mb-1 leading-tight transition-all duration-300 ${isExpanded ? \'\' : \'line-clamp-3 cursor-pointer\'}`} 
                 dangerouslySetInnerHTML={{__html: html}} 
             />
         );
@@ -521,7 +522,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <img src={task.imageUrl} alt="Anexo da Ideia" className="w-full h-auto object-cover max-h-64 hover:opacity-90 transition-opacity" />
                     </div>
                 )}
-                <div onClick={(e) => toggleExpand(task.id, e)}>{renderFormattedText(task.description, expandedTaskId === task.id)}</div>
+                <div onClick={(e) => toggleExpand(task.id, e)}>{renderFormattedText(task.description, expandedTaskId === task.id, task.isMilestone)}</div>
                 
                 <div className="flex gap-2 mt-3 pt-3 border-t border-slate-800 justify-between items-center">
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end items-center">
@@ -656,7 +657,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <img src={task.imageUrl} alt="Anexo da Tática" className="w-full h-auto object-cover max-h-64 hover:opacity-90 transition-opacity" />
                     </div>
                 )}
-                <div onClick={(e) => toggleExpand(task.id, e)}>{renderFormattedText(task.description, expandedTaskId === task.id)}</div>
+                <div onClick={(e) => toggleExpand(task.id, e)}>{renderFormattedText(task.description, expandedTaskId === task.id, task.isMilestone)}</div>
                 {obj && (
                     <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-xs px-2 py-1 rounded-md font-semibold truncate max-w-full mt-1">
                         {obj.name}
