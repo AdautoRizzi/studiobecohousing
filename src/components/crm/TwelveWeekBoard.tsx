@@ -11,6 +11,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [editTaskObj, setEditTaskObj] = useState<string | undefined>(undefined);
     const [editTaskTargetSprint, setEditTaskTargetSprint] = useState<number>(1);
     const [editTaskImage, setEditTaskImage] = useState<string | undefined>(undefined);
+    const [editTaskIsMilestone, setEditTaskIsMilestone] = useState<boolean>(false);
+    const [editTaskChecklist, setEditTaskChecklist] = useState<any[]>([]);
     const [draggedTask, setDraggedTask] = useState<string | null>(null);
     const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
     const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
@@ -111,6 +113,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             task.description = editTaskDesc;
             task.objectiveId = editTaskObj;
             task.imageUrl = editTaskImage;
+            task.isMilestone = editTaskIsMilestone;
+            task.checklist = editTaskChecklist;
             
             if (!isInbox && editTaskTargetSprint !== currentWeek) {
                 // Move task to target sprint
@@ -196,6 +200,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         setEditTaskObj(task.objectiveId);
         setEditTaskTargetSprint(currentWeek);
         setEditTaskImage(task.imageUrl);
+        setEditTaskIsMilestone(task.isMilestone || false);
+        setEditTaskChecklist(task.checklist ? JSON.parse(JSON.stringify(task.checklist)) : []);
         setEditingTaskId(task.id);
     };
 
@@ -444,6 +450,62 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         )}
                     </div>
 
+                    <div className="mt-4 mb-2">
+                        <label className="flex items-center gap-2 cursor-pointer p-2 bg-amber-950/20 border border-amber-900/30 rounded hover:bg-amber-950/30">
+                            <input 
+                                type="checkbox" 
+                                checked={editTaskIsMilestone}
+                                onChange={(e) => setEditTaskIsMilestone(e.target.checked)}
+                                className="w-4 h-4 accent-amber-500"
+                            />
+                            <span className="text-amber-400 font-bold text-xs">É um Marco Estratégico?</span>
+                        </label>
+                    </div>
+                    
+                    <div className="mb-4">
+                        <div className="text-xs font-semibold text-slate-400 mb-2">Checklist</div>
+                        <div className="space-y-2 mb-2">
+                            {editTaskChecklist.map((item, idx) => (
+                                <div key={item.id} className="flex gap-2 items-center">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={item.completed}
+                                        onChange={(e) => {
+                                            const newC = [...editTaskChecklist];
+                                            newC[idx].completed = e.target.checked;
+                                            setEditTaskChecklist(newC);
+                                        }}
+                                        className="w-4 h-4"
+                                    />
+                                    <input 
+                                        type="text"
+                                        value={item.text}
+                                        onChange={(e) => {
+                                            const newC = [...editTaskChecklist];
+                                            newC[idx].text = e.target.value;
+                                            setEditTaskChecklist(newC);
+                                        }}
+                                        className="flex-1 bg-slate-800 border-none text-white text-xs rounded px-2 py-1"
+                                    />
+                                    <button 
+                                        type="button" 
+                                        onClick={() => setEditTaskChecklist(editTaskChecklist.filter((_, i) => i !== idx))}
+                                        className="text-red-400 p-1"
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        <button 
+                            type="button"
+                            onClick={() => setEditTaskChecklist([...editTaskChecklist, { id: 'chk_' + Date.now(), text: '', completed: false }])}
+                            className="text-[10px] text-primary-400 font-bold uppercase"
+                        >
+                            + Adicionar Sub-tarefa
+                        </button>
+                    </div>
+                    
                     <div className="flex gap-2 justify-end">
                         <button onClick={() => setEditingTaskId(null)} className="text-xs text-slate-500 hover:text-slate-300">Cancelar</button>
                         <button onClick={() => saveTaskEdit(task.id)} className="text-xs bg-purple-600 text-white px-2 py-1 rounded hover:bg-purple-700">Salvar</button>
@@ -523,6 +585,62 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         )}
                     </div>
 
+                    <div className="mt-4 mb-2">
+                        <label className="flex items-center gap-2 cursor-pointer p-2 bg-amber-950/20 border border-amber-900/30 rounded hover:bg-amber-950/30">
+                            <input 
+                                type="checkbox" 
+                                checked={editTaskIsMilestone}
+                                onChange={(e) => setEditTaskIsMilestone(e.target.checked)}
+                                className="w-4 h-4 accent-amber-500"
+                            />
+                            <span className="text-amber-400 font-bold text-xs">É um Marco Estratégico?</span>
+                        </label>
+                    </div>
+                    
+                    <div className="mb-4">
+                        <div className="text-xs font-semibold text-slate-400 mb-2">Checklist</div>
+                        <div className="space-y-2 mb-2">
+                            {editTaskChecklist.map((item, idx) => (
+                                <div key={item.id} className="flex gap-2 items-center">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={item.completed}
+                                        onChange={(e) => {
+                                            const newC = [...editTaskChecklist];
+                                            newC[idx].completed = e.target.checked;
+                                            setEditTaskChecklist(newC);
+                                        }}
+                                        className="w-4 h-4"
+                                    />
+                                    <input 
+                                        type="text"
+                                        value={item.text}
+                                        onChange={(e) => {
+                                            const newC = [...editTaskChecklist];
+                                            newC[idx].text = e.target.value;
+                                            setEditTaskChecklist(newC);
+                                        }}
+                                        className="flex-1 bg-slate-800 border-none text-white text-xs rounded px-2 py-1"
+                                    />
+                                    <button 
+                                        type="button" 
+                                        onClick={() => setEditTaskChecklist(editTaskChecklist.filter((_, i) => i !== idx))}
+                                        className="text-red-400 p-1"
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        <button 
+                            type="button"
+                            onClick={() => setEditTaskChecklist([...editTaskChecklist, { id: 'chk_' + Date.now(), text: '', completed: false }])}
+                            className="text-[10px] text-primary-400 font-bold uppercase"
+                        >
+                            + Adicionar Sub-tarefa
+                        </button>
+                    </div>
+                    
                     <div className="flex gap-2 justify-end">
                         <button onClick={() => setEditingTaskId(null)} className="text-xs text-slate-500 hover:text-slate-300">Cancelar</button>
                         <button onClick={() => saveTaskEdit(task.id)} className="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700">Salvar</button>
