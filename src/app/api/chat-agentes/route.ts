@@ -19,10 +19,7 @@ export async function POST(request: Request) {
         // O layout tem a "Maria Silva" fixa.
         let userContext = `
 [Contexto do Cliente Atual] Nome: Maria Silva (Usuária Teste), Perfil: Interessada em Moradia Sustentável, Cota 12.`;
- = await supabase
-            .from('leads')
-            .select('*')
-            .limit(1);
+ 
             
         let userContext = '';
         if (leads && leads.length > 0) {
