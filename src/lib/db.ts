@@ -451,6 +451,7 @@ export interface TwelveWeekPlan {
     objectives: TrimestralObjective[];
     sprints: Record<number, ScrumSprint>;
     currentSprintWeek: number;
+    inbox?: ScrumTask[];
 }
 
 async function ensureSystem12WeekUser() {
