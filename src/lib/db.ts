@@ -421,13 +421,23 @@ export interface TrimestralObjective {
     name: string;
 }
 
+
+export interface ChecklistItem {
+    id: string;
+    text: string;
+    completed: boolean;
+}
+
 export interface ScrumTask {
     id: string;
     description: string;
     status: 'todo' | 'doing' | 'done';
     objectiveId?: string;
     owner?: string;
+    isMilestone?: boolean;
+    checklist?: ChecklistItem[];
 }
+
 
 export interface ScrumSprint {
     weekNumber: number;
