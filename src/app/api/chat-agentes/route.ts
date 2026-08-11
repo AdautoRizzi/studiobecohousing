@@ -21,11 +21,7 @@ export async function POST(request: Request) {
 [Contexto do Cliente Atual] Nome: Maria Silva (Usuária Teste), Perfil: Interessada em Moradia Sustentável, Cota 12.`;
  
             
-        let userContext = '';
-        if (leads && leads.length > 0) {
-            const lead = leads[0];
-            userContext = `\n[Contexto do Cliente Atual] Nome: ${lead.nome}, Profissão: ${lead.profissao}, Interesses/Preferências: Moradia ${lead.ondeMorar}, ${lead.tipoCohousing}, com ${lead.comQuem}. Renda: ${lead.rendaMensal}, Patrimônio: ${lead.patrimonioImobiliario}.`;
-        }
+        
 
         const systemPrompt = `Você é o 'Orquestrador da Comunidade' do StudioBe, uma startup de cohousing.
 Sua função é conversar amigavelmente com os clientes/membros da comunidade.
