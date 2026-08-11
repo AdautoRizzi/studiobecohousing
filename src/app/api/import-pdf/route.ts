@@ -123,7 +123,7 @@ export async function GET() {
 
         // Insert into inbox
         marcos.forEach((marco, i) => {
-            plan.inbox.push({
+            plan.inbox!.push({
                 id: 'pdf_marco_' + Date.now() + '_' + i,
                 description: marco.title,
                 status: 'todo',
