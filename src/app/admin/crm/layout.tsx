@@ -49,6 +49,10 @@ export default async function CRMLayout({ children }: { children: React.ReactNod
                         Métricas & KPIs
                     </Link>
                     
+                                        <Link href="/admin/crm/cerebro" className={`flex items-center gap-3 px-3 py-2 rounded-lg font-medium transition-colors ${pathname === '/admin/crm/cerebro' ? 'bg-primary-500/20 text-primary-400' : 'text-slate-400 hover:bg-slate-800'}`}>
+                        🧠 Cérebro I.A.
+                    </Link>
+
                     <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Antigo</div>
                     <Link href="/admin" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-slate-800 rounded-lg font-medium transition-colors">
                         Aprovação Manual
