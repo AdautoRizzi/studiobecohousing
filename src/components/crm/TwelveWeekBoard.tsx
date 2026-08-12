@@ -397,7 +397,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             
         return (
             <div 
-                className={`text-sm ${isMilestone ? \'text-amber-400 font-medium\' : \'text-slate-200\'} mb-2 leading-relaxed mb-1 leading-tight transition-all duration-300 ${isExpanded ? \'\' : \'line-clamp-3 cursor-pointer\'}`} 
+                className={`text-sm ${isMilestone ? 'text-amber-400 font-medium' : 'text-slate-200'} mb-2 leading-relaxed mb-1 leading-tight transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3 cursor-pointer'}`} 
                 dangerouslySetInnerHTML={{__html: html}} 
             />
         );
