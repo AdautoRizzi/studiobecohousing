@@ -513,10 +513,8 @@ export async function getTwelveWeeksPlan(): Promise<TwelveWeekPlan> {
         const oldPlan = JSON.parse(sysUser?.notasCrm || '{}');
         
         // Salvar na tabela nova
-        await supabase.from('app_state').upsert({ id: 'kanban_main', data: oldPlan });
-        
-        // Deleta o usuário antigo para não sujar a base
-        if (sysUser?.id) {
+        const { error: upsertError } = await supabase.from('app_state').upsert({ id: 'kanban_main', data: oldPlan });
+        if (!upsertError && sysUser?.id) {
             await supabase.from('leads').delete().eq('id', sysUser.id);
         }
         
