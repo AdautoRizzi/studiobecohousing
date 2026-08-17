@@ -501,16 +501,37 @@ async function ensureSystem12WeekUser() {
 }
 
 export async function getTwelveWeeksPlan(): Promise<TwelveWeekPlan> {
-    const sysUser = await ensureSystem12WeekUser();
-    try { 
-        return JSON.parse(sysUser?.notasCrm || '{}'); 
-    } catch(e) { 
-        const dummy: TwelveWeekPlan = { vision3Years: 'Erro', objectives: [], currentSprintWeek: 1, sprints: {} };
+    try {
+        const { data, error } = await supabase.from('app_state').select('data').eq('id', 'kanban_main').single();
+        if (data && data.data) {
+            // Se já tem no app_state, usa ele
+            return typeof data.data === 'string' ? JSON.parse(data.data) : data.data as TwelveWeekPlan;
+        }
+        
+        // Se não achou na nova tabela, vamos migrar do antigo
+        const sysUser = await ensureSystem12WeekUser();
+        const oldPlan = JSON.parse(sysUser?.notasCrm || '{}');
+        
+        // Salvar na tabela nova
+        await supabase.from('app_state').upsert({ id: 'kanban_main', data: oldPlan });
+        
+        // Deleta o usuário antigo para não sujar a base
+        if (sysUser?.id) {
+            await supabase.from('leads').delete().eq('id', sysUser.id);
+        }
+        
+        return oldPlan;
+    } catch(e) {
+        console.error("Erro no getTwelveWeeksPlan:", e);
+        const dummy: TwelveWeekPlan = { vision3Years: 'Erro ao carregar', objectives: [], currentSprintWeek: 1, sprints: {} };
         return dummy;
     }
 }
 
 export async function saveTwelveWeeksPlan(plan: TwelveWeekPlan) {
-    const sysUser = await ensureSystem12WeekUser();
-    await supabase.from('leads').update({ notasCrm: JSON.stringify(plan) }).eq('id', sysUser?.id);
+    try {
+        await supabase.from('app_state').upsert({ id: 'kanban_main', data: plan });
+    } catch (error) {
+        console.error("Erro ao salvar Kanban:", error);
+    }
 }
