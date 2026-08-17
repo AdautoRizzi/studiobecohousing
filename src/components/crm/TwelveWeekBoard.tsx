@@ -217,6 +217,39 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         }, 0);
     };
 
+    
+    const toggleChecklistItem = async (taskId: string, itemIdx: number) => {
+        const newPlan = { ...plan };
+        let isInbox = false;
+        let taskIndex = -1;
+        let sprintKey = currentWeek;
+        
+        // Search in sprints
+        for(const [sKey, sObj] of Object.entries(newPlan.sprints || {})) {
+            const sprintTasks = (sObj as any).tasks || [];
+            const idx = sprintTasks.findIndex((t: any) => t.id === taskId);
+            if(idx !== -1) {
+                taskIndex = idx;
+                sprintKey = Number(sKey);
+                break;
+            }
+        }
+        
+        // Search in inbox if not found
+        if (taskIndex === -1 && newPlan.inbox) {
+            taskIndex = newPlan.inbox.findIndex((t: any) => t.id === taskId);
+            if (taskIndex !== -1) isInbox = true;
+        }
+        
+        if (taskIndex !== -1) {
+            const task = isInbox ? newPlan.inbox[taskIndex] : newPlan.sprints[sprintKey].tasks[taskIndex];
+            if(task.checklist && task.checklist[itemIdx]) {
+                task.checklist[itemIdx].completed = !task.checklist[itemIdx].completed;
+                await savePlan(newPlan);
+            }
+        }
+    };
+
     const handleDragEnd = (e: React.DragEvent) => {
         setDraggedTask(null);
         if(e.target instanceof HTMLElement) e.target.classList.remove('opacity-50');
@@ -501,7 +534,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <button 
                             type="button"
                             onClick={() => setEditTaskChecklist([...editTaskChecklist, { id: 'chk_' + Date.now(), text: '', completed: false }])}
-                            className="text-[10px] text-primary-400 font-bold uppercase"
+                            className="text-xs text-blue-400 hover:text-blue-300 font-bold mt-2"
                         >
                             + Adicionar Sub-tarefa
                         </button>
@@ -523,6 +556,23 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     </div>
                 )}
                 <div onClick={(e) => toggleExpand(task.id, e)}>{renderFormattedText(task.description, expandedTaskId === task.id, task.isMilestone)}</div>
+                    {task.checklist && task.checklist.length > 0 && (
+                        <div className="mt-2 space-y-1">
+                            {task.checklist.map((chk: any, idx: number) => (
+                                <div key={chk.id || idx} className="flex items-center gap-2 group/chk">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={chk.completed}
+                                        onChange={(e) => { e.stopPropagation(); toggleChecklistItem(task.id, idx); }}
+                                        className="w-3 h-3 cursor-pointer accent-emerald-500"
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                    <span className={`text-xs ${chk.completed ? 'line-through text-slate-500' : 'text-slate-300'}`}>{chk.text || '...'}</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
                 
                 <div className="flex gap-2 mt-3 pt-3 border-t border-slate-800 justify-between items-center">
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end items-center">
@@ -636,7 +686,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <button 
                             type="button"
                             onClick={() => setEditTaskChecklist([...editTaskChecklist, { id: 'chk_' + Date.now(), text: '', completed: false }])}
-                            className="text-[10px] text-primary-400 font-bold uppercase"
+                            className="text-xs text-blue-400 hover:text-blue-300 font-bold mt-2"
                         >
                             + Adicionar Sub-tarefa
                         </button>
@@ -658,6 +708,23 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     </div>
                 )}
                 <div onClick={(e) => toggleExpand(task.id, e)}>{renderFormattedText(task.description, expandedTaskId === task.id, task.isMilestone)}</div>
+                    {task.checklist && task.checklist.length > 0 && (
+                        <div className="mt-2 space-y-1">
+                            {task.checklist.map((chk: any, idx: number) => (
+                                <div key={chk.id || idx} className="flex items-center gap-2 group/chk">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={chk.completed}
+                                        onChange={(e) => { e.stopPropagation(); toggleChecklistItem(task.id, idx); }}
+                                        className="w-3 h-3 cursor-pointer accent-emerald-500"
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                    <span className={`text-xs ${chk.completed ? 'line-through text-slate-500' : 'text-slate-300'}`}>{chk.text || '...'}</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
                 {obj && (
                     <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-xs px-2 py-1 rounded-md font-semibold truncate max-w-full mt-1">
                         {obj.name}
@@ -789,8 +856,26 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
 
             {/* ABA 2: KANBAN DO SPRINT */}
             {activeTab === 'kanban' && (
-                <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div className="flex justify-between items-center mb-2">
+                        <div className="text-xl font-bold text-white">Tração & Marcos</div>
+                        <div className="flex items-center gap-2">
+                            <input 
+                                type="text" 
+                                placeholder="URL Imagem de Fundo (opcional)"
+                                value={bgImage}
+                                onChange={(e) => setBgImage(e.target.value)}
+                                className="bg-[#020617] border border-slate-700 rounded-lg p-2 text-xs text-slate-200 w-64 focus:outline-none"
+                            />
+                            <button onClick={() => savePlan({...plan, bgImage})} className="text-xs bg-slate-800 text-slate-300 px-3 py-2 rounded hover:bg-slate-700 transition font-bold">
+                                Salvar Fundo
+                            </button>
+                        </div>
+                    </div>
+                    <div 
+                        className="grid grid-cols-1 md:grid-cols-5 gap-4 rounded-xl p-4 transition-all duration-500"
+                        style={bgImage ? {backgroundImage: `linear-gradient(rgba(15,23,42,0.85), rgba(15,23,42,0.85)), url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center'} : {}}
+                    >
 
                         {/* BACKLOG (CAIXA DE ENTRADA) */}
                         <div className="bg-[#020617]/50 rounded-xl border border-slate-700/50 flex flex-col h-[650px] md:h-[80vh]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'inbox')}>
@@ -931,7 +1016,61 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                                 Analisar Tração (Estratégia)
                             </button>
                         </div>
-                    </div>
+                    
+                        <div className="bg-slate-900 rounded-lg p-5 border border-slate-700 mt-6 md:col-span-2">
+                            <h3 className="text-lg font-bold text-slate-200 mb-2">Campanhas em Massa (E-mail)</h3>
+                            <p className="text-sm text-slate-400 mb-4">Dispare e-mails para sua base de Leads do CRM usando a IA para engajamento.</p>
+                            <form onSubmit={async (e) => {
+                                e.preventDefault();
+                                const form = e.target as any;
+                                const subject = form.elements.subject.value;
+                                const html = form.elements.html.value;
+                                const targetStatus = form.elements.targetStatus.value;
+                                const btn = form.elements.submitBtn;
+                                btn.disabled = true;
+                                btn.innerText = 'Enviando...';
+                                try {
+                                    const res = await fetch('/api/campaign/send', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ subject, html, targetStatus })
+                                    });
+                                    const data = await res.json();
+                                    if(data.success) alert(`Campanha enviada com sucesso para ${data.sentCount} leads!`);
+                                    else alert('Erro: ' + (data.error || data.message));
+                                } catch(err) {
+                                    alert('Erro ao enviar campanha.');
+                                }
+                                btn.disabled = false;
+                                btn.innerText = 'Disparar Campanha';
+                            }} className="space-y-4">
+                                <div className="flex gap-4">
+                                    <div className="flex-1">
+                                        <label className="block text-xs font-bold text-slate-400 mb-1">Assunto do E-mail</label>
+                                        <input name="subject" required type="text" placeholder="Ex: Novidades do Cohousing" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500" />
+                                    </div>
+                                    <div className="w-1/3">
+                                        <label className="block text-xs font-bold text-slate-400 mb-1">Filtrar por Status</label>
+                                        <select name="targetStatus" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
+                                            <option value="Todos">Todos os Leads</option>
+                                            <option value="Novo">Novo</option>
+                                            <option value="Contatado">Contatado</option>
+                                            <option value="Qualificado">Qualificado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-400 mb-1">Conteúdo (HTML ou Texto Livre)</label>
+                                    <textarea name="html" required rows={4} placeholder="Olá! Estamos com novidades..." className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500 custom-scrollbar"></textarea>
+                                </div>
+                                <div className="flex justify-end">
+                                    <button name="submitBtn" type="submit" className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors shadow-lg shadow-blue-900/20">
+                                        Disparar Campanha
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+</div>
                 </div>
             )}
 

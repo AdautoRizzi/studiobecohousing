@@ -63,7 +63,8 @@ export interface QueuedMessage {
 export async function getAllUsers(): Promise<UserAccount[]> {
     const { data, error } = await supabase
         .from('users')
-        .select('*');
+        .select('*')
+        ;
     
     if (error) {
         console.error('Erro ao buscar usuários:', error);
@@ -76,6 +77,7 @@ export async function getUserByEmail(email: string): Promise<UserAccount | undef
     const { data, error } = await supabase
         .from('users')
         .select('*')
+        
         .eq('email', email)
         .single();
     
@@ -109,10 +111,14 @@ export async function approveUser(email: string) {
 }
 
 // Funções para Leads (CRM)
+export const SYS_12WEEK_PLAN_EMAIL = 'sys_12week_plan@studiobe.com';
+
 export async function getAllLeads(): Promise<Lead[]> {
     const { data, error } = await supabase
         .from('leads')
         .select('*')
+        
+        .neq('email', SYS_12WEEK_PLAN_EMAIL)
         .order('createdAt', { ascending: false });
     
     if (error) {
@@ -126,6 +132,7 @@ export async function getLeadById(id: string): Promise<Lead | undefined> {
     const { data, error } = await supabase
         .from('leads')
         .select('*')
+        
         .eq('id', id)
         .single();
     
@@ -231,7 +238,8 @@ export async function logManualInteraction(leadId: string, content: string, type
 export async function getAllInteractions(): Promise<Interaction[]> {
     const { data, error } = await supabase
         .from('lead_interactions')
-        .select('*');
+        .select('*')
+        ;
     
     if (error) return [];
     return data as Interaction[];
@@ -240,6 +248,7 @@ export async function getInteractionsByLead(leadId: string): Promise<Interaction
     const { data, error } = await supabase
         .from('lead_interactions')
         .select('*')
+        
         .eq('lead_id', leadId)
         .order('sent_at', { ascending: false });
     
@@ -252,6 +261,7 @@ export async function getMessageTemplates(): Promise<MessageTemplate[]> {
     const { data, error } = await supabase
         .from('message_templates')
         .select('*')
+        
         .order('title', { ascending: true });
     
     if (error) return [];
@@ -414,7 +424,7 @@ export async function saveMethodSteps(steps: MethodStep[]) {
 
 
 // --- HACK MVP: 12 WEEK YEAR + SCRUM PLAN ---
-const SYS_12WEEK_PLAN_EMAIL = 'sys_12week_plan@studiobe.com';
+
 
 export interface TrimestralObjective {
     id: string;
