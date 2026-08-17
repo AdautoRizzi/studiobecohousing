@@ -45,7 +45,7 @@ export async function POST(request: Request) {
             if (emails.length === 0) continue;
 
             const { error: sendError } = await resend.emails.send({
-                from: 'Cohousing Brasil <contato@cohousingbrasil.com.br>', // Example sender
+                from: `Studio Be <${process.env.EMAIL_USER || 'contato@studiobecohousing.com'}>`, // Example sender
                 to: [], 
                 bcc: emails, // Use BCC for mass campaigns to hide recipients
                 subject: subject,
