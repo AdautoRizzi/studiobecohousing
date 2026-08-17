@@ -1,8 +1,30 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [plan, setPlan] = useState<any>(initialPlan);
+
+  useEffect(() => {
+    const channel = supabase.channel('realtime:app_state')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'app_state',
+        filter: 'id=eq.kanban_main'
+      }, (payload) => {
+        if ((payload.new as any) && (payload.new as any).data) {
+          const newData = typeof (payload.new as any).data === 'string' ? JSON.parse((payload.new as any).data) : (payload.new as any).data;
+          setPlan(newData);
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
     const [saving, setSaving] = useState(false);
     const [activeTab, setActiveTab] = useState<'vision' | 'kanban' | 'analytics' | 'agents'>('kanban');
     const [editingVision, setEditingVision] = useState(false);
