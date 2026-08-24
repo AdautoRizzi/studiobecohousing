@@ -8,6 +8,7 @@ export default function AdminBlogPage() {
     const [loading, setLoading] = useState(true);
     const [title, setTitle] = useState('');
     const [slug, setSlug] = useState('');
+    const [externalUrl, setExternalUrl] = useState('');
     const [summary, setSummary] = useState('');
     const [content, setContent] = useState('');
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -35,7 +36,7 @@ export default function AdminBlogPage() {
 
     const savePost = async (e: React.FormEvent) => {
         e.preventDefault();
-        const postData = { title, slug, summary, content };
+        const postData = { title, slug, summary, content, external_url: externalUrl || null };
         if (editingId) {
             await supabase.from('blog_posts').update(postData).eq('id', editingId);
         } else {
@@ -43,6 +44,7 @@ export default function AdminBlogPage() {
         }
         setTitle('');
         setSlug('');
+        setExternalUrl('');
         setSummary('');
         setContent('');
         setEditingId(null);
@@ -53,6 +55,7 @@ export default function AdminBlogPage() {
         setEditingId(post.id);
         setTitle(post.title);
         setSlug(post.slug);
+        setExternalUrl(post.external_url || '');
         setSummary(post.summary);
         setContent(post.content);
         window.scrollTo(0, 0);
@@ -82,6 +85,11 @@ export default function AdminBlogPage() {
                         <input required value={slug} onChange={e => setSlug(e.target.value)} className="w-full bg-[#020617] border border-slate-700 rounded p-2 text-white focus:border-purple-500 outline-none" />
                     </div>
                 </div>
+                
+                <div className="mb-4">
+                    <label className="block text-sm text-slate-400 mb-1">Link Externo (Opcional - Ex: link do Jornal A Tribuna)</label>
+                    <input value={externalUrl} onChange={e => setExternalUrl(e.target.value)} placeholder="https://..." className="w-full bg-[#020617] border border-slate-700 rounded p-2 text-white focus:border-purple-500 outline-none" />
+                </div>
 
                 <div className="mb-4">
                     <label className="block text-sm text-slate-400 mb-1">Resumo (Para a página de mídias)</label>
@@ -98,7 +106,7 @@ export default function AdminBlogPage() {
                         {editingId ? 'Atualizar Postagem' : 'Publicar'}
                     </button>
                     {editingId && (
-                        <button type="button" onClick={() => { setEditingId(null); setTitle(''); setSlug(''); setSummary(''); setContent(''); }} className="bg-slate-700 hover:bg-slate-600 text-white px-6 py-2 rounded">
+                        <button type="button" onClick={() => { setEditingId(null); setTitle(''); setSlug(''); setExternalUrl(''); setSummary(''); setContent(''); }} className="bg-slate-700 hover:bg-slate-600 text-white px-6 py-2 rounded">
                             Cancelar
                         </button>
                     )}

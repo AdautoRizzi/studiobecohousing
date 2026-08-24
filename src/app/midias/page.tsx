@@ -54,9 +54,15 @@ export default function MidiasPage() {
 
                                     <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-50">
                                         <span className="text-gray-400 text-sm font-medium">{new Date(noticia.published_at).toLocaleDateString('pt-BR')}</span>
-                                        <Link href={`/midias/${noticia.slug}`} className="text-secondary-600 font-bold hover:text-secondary-800 flex items-center gap-2 transition-colors outline-none">
-                                            Ler matéria inteira
-                                        </Link>
+                                        {noticia.external_url ? (
+                                            <a href={noticia.external_url} target="_blank" rel="noopener noreferrer" className="text-secondary-600 font-bold hover:text-secondary-800 flex items-center gap-2 transition-colors outline-none">
+                                                Ler matéria completa ↗
+                                            </a>
+                                        ) : (
+                                            <Link href={`/midias/${noticia.slug}`} className="text-secondary-600 font-bold hover:text-secondary-800 flex items-center gap-2 transition-colors outline-none">
+                                                Ler artigo completo
+                                            </Link>
+                                        )}
                                     </div>
                                 </div>
                             ))}
