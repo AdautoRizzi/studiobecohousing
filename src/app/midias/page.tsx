@@ -12,6 +12,13 @@ export default function MidiasPage() {
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
     useEffect(() => {
+        // Read URL parameter for initial tag filter
+        const params = new URLSearchParams(window.location.search);
+        const tagParam = params.get('tag');
+        if (tagParam) {
+            setSelectedTag(tagParam);
+        }
+
         const fetchPosts = async () => {
             const { data } = await supabase.from('blog_posts').select('*').order('published_at', { ascending: false });
             if (data) setPosts(data);
@@ -22,6 +29,16 @@ export default function MidiasPage() {
 
     const allTags = Array.from(new Set(posts.flatMap(p => p.tags || []))).sort();
     const filteredPosts = selectedTag ? posts.filter(p => p.tags && p.tags.includes(selectedTag)) : posts;
+
+    // Helper to update URL when clicking tags
+    const handleTagSelect = (tag: string | null) => {
+        setSelectedTag(tag);
+        if (tag) {
+            window.history.pushState(null, '', `?tag=${encodeURIComponent(tag)}`);
+        } else {
+            window.history.pushState(null, '', window.location.pathname);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-background font-sans text-foreground flex flex-col relative">
@@ -114,7 +131,7 @@ export default function MidiasPage() {
                                 {!loading && allTags.length > 0 ? (
                                     <div className="flex flex-wrap gap-2">
                                         <button 
-                                            onClick={() => setSelectedTag(null)}
+                                            onClick={() => handleTagSelect(null)}
                                             className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${!selectedTag ? 'bg-primary-900 text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100'}`}
                                         >
                                             Todos os Artigos
@@ -122,7 +139,7 @@ export default function MidiasPage() {
                                         {allTags.map(tag => (
                                             <button 
                                                 key={tag as string}
-                                                onClick={() => setSelectedTag(tag as string)}
+                                                onClick={() => handleTagSelect(tag as string)}
                                                 className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${selectedTag === tag ? 'bg-secondary-600 text-white shadow-md' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100'}`}
                                             >
                                                 {tag as string}
