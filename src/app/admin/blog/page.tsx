@@ -15,9 +15,11 @@ export default function AdminBlogPage() {
     const [content, setContent] = useState('');
     const [tags, setTags] = useState('');
     const [imageUrl, setImageUrl] = useState('');
+    
     const [authorName, setAuthorName] = useState('');
     const [authorBio, setAuthorBio] = useState('');
     const [authorSocialLink, setAuthorSocialLink] = useState('');
+    const [authorAvatarUrl, setAuthorAvatarUrl] = useState('');
     
     const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -45,7 +47,6 @@ export default function AdminBlogPage() {
     const savePost = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        // Convert comma string to array
         const tagsArray = tags.split(',').map(t => t.trim()).filter(t => t !== '');
 
         const postData = { 
@@ -58,7 +59,8 @@ export default function AdminBlogPage() {
             image_url: imageUrl || null,
             author_name: authorName || null,
             author_bio: authorBio || null,
-            author_social_link: authorSocialLink || null
+            author_social_link: authorSocialLink || null,
+            author_avatar_url: authorAvatarUrl || null
         };
 
         if (editingId) {
@@ -82,6 +84,7 @@ export default function AdminBlogPage() {
         setAuthorName('');
         setAuthorBio('');
         setAuthorSocialLink('');
+        setAuthorAvatarUrl('');
         setEditingId(null);
     };
 
@@ -97,6 +100,7 @@ export default function AdminBlogPage() {
         setAuthorName(post.author_name || '');
         setAuthorBio(post.author_bio || '');
         setAuthorSocialLink(post.author_social_link || '');
+        setAuthorAvatarUrl(post.author_avatar_url || '');
         window.scrollTo(0, 0);
     };
 
@@ -137,7 +141,7 @@ export default function AdminBlogPage() {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-sm text-slate-400 mb-1">Imagem de Capa (Link da imagem)</label>
+                    <label className="block text-sm text-slate-400 mb-1">Imagem de Capa (Link da imagem. Ex: https://.../foto.jpg)</label>
                     <input value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="https://..." className="w-full bg-[#020617] border border-slate-700 rounded p-2 text-white focus:border-purple-500 outline-none" />
                 </div>
 
@@ -160,15 +164,19 @@ export default function AdminBlogPage() {
 
                 <div className="border-t border-slate-700 pt-6 mb-6">
                     <h3 className="text-lg font-bold mb-4 text-white">Dados do Autor</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label className="block text-sm text-slate-400 mb-1">Nome</label>
                             <input value={authorName} onChange={e => setAuthorName(e.target.value)} placeholder="Ex: Claudia" className="w-full bg-[#020617] border border-slate-700 rounded p-2 text-white focus:border-purple-500 outline-none" />
                         </div>
-                        <div className="md:col-span-2">
-                            <label className="block text-sm text-slate-400 mb-1">Link da Rede Social (LinkedIn/Insta)</label>
-                            <input value={authorSocialLink} onChange={e => setAuthorSocialLink(e.target.value)} placeholder="https://..." className="w-full bg-[#020617] border border-slate-700 rounded p-2 text-white focus:border-purple-500 outline-none" />
+                        <div>
+                            <label className="block text-sm text-slate-400 mb-1">Foto de Perfil (Link da imagem da foto)</label>
+                            <input value={authorAvatarUrl} onChange={e => setAuthorAvatarUrl(e.target.value)} placeholder="https://..." className="w-full bg-[#020617] border border-slate-700 rounded p-2 text-white focus:border-purple-500 outline-none" />
                         </div>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm text-slate-400 mb-1">Link da Rede Social (LinkedIn/Insta)</label>
+                        <input value={authorSocialLink} onChange={e => setAuthorSocialLink(e.target.value)} placeholder="https://..." className="w-full bg-[#020617] border border-slate-700 rounded p-2 text-white focus:border-purple-500 outline-none" />
                     </div>
                     <div>
                         <label className="block text-sm text-slate-400 mb-1">Mini Biografia</label>
