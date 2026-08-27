@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getTwelveWeeksPlan, saveTwelveWeeksPlan } from '@/lib/db';
 
+export const dynamic = "force-dynamic";
 export async function GET() {
     try {
         const plan = await getTwelveWeeksPlan();

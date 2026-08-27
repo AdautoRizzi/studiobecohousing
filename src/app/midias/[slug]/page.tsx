@@ -60,7 +60,7 @@ export default function BlogPostPage() {
         
         return text.split('\n').map((line, i) => {
             // Verifica Imagem
-            const imgMatch = line.match(/\[IMAGEM:\s*(.+)\]/i);
+            const imgMatch = line.match(/\[IMAGEM:\s*(.+?)\]/i);
             if (imgMatch) {
                 return (
                     <figure key={`img-${i}`} className="my-12">
@@ -70,7 +70,7 @@ export default function BlogPostPage() {
             }
             
             // Verifica Vídeo
-            const vidMatch = line.match(/\[VIDEO:\s*(.+)\]/i);
+            const vidMatch = line.match(/\[VIDEO:\s*(.+?)\]/i);
             if (vidMatch) {
                 let url = vidMatch[1].trim();
                 if (url.includes('youtube.com/watch?v=')) {
@@ -107,7 +107,7 @@ export default function BlogPostPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-20">
                         
                         {/* Lado Esquerdo: Conteúdo Principal do Artigo */}
-                        <article className="lg:col-span-8">
+                        <article className="lg:col-span-9">
                             
                             {/* Cabeçalho do Artigo */}
                             <header className="mb-12">
@@ -124,7 +124,7 @@ export default function BlogPostPage() {
                                     ))}
                                 </div>
 
-                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-900 tracking-tight leading-tight mb-8">
+                                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-900 tracking-tight leading-tight mb-8">
                                     {post.title}
                                 </h1>
                                 
@@ -197,7 +197,7 @@ export default function BlogPostPage() {
                         </article>
 
                         {/* Lado Direito: Nuvem de Tags Sidebar */}
-                        <aside className="lg:col-span-4">
+                        <aside className="lg:col-span-3">
                             <div className="sticky top-32 bg-gray-50 p-8 rounded-3xl border border-gray-200 shadow-sm">
                                 <h3 className="text-xl font-bold text-primary-900 mb-6">Explore o Blog</h3>
                                 
@@ -207,7 +207,7 @@ export default function BlogPostPage() {
                                             <Link 
                                                 href={`/midias?tag=${encodeURIComponent(tag)}`}
                                                 key={tag as string}
-                                                className="px-4 py-2 rounded-full text-sm font-semibold transition-all bg-white text-gray-600 hover:bg-primary-900 hover:text-white border border-gray-200 shadow-sm"
+                                                className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all bg-white text-gray-600 hover:bg-primary-900 hover:text-white border border-gray-200 shadow-sm"
                                             >
                                                 {tag as string}
                                             </Link>

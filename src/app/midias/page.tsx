@@ -51,7 +51,7 @@ export default function MidiasPage() {
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary-50 text-primary-800 text-sm font-bold mb-6 border border-secondary-100 uppercase tracking-widest">
                             Blog & Mídias
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-bold text-primary-900 tracking-tight leading-tight mb-8">
+                        <h1 className="text-3xl md:text-5xl font-bold text-primary-900 tracking-tight leading-tight mb-8">
                             O Mundo fala sobre o <span className="text-secondary-600">Cohousing</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-gray-600 mt-4 leading-relaxed font-light">
@@ -62,7 +62,7 @@ export default function MidiasPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                         
                         {/* Lado Esquerdo: Posts */}
-                        <div className="lg:col-span-8 lg:order-1 order-2">
+                        <div className="lg:col-span-9 lg:order-1 order-2">
                             {loading ? (
                                 <div className="text-center py-20 text-gray-500 flex flex-col items-center">
                                     <div className="w-12 h-12 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin mb-4"></div>
@@ -124,7 +124,7 @@ export default function MidiasPage() {
                         </div>
 
                         {/* Lado Direito: Nuvem de Tags Sidebar */}
-                        <div className="lg:col-span-4 lg:order-2 order-1">
+                        <div className="lg:col-span-3 lg:order-2 order-1">
                             <div className="sticky top-32 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
                                 <h3 className="text-xl font-bold text-primary-900 mb-6">Tópicos Populares</h3>
                                 
@@ -132,7 +132,7 @@ export default function MidiasPage() {
                                     <div className="flex flex-wrap gap-2">
                                         <button 
                                             onClick={() => handleTagSelect(null)}
-                                            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${!selectedTag ? 'bg-primary-900 text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100'}`}
+                                            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${!selectedTag ? 'bg-primary-900 text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100'}`}
                                         >
                                             Todos os Artigos
                                         </button>
@@ -140,7 +140,7 @@ export default function MidiasPage() {
                                             <button 
                                                 key={tag as string}
                                                 onClick={() => handleTagSelect(tag as string)}
-                                                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${selectedTag === tag ? 'bg-secondary-600 text-white shadow-md' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100'}`}
+                                                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${selectedTag === tag ? 'bg-secondary-600 text-white shadow-md' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100'}`}
                                             >
                                                 {tag as string}
                                             </button>
