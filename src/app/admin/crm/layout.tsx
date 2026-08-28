@@ -20,6 +20,10 @@ export default async function CRMLayout({ children }: { children: React.ReactNod
                 </div>
                 <nav className="flex-1 p-4 flex flex-col gap-2">
                     <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-4 px-3">Gestão</div>
+                    <Link href="/admin/crm/blog" className="flex items-center gap-3 px-3 py-2 text-purple-400 bg-slate-800/50 hover:bg-slate-800 rounded-lg font-medium transition-colors border border-purple-500/20 mb-2">
+                        <span className="text-xl">📝</span>
+                        Gerenciador do Blog
+                    </Link>
                     <Link href="/admin/tasks" className="flex items-center gap-3 px-3 py-2 text-blue-400 bg-slate-800/50 hover:bg-slate-800 rounded-lg font-medium transition-colors border border-blue-500/20 mb-2">
                         <span className="text-xl">📋</span>
                         Gerenciamento do Negócio
