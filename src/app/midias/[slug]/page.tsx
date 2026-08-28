@@ -63,8 +63,8 @@ export default function BlogPostPage() {
             const imgMatch = line.match(/\[IMAGEM:\s*(.+?)\]/i);
             if (imgMatch) {
                 return (
-                    <figure key={`img-${i}`} className="my-12">
-                        <img src={imgMatch[1].trim()} alt="Ilustração do artigo" className="w-full h-auto rounded-2xl shadow-lg" />
+                    <figure key={`img-${i}`} className="my-12 flex justify-center">
+                        <img src={imgMatch[1].trim()} alt="Ilustração do artigo" className="mx-auto rounded-2xl shadow-lg object-contain max-h-[500px] max-w-full" />
                     </figure>
                 );
             }
