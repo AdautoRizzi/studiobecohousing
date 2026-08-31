@@ -27,9 +27,9 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     return (
         <div className="flex h-screen bg-secondary-50 font-sans">
             <aside className="w-64 bg-secondary-900 text-white flex flex-col hidden md:flex overflow-y-auto">
-                <div className="p-6 flex items-center bg-white m-4 rounded-xl shadow-inner mb-2 hover:opacity-90 transition-opacity">
+                <div className="p-4 flex items-center bg-white mx-4 mt-6 mb-2 rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <Link href="/dashboard">
-                        <img src="/logo.png" alt="Studio Be" className="h-[8rem] w-auto object-contain mx-auto scale-125" />
+                        <img src="/logo.png" alt="Studio Be" className="h-14 w-auto object-contain mx-auto" />
                     </Link>
                 </div>
 

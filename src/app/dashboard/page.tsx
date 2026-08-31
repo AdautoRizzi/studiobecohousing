@@ -10,12 +10,12 @@ export default function DashboardHomePage() {
     return (
         <div className="space-y-8 max-w-6xl mx-auto pb-20">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight text-primary-900">Sua Jornada Studio Be</h1>
+                <h1 className="text-3xl font-serif font-bold tracking-tight text-primary-900">Sua Jornada Studio Be</h1>
                 <p className="text-gray-600 mt-2">Acompanhe seu progresso e descubra os próximos passos para viver em comunidade.</p>
             </div>
 
             {/* Visual Tracker */}
-            <div className="bg-white p-8 rounded-2xl border border-secondary-100 shadow-sm overflow-x-auto">
+            <div className="bg-white p-6 md:p-8 rounded-2xl border border-secondary-100 shadow-sm overflow-x-auto">
                 <div className="flex items-center justify-between min-w-[900px] relative">
                     {/* Linha de fundo da trilha */}
                     <div className="absolute left-6 right-6 top-5 h-1 bg-gray-100 -z-10 rounded-full"></div>
@@ -48,12 +48,12 @@ export default function DashboardHomePage() {
 
             {/* Offer Card & Summary Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 bg-gradient-to-br from-primary-900 to-secondary-900 text-white p-8 md:p-10 rounded-2xl shadow-lg relative overflow-hidden flex flex-col justify-center">
+                <div className="lg:col-span-2 bg-gradient-to-br from-primary-900 to-secondary-900 text-white p-6 md:p-8 rounded-2xl shadow-lg relative overflow-hidden flex flex-col justify-center">
                     <div className="relative z-10">
                         <span className="inline-block px-4 py-1.5 bg-white/20 text-white text-[10px] font-extrabold uppercase tracking-widest rounded-full mb-6">
                             Próxima Evolução
                         </span>
-                        <h2 className="text-3xl font-bold mb-4 tracking-tight">{currentTierInfo.offerTitle}</h2>
+                        <h2 className="text-2xl md:text-3xl font-serif font-bold mb-4 tracking-tight">{currentTierInfo.offerTitle}</h2>
                         <p className="text-primary-100 mb-10 max-w-lg text-lg leading-relaxed font-light">
                             {currentTierInfo.offerDesc}
                         </p>
@@ -77,7 +77,7 @@ export default function DashboardHomePage() {
                     <div className="absolute right-10 top-10 w-32 h-32 bg-primary-400/20 rounded-full blur-2xl pointer-events-none"></div>
                 </div>
 
-                <div className="bg-white p-8 rounded-2xl border border-secondary-100 shadow-sm flex flex-col justify-between">
+                <div className="bg-white p-6 md:p-8 rounded-2xl border border-secondary-100 shadow-sm flex flex-col justify-between">
                     <div>
                         <h3 className="font-semibold text-lg text-primary-900 mb-1">Seu Status</h3>
                         <p className="text-gray-500 text-sm">Nível Atual: {tier}</p>
