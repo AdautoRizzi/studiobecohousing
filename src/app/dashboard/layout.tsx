@@ -11,6 +11,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     const { tier, setTier } = useClientTier();
 
     const allNav = [
+        { name: 'Minha Jornada', href: '/dashboard', icon: '🗺️', minTier: 0, exact: true },
         { name: 'Meu Perfil', href: '/dashboard/perfil', icon: '👤', minTier: 0 },
         { name: 'Comunidade & Vizinhos', href: '/dashboard/comunidade', icon: '👥', minTier: 2 },
         { name: 'Governança & Fórum', href: '/dashboard/governanca', icon: '🏛️', minTier: 3 },
@@ -27,7 +28,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         <div className="flex h-screen bg-secondary-50 font-sans">
             <aside className="w-64 bg-secondary-900 text-white flex flex-col hidden md:flex overflow-y-auto">
                 <div className="p-6 flex items-center bg-white m-4 rounded-xl shadow-inner mb-2 hover:opacity-90 transition-opacity">
-                    <Link href="/">
+                    <Link href="/dashboard">
                         <img src="/logo.png" alt="Studio Be" className="h-[8rem] w-auto object-contain mx-auto scale-125" />
                     </Link>
                 </div>
@@ -39,7 +40,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 
                 <nav className="flex-1 px-4 py-6 space-y-2">
                     {visibleNav.map((item) => {
-                        const isActive = pathname.startsWith(item.href);
+                        const isActive = (item as any).exact ? pathname === item.href : pathname.startsWith(item.href);
                         return (
                             <Link
                                 key={item.name}
