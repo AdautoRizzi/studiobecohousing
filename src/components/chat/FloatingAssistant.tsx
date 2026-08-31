@@ -55,7 +55,7 @@ export default function FloatingAssistant() {
     };
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end relative">
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
             {isOpen && (
                 <div className="bg-white rounded-2xl shadow-2xl w-[350px] sm:w-[400px] h-[500px] mb-4 flex flex-col border border-slate-200 overflow-hidden transform transition-all duration-300">
                     <div className="bg-primary-900 text-white p-4 flex justify-between items-center">
