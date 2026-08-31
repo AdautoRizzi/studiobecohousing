@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${montserrat.variable} ${playfair.variable} font-sans antialiased`}
       >
         {children}
         <WhatsAppWidget />
