@@ -141,7 +141,7 @@ export default function MatchAdminDashboard() {
                             <option value="Em 1 ano">Alta Urgência (1 ano)</option>
                             <option value="Entre 1 e 2 anos">Curto Prazo (1-2 anos)</option>
                             <option value="Entre 2 e 5 anos">Médio Prazo (2-5 anos)</option>
-                            <option value="Mais de 5 anos">Longo Prazo (>5 anos)</option>
+                            <option value="Mais de 5 anos">Longo Prazo (&gt;5 anos)</option>
                         </select>
                     </div>
 
@@ -150,7 +150,7 @@ export default function MatchAdminDashboard() {
                         <label className="text-xs font-semibold text-slate-400 uppercase">2. Grau de Match</label>
                         <select value={filterMatch} onChange={e => setFilterMatch(e.target.value)} className="bg-slate-900 border border-slate-700 text-sm rounded-lg p-2 text-white outline-none focus:border-primary-500 transition-colors">
                             <option value="all">Todas as Pontuações</option>
-                            <option value="high">🟢 Quentes (> 80%)</option>
+                            <option value="high">🟢 Quentes (&gt; 80%)</option>
                             <option value="medium">🟡 Mornos (50 - 80%)</option>
                             <option value="low">🔴 Frios (&lt; 50%)</option>
                         </select>
