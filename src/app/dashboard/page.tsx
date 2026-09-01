@@ -59,13 +59,34 @@ export default function DashboardHomePage() {
                         </p>
                         
                         {currentTierInfo.cta && (
-                            <button 
-                                onClick={() => { if (tier < 8) setTier(tier + 1); }}
-                                className="group bg-white text-primary-900 hover:bg-gray-50 font-bold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-xl flex items-center gap-3 w-fit"
-                            >
-                                {currentTierInfo.cta}
-                                <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </button>
+                            <div className="flex flex-wrap gap-4 items-center">
+                                {currentTierInfo.ctaLink && currentTierInfo.ctaLink !== '#' ? (
+                                    <Link 
+                                        href={currentTierInfo.ctaLink}
+                                        className="group bg-white text-primary-900 hover:bg-gray-50 font-bold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-xl flex items-center gap-3 w-fit"
+                                    >
+                                        {currentTierInfo.cta}
+                                        <span className="group-hover:translate-x-1 transition-transform">→</span>
+                                    </Link>
+                                ) : (
+                                    <button 
+                                        onClick={() => { if (tier < 8) setTier(tier + 1); }}
+                                        className="group bg-white text-primary-900 hover:bg-gray-50 font-bold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-xl flex items-center gap-3 w-fit"
+                                    >
+                                        {currentTierInfo.cta}
+                                        <span className="group-hover:translate-x-1 transition-transform">→</span>
+                                    </button>
+                                )}
+                                
+                                {currentTierInfo.ctaLink && currentTierInfo.ctaLink !== '#' && (
+                                    <button 
+                                        onClick={() => { if (tier < 8) setTier(tier + 1); }}
+                                        className="text-primary-100 hover:text-white text-sm underline opacity-70 hover:opacity-100 transition-opacity"
+                                    >
+                                        (Simular Avanço ⚙️)
+                                    </button>
+                                )}
+                            </div>
                         )}
                         {!currentTierInfo.cta && (
                             <div className="py-3 px-6 bg-white/10 rounded-lg inline-block text-sm font-medium">
