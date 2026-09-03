@@ -32,6 +32,10 @@ export default async function CRMLayout({ children }: { children: React.ReactNod
                         <span className="text-xl">🚀</span>
                         Jornada do Cliente
                     </Link>
+                    <Link href="/admin/crm/territorios" className="flex items-center gap-3 px-3 py-2 text-emerald-400 bg-slate-800/50 hover:bg-slate-800 rounded-lg font-medium transition-colors border border-emerald-500/20 mb-2">
+                        <span className="text-xl">🗺️</span>
+                        Banco de Terras (I.T.)
+                    </Link>
                     <Link href="/admin/crm/match" className="flex items-center gap-3 px-3 py-2 text-pink-400 bg-slate-800/50 hover:bg-slate-800 rounded-lg font-medium transition-colors border border-pink-500/20 mb-2">
                         <span className="text-xl">❤️</span>
                         Análise de Match
