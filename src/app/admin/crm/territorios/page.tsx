@@ -202,7 +202,7 @@ export default function BancoTerrasAdmin() {
                                 <div className="space-y-4 text-sm">
                                     <div className="bg-slate-800/50 p-4 rounded-lg">
                                         <p className="text-xs text-slate-500 uppercase font-bold mb-1">Contato do Proprietário</p>
-                                        <p className="text-white font-medium">{selectedTerritory.owner_name}</p>
+                                        <p className="text-white font-medium">{selectedTerritory.property_name ? `${selectedTerritory.property_name} (${selectedTerritory.owner_name})` : selectedTerritory.owner_name}</p>
                                         <p className="text-emerald-400">{selectedTerritory.owner_phone}</p>
                                     </div>
                                     

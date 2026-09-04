@@ -10,7 +10,7 @@ export default function ProprietariosWizardPage() {
 
     const [formData, setFormData] = useState({
         // Step 1: Identificação
-        owner_name: '', owner_phone: '', owner_email: '', preferred_contact: 'WhatsApp',
+        property_name: '', owner_name: '', owner_phone: '', owner_email: '', preferred_contact: 'WhatsApp',
         location_city: '', maps_link: '', coordinates: '', area_hectares: '', useful_area: '',
         
         // Step 2: Comercial & Documental
@@ -131,7 +131,10 @@ export default function ProprietariosWizardPage() {
                                     <div><label className="block text-sm font-bold text-slate-700 mb-1">Nome Completo *</label><input required type="text" value={formData.owner_name} onChange={e => setFormData({...formData, owner_name: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
                                     <div><label className="block text-sm font-bold text-slate-700 mb-1">Telefone/WhatsApp *</label><input required type="text" value={formData.owner_phone} onChange={e => setFormData({...formData, owner_phone: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
                                 </div>
-                                <div><label className="block text-sm font-bold text-slate-700 mb-1">Município da Área *</label><input required type="text" value={formData.location_city} onChange={e => setFormData({...formData, location_city: e.target.value})} placeholder="Ex: Porto Feliz, Itu..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                                    <div><label className="block text-sm font-bold text-slate-700 mb-1">Nome da Propriedade (Opcional)</label><input type="text" value={formData.property_name} onChange={e => setFormData({...formData, property_name: e.target.value})} placeholder="Ex: Fazenda Bela Vista" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                    <div><label className="block text-sm font-bold text-slate-700 mb-1">Município da Área *</label><input required type="text" value={formData.location_city} placeholder="Ex: Itu, Porto Feliz..."  onChange={e => setFormData({...formData, location_city: e.target.value})} placeholder="Ex: Porto Feliz, Itu..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                </div>
                                 <div><label className="block text-sm font-bold text-slate-700 mb-1">Link do Google Maps (Opcional)</label><input type="text" value={formData.maps_link} onChange={e => setFormData({...formData, maps_link: e.target.value})} placeholder="Cole o link do mapa aqui" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     <div><label className="block text-sm font-bold text-slate-700 mb-1">Área Total (Hectares) *</label><input required type="number" step="0.1" value={formData.area_hectares} onChange={e => setFormData({...formData, area_hectares: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
