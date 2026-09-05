@@ -29,8 +29,8 @@ export default function ProprietariosWizardPage() {
     const handleNext = () => setStep(prev => Math.min(prev + 1, 4));
     const handlePrev = () => setStep(prev => Math.max(prev - 1, 1));
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
+        
         setStatus('saving');
         
         try {
@@ -102,7 +102,7 @@ export default function ProprietariosWizardPage() {
                     <p className="text-lg text-slate-600 mb-8 leading-relaxed">
                         Sua área foi recebida e entrará em nosso <strong>Algoritmo de Inteligência Territorial</strong>. 
                         Nossa equipe avaliará a viabilidade regenerativa e o potencial de valorização. 
-                        Caso atingida a pontuação necessária, nossa equipe de aquisições entrará em contato.
+                        Nossa equipe de aquisições fará uma análise detalhada e entrará em contato em breve para conversar sobre os próximos passos.
                     </p>
                     <Link href="/" className="bg-emerald-600 text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:bg-emerald-700 transition-colors inline-block">
                         Voltar para a Página Inicial
@@ -124,7 +124,7 @@ export default function ProprietariosWizardPage() {
             <section className="max-w-3xl mx-auto px-4 pt-12">
                 <div className="text-center mb-10">
                     <h2 className="text-4xl font-serif font-bold text-slate-900 mb-4">Cadastre sua Propriedade</h2>
-                    <p className="text-slate-600 text-lg">Buscamos áreas estratégicas para o desenvolvimento de comunidades regenerativas de alto padrão.</p>
+                    <p className="text-slate-600 text-lg">Buscamos áreas estratégicas para o desenvolvimento de comunidades regenerativas.</p>
                 </div>
 
                 {/* Progress Bar */}
@@ -266,7 +266,7 @@ export default function ProprietariosWizardPage() {
                             {step < 4 ? (
                                 <button type="button" onClick={handleNext} className="bg-slate-800 text-white px-8 py-3 rounded-xl font-bold hover:bg-slate-900 transition-colors shadow-lg">Próxima Etapa →</button>
                             ) : (
-                                <button type="submit" disabled={status !== 'idle'} className="bg-emerald-600 text-white px-10 py-3 rounded-xl font-bold hover:bg-emerald-700 transition-colors shadow-lg disabled:opacity-50 flex items-center gap-2">
+                                <button type="button" onClick={handleSubmit} disabled={status !== 'idle'} className="bg-emerald-600 text-white px-10 py-3 rounded-xl font-bold hover:bg-emerald-700 transition-colors shadow-lg disabled:opacity-50 flex items-center gap-2">
                                     {status === 'idle' ? 'Concluir e Enviar Oferta' : <><span className="animate-spin">⏳</span> Processando...</>}
                                 </button>
                             )}
