@@ -11,7 +11,7 @@ export default function ProprietariosWizardPage() {
     const [formData, setFormData] = useState({
         // Step 1: Identificação
         property_name: '', owner_name: '', owner_phone: '', owner_email: '', preferred_contact: 'WhatsApp',
-        location_city: '', maps_link: '', coordinates: '', area_hectares: '', useful_area: '',
+        location_city: '', maps_link: '', coordinates: '', area_hectares: '', useful_area: '', area_unit: 'Hectares (ha)',
         
         // Step 2: Comercial & Documental
         estimated_price: '', price_per_hectare: '',
@@ -60,10 +60,25 @@ export default function ProprietariosWizardPage() {
             const payload = { ...formData };
             if (payload.forest_area === '') delete payload.forest_area;
 
+            // Converter a área para Hectares internamente para a calculadora funcionar
+            let multiplier = 1;
+            if (payload.area_unit === 'Alqueires Paulistas') multiplier = 2.42;
+            if (payload.area_unit === 'Alqueires Mineiros') multiplier = 4.84;
+            if (payload.area_unit === 'Metros Quadrados (m²)') multiplier = 0.0001;
+
+            const finalAreaHectares = (Number(formData.area_hectares) || 0) * multiplier;
+            const finalUsefulArea = (Number(formData.useful_area) || 0) * multiplier;
+
+            // Registrar a info original no Pitch para o CRM visualizar
+            const unitInfo = `\n\n[NOTA DO SISTEMA: Área informada originalmente como ${formData.area_hectares} ${formData.area_unit}. Convertido automaticamente para ${finalAreaHectares.toFixed(2)} Hectares pelo algoritmo]`;
+            const finalPitch = (payload.owner_pitch || '') + unitInfo;
+            delete payload.area_unit; // Não temos essa coluna no Supabase ainda
+
             const { error } = await supabase.from('territories').insert([{
                 ...payload,
-                area_hectares: Number(formData.area_hectares) || 0,
-                useful_area: Number(formData.useful_area) || 0,
+                area_hectares: finalAreaHectares,
+                useful_area: finalUsefulArea,
+                owner_pitch: finalPitch,
                 price_per_hectare: Number(formData.price_per_hectare) || 0,
                 files_urls: fileUrls
             }]);
@@ -140,9 +155,18 @@ export default function ProprietariosWizardPage() {
                                     <div><label className="block text-sm font-bold text-slate-700 mb-1">Município da Área *</label><input required type="text" value={formData.location_city} placeholder="Ex: Itu, Porto Feliz..."  onChange={e => setFormData({...formData, location_city: e.target.value})} placeholder="Ex: Porto Feliz, Itu..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
                                 </div>
                                 <div><label className="block text-sm font-bold text-slate-700 mb-1">Link do Google Maps (Opcional)</label><input type="text" value={formData.maps_link} onChange={e => setFormData({...formData, maps_link: e.target.value})} placeholder="Cole o link do mapa aqui" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    <div><label className="block text-sm font-bold text-slate-700 mb-1">Área Total (Hectares) *</label><input required type="number" step="0.1" value={formData.area_hectares} onChange={e => setFormData({...formData, area_hectares: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
-                                    <div><label className="block text-sm font-bold text-slate-700 mb-1">Área Útil (Opcional)</label><input type="number" step="0.1" value={formData.useful_area} onChange={e => setFormData({...formData, useful_area: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                    <div>
+                                        <label className="block text-sm font-bold text-slate-700 mb-1">Unidade de Medida *</label>
+                                        <select value={formData.area_unit} onChange={e => setFormData({...formData, area_unit: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+                                            <option value="Hectares (ha)">Hectares (ha)</option>
+                                            <option value="Alqueires Paulistas">Alqueires Paulistas (24.200 m²)</option>
+                                            <option value="Alqueires Mineiros">Alqueires Mineiros (48.400 m²)</option>
+                                            <option value="Metros Quadrados (m²)">Metros Quadrados (m²)</option>
+                                        </select>
+                                    </div>
+                                    <div><label className="block text-sm font-bold text-slate-700 mb-1">Área Total *</label><input required type="number" step="any" value={formData.area_hectares} onChange={e => setFormData({...formData, area_hectares: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                    <div><label className="block text-sm font-bold text-slate-700 mb-1">Área Útil (Opcional)</label><input type="number" step="any" value={formData.useful_area} onChange={e => setFormData({...formData, useful_area: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
                                 </div>
                             </div>
                         </div>
