@@ -57,7 +57,7 @@ export default function ProprietariosWizardPage() {
 
             setStatus('saving');
             // 2. Salvar no Banco
-            const payload = { ...formData };
+            const payload: any = { ...formData };
             if (payload.forest_area === '') delete payload.forest_area;
 
             // Converter a área para Hectares internamente para a calculadora funcionar
@@ -176,7 +176,16 @@ export default function ProprietariosWizardPage() {
                             <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span>💼</span> Aspectos Comerciais</h3>
                             <div className="space-y-5">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    <div><label className="block text-sm font-bold text-slate-700 mb-1">Preço Total Estimado (R$)</label><input type="text" value={formData.estimated_price} onChange={e => setFormData({...formData, estimated_price: e.target.value})} placeholder="Ex: 5.000.000" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                    <div>
+    <label className="block text-sm font-bold text-slate-700 mb-1">Preço Total Estimado (R$)</label>
+    <input type="text" value={formData.estimated_price} onChange={e => {
+        let val = e.target.value.replace(/\D/g, '');
+        if (val) {
+            val = (Number(val) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        setFormData({...formData, estimated_price: val});
+    }} placeholder="Ex: 5.000.000,00" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" />
+</div>
                                     <div><label className="block text-sm font-bold text-slate-700 mb-1">Situação Documental</label>
                                         <select value={formData.documentation} onChange={e => setFormData({...formData, documentation: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
                                             <option value="">Selecione...</option>
@@ -211,14 +220,21 @@ export default function ProprietariosWizardPage() {
                                         <option value="Acidentada">Acidentada / Montanhosa</option>
                                     </select>
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1">Recursos Hídricos na Área (Resumo) *</label>
-                                    <select required value={formData.has_water} onChange={e => setFormData({...formData, has_water: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
-                                        <option value="">Selecione...</option>
-                                        <option value="Rico em Água (Rios/Represa)">Rico em Água (Rios, Represas grandes)</option>
-                                        <option value="Nascentes/Poço">Nascentes, Córregos ou Poço</option>
-                                        <option value="Seco">Seco / Sem recursos relevantes</option>
-                                    </select>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div>
+                                        <label className="block text-sm font-bold text-slate-700 mb-1">Recursos Hídricos (Resumo) *</label>
+                                        <select required value={formData.has_water} onChange={e => setFormData({...formData, has_water: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+                                            <option value="">Selecione...</option>
+                                            <option value="Rico em Água (Rios/Represa)">Rico em Água (Rios, Represas grandes)</option>
+                                            <option value="Nascentes">Múltiplas Nascentes / Córregos</option>
+                                            <option value="Poço Artesiano">Apenas Poço Artesiano / Caipira</option>
+                                            <option value="Seco">Seco / Sem recursos relevantes</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-bold text-slate-700 mb-1">Vazão do Poço / Rio (Opcional)</label>
+                                        <input type="text" placeholder="Ex: 5.000 litros/hora" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" onChange={e => setFormData({...formData, owner_pitch: formData.owner_pitch.includes('| Vazão:') ? formData.owner_pitch.replace(/\| Vazão: .*/, '| Vazão: ' + e.target.value) : formData.owner_pitch + ' | Vazão: ' + e.target.value})} />
+                                    </div>
                                 </div>
                                 
                                 <div className="border-t border-slate-200 pt-5 mt-5">
