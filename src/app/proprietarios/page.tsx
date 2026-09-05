@@ -57,8 +57,11 @@ export default function ProprietariosWizardPage() {
 
             setStatus('saving');
             // 2. Salvar no Banco
+            const payload = { ...formData };
+            if (payload.forest_area === '') delete payload.forest_area;
+
             const { error } = await supabase.from('territories').insert([{
-                ...formData,
+                ...payload,
                 area_hectares: Number(formData.area_hectares) || 0,
                 useful_area: Number(formData.useful_area) || 0,
                 price_per_hectare: Number(formData.price_per_hectare) || 0,
@@ -68,9 +71,10 @@ export default function ProprietariosWizardPage() {
             if (error) throw error;
             
             setStatus('success');
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
             setStatus('error');
+            alert('Erro ao salvar no banco: ' + (err.message || 'Desconhecido'));
         }
     };
 
