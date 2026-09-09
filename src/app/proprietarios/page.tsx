@@ -11,15 +11,17 @@ export default function ProprietariosWizardPage() {
     const [formData, setFormData] = useState({
         // Step 1: Identificação
         property_name: '', owner_name: '', owner_phone: '', owner_email: '', preferred_contact: 'WhatsApp',
-        location_city: '', maps_link: '', coordinates: '', area_hectares: '', useful_area: '', area_unit: 'Hectares (ha)',
+        location_city: '', maps_link: '', address: '', coordinates: '', area_hectares: '', useful_area: '', area_unit: 'Hectares (ha)',
         
         // Step 2: Comercial & Documental
         estimated_price: '', price_per_hectare: '',
         accept_negotiation: false, accept_exchange: false, accept_partnership: false, accept_buy_option: false,
         documentation: '', judicial_issues: '', has_commission: false,
+        doc_car: false, doc_ccir: false, doc_itr: false, doc_georef: false, doc_legal_reserve: false, doc_app: false,
         
         // Step 3: Físicas & Infraestrutura
-        topography: '', forest_area: '', water_sources: [] as string[],
+        topography: '', soil_type: '', forest_area: '', pasture_area: '', agriculture_area: '', distance_main_road: '',
+        water_sources: [] as string[], infra_items: [] as string[], improvements: [] as string[], current_use: [] as string[],
         has_water: '', // resumo
         
         // Step 4: Pitch
@@ -59,6 +61,8 @@ export default function ProprietariosWizardPage() {
             // 2. Salvar no Banco
             const payload: any = { ...formData };
             if (payload.forest_area === '') delete payload.forest_area;
+        if (payload.pasture_area === '') delete payload.pasture_area;
+        if (payload.agriculture_area === '') delete payload.agriculture_area;
 
             // Converter a área para Hectares internamente para a calculadora funcionar
             let multiplier = 1;
@@ -151,10 +155,18 @@ export default function ProprietariosWizardPage() {
                                     <div><label className="block text-sm font-bold text-slate-700 mb-1">Telefone/WhatsApp *</label><input required type="text" value={formData.owner_phone} onChange={e => setFormData({...formData, owner_phone: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                                    <div><label className="block text-sm font-bold text-slate-700 mb-1">E-mail (Opcional)</label><input type="email" value={formData.owner_email} onChange={e => setFormData({...formData, owner_email: e.target.value})} placeholder="Seu melhor e-mail" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                    <div><label className="block text-sm font-bold text-slate-700 mb-1">Forma Preferencial de Contato</label><select value={formData.preferred_contact} onChange={e => setFormData({...formData, preferred_contact: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none"><option value="WhatsApp">WhatsApp</option><option value="Telefone">Ligação Telefônica</option><option value="E-mail">E-mail</option></select></div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                                     <div><label className="block text-sm font-bold text-slate-700 mb-1">Nome da Propriedade (Opcional)</label><input type="text" value={formData.property_name} onChange={e => setFormData({...formData, property_name: e.target.value})} placeholder="Ex: Fazenda Bela Vista" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
                                     <div><label className="block text-sm font-bold text-slate-700 mb-1">Município da Área *</label><input required type="text" value={formData.location_city} onChange={e => setFormData({...formData, location_city: e.target.value})} placeholder="Ex: Porto Feliz, Itu..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
                                 </div>
-                                <div><label className="block text-sm font-bold text-slate-700 mb-1">Link do Google Maps (Opcional)</label><input type="text" value={formData.maps_link} onChange={e => setFormData({...formData, maps_link: e.target.value})} placeholder="Cole o link do mapa aqui" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                <div><label className="block text-sm font-bold text-slate-700 mb-1">Endereço ou Localização Detalhada (Opcional)</label><input type="text" value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} placeholder="Rua, Estrada km, Referências..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none mb-5" /></div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                                    <div><label className="block text-sm font-bold text-slate-700 mb-1">Link do Google Maps (Opcional)</label><input type="text" value={formData.maps_link} onChange={e => setFormData({...formData, maps_link: e.target.value})} placeholder="Cole o link do mapa aqui" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                    <div><label className="block text-sm font-bold text-slate-700 mb-1">Coordenadas Geográficas (Opcional)</label><input type="text" value={formData.coordinates} onChange={e => setFormData({...formData, coordinates: e.target.value})} placeholder="-23.5505, -46.6333" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                </div>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                     <div>
                                         <label className="block text-sm font-bold text-slate-700 mb-1">Unidade de Medida *</label>
@@ -204,6 +216,22 @@ export default function ProprietariosWizardPage() {
                                         <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={formData.accept_buy_option} onChange={e => setFormData({...formData, accept_buy_option: e.target.checked})} className="w-5 h-5 text-emerald-600 rounded" /> Opção de Compra (Due Diligence)</label>
                                     </div>
                                 </div>
+                                <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 mt-5">
+                                    <label className="block text-sm font-bold text-slate-700 mb-2">Documentos e Cadastros (Opcional)</label>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
+                                        {[
+                                            {id: 'doc_car', label: 'CAR'}, {id: 'doc_ccir', label: 'CCIR'}, {id: 'doc_itr', label: 'ITR'},
+                                            {id: 'doc_georef', label: 'Georreferenciamento'}, {id: 'doc_legal_reserve', label: 'Reserva Legal'}, {id: 'doc_app', label: 'APP'}
+                                        ].map(doc => (
+                                            <label key={doc.id} className="flex items-center gap-2 text-sm text-slate-600 bg-white p-2 rounded-lg border border-slate-100 cursor-pointer hover:bg-slate-50">
+                                                <input type="checkbox" checked={formData[doc.id as keyof typeof formData] as boolean} onChange={e => setFormData({...formData, [doc.id]: e.target.checked})} className="w-4 h-4 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500" />
+                                                {doc.label}
+                                            </label>
+                                        ))}
+                                    </div>
+                                    <label className="block text-sm font-bold text-slate-700 mb-1">Pendências Judiciais/Fundiárias (Opcional)</label>
+                                    <textarea rows={2} value={formData.judicial_issues} onChange={e => setFormData({...formData, judicial_issues: e.target.value})} placeholder="Descreva brevemente se houver restrições..." className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" />
+                                </div>
                             </div>
                         </div>
 
@@ -211,14 +239,34 @@ export default function ProprietariosWizardPage() {
                         <div className={step === 3 ? 'block' : 'hidden'}>
                             <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2"><span>🏞️</span> Características Físicas</h3>
                             <div className="space-y-5">
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1">Topografia Predominante</label>
-                                    <select value={formData.topography} onChange={e => setFormData({...formData, topography: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
-                                        <option value="">Selecione...</option>
-                                        <option value="Maioria Plana">Plana (Até 5% declividade)</option>
-                                        <option value="Ondulada">Ondulada (5% a 20%)</option>
-                                        <option value="Acidentada">Acidentada / Montanhosa</option>
-                                    </select>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                                    <div>
+                                        <label className="block text-sm font-bold text-slate-700 mb-1">Topografia Predominante</label>
+                                        <select value={formData.topography} onChange={e => setFormData({...formData, topography: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+                                            <option value="">Selecione...</option>
+                                            <option value="Maioria Plana">Plana (Até 5% declividade)</option>
+                                            <option value="Ondulada">Ondulada (5% a 20%)</option>
+                                            <option value="Acidentada">Acidentada / Montanhosa</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-bold text-slate-700 mb-1">Tipo de Solo (Opcional)</label>
+                                        <input type="text" value={formData.soil_type} onChange={e => setFormData({...formData, soil_type: e.target.value})} placeholder="Ex: Terra roxa, Arenoso..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+                                    <div>
+                                        <label className="block text-sm font-bold text-slate-700 mb-1">Mata (ha) (Opcional)</label>
+                                        <input type="number" step="any" value={formData.forest_area} onChange={e => setFormData({...formData, forest_area: e.target.value})} placeholder="Ex: 2.5" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-bold text-slate-700 mb-1">Pastagem (ha) (Opcional)</label>
+                                        <input type="number" step="any" value={formData.pasture_area} onChange={e => setFormData({...formData, pasture_area: e.target.value})} placeholder="Ex: 5.0" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-bold text-slate-700 mb-1">Agrícola (ha) (Opcional)</label>
+                                        <input type="number" step="any" value={formData.agriculture_area} onChange={e => setFormData({...formData, agriculture_area: e.target.value})} placeholder="Ex: 10.0" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" />
+                                    </div>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     <div>
@@ -237,7 +285,49 @@ export default function ProprietariosWizardPage() {
                                     </div>
                                 </div>
                                 
-                                <div className="border-t border-slate-200 pt-5 mt-5">
+                                
+                                <div className="mb-6">
+                                    <label className="block text-sm font-bold text-slate-700 mb-2">Uso Atual da Propriedade (Opcional)</label>
+                                    <div className="flex flex-wrap gap-2">
+                                        {['Pecuária', 'Agricultura', 'Lazer', 'Residencial', 'Turismo', 'Área sem utilização', 'Outro'].map(uso => (
+                                            <label key={uso} className={`px-4 py-2 rounded-full border text-sm cursor-pointer transition-colors ${formData.current_use.includes(uso) ? 'bg-emerald-100 border-emerald-500 text-emerald-800 font-bold' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
+                                                <input type="checkbox" className="hidden" checked={formData.current_use.includes(uso)} onChange={(e) => {
+                                                    const updated = e.target.checked ? [...formData.current_use, uso] : formData.current_use.filter(i => i !== uso);
+                                                    setFormData({...formData, current_use: updated});
+                                                }} />
+                                                {uso}
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                                
+                                <div className="mb-6">
+                                    <label className="block text-sm font-bold text-slate-700 mb-2">Infraestrutura Existente (Opcional)</label>
+                                    <div className="flex flex-wrap gap-2 mb-3">
+                                        {['Energia Elétrica', 'Saneamento/Fossa', 'Internet', 'Telefonia', 'Acesso Asfaltado'].map(infra => (
+                                            <label key={infra} className={`px-4 py-2 rounded-full border text-sm cursor-pointer transition-colors ${formData.infra_items.includes(infra) ? 'bg-emerald-100 border-emerald-500 text-emerald-800 font-bold' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
+                                                <input type="checkbox" className="hidden" checked={formData.infra_items.includes(infra)} onChange={(e) => {
+                                                    const updated = e.target.checked ? [...formData.infra_items, infra] : formData.infra_items.filter(i => i !== infra);
+                                                    setFormData({...formData, infra_items: updated});
+                                                }} />
+                                                {infra}
+                                            </label>
+                                        ))}
+                                    </div>
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        {['Construções/Sedes', 'Cercas', 'Estradas Internas', 'Vista/Paisagem'].map(imp => (
+                                            <label key={imp} className={`px-4 py-2 rounded-full border text-sm cursor-pointer transition-colors ${formData.improvements.includes(imp) ? 'bg-emerald-100 border-emerald-500 text-emerald-800 font-bold' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
+                                                <input type="checkbox" className="hidden" checked={formData.improvements.includes(imp)} onChange={(e) => {
+                                                    const updated = e.target.checked ? [...formData.improvements, imp] : formData.improvements.filter(i => i !== imp);
+                                                    setFormData({...formData, improvements: updated});
+                                                }} />
+                                                {imp}
+                                            </label>
+                                        ))}
+                                    </div>
+                                    <div><input type="text" value={formData.distance_main_road} onChange={e => setFormData({...formData, distance_main_road: e.target.value})} placeholder="Distância aproximada da estrada principal (ex: 2km de terra)" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                </div>
+<div className="border-t border-slate-200 pt-5 mt-5">
                                     <label className="block text-sm font-bold text-slate-700 mb-2">Upload de Documento ou Foto (Opcional)</label>
                                     <p className="text-xs text-slate-500 mb-3">Anexe a Matrícula, um KML ou uma foto representativa (PDF, JPG, PNG).</p>
                                     <input type="file" onChange={e => setFile(e.target.files?.[0] || null)} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100" />
