@@ -117,7 +117,7 @@ export async function getAllLeads(): Promise<Lead[]> {
     const { data, error } = await supabase
         .from('leads')
         .select('*')
-        
+        .not('email', 'like', 'system_%@studiobe.com')
         .neq('email', SYS_12WEEK_PLAN_EMAIL)
         .order('createdAt', { ascending: false });
     
