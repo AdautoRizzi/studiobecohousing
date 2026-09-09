@@ -113,7 +113,22 @@ export default function BancoTerrasAdmin() {
         }
     };
 
-    const isEixoPirai = selectedTerritory?.location_city?.toLowerCase().includes('itu') || 
+    
+    const handleDelete = async (id: string) => {
+        if (!confirm('Tem certeza que deseja excluir esta propriedade? Essa ação é irreversível.')) return;
+        setSaving(true);
+        try {
+            const { error } = await supabase.from('territories').delete().eq('id', id);
+            if (error) throw error;
+            await loadData();
+        } catch (err) {
+            console.error(err);
+            alert('Erro ao excluir propriedade.');
+        } finally {
+            setSaving(false);
+        }
+    };
+const isEixoPirai = selectedTerritory?.location_city?.toLowerCase().includes('itu') || 
                         selectedTerritory?.location_city?.toLowerCase().includes('salto') ||
                         selectedTerritory?.location_city?.toLowerCase().includes('porto feliz');
 
@@ -169,9 +184,14 @@ export default function BancoTerrasAdmin() {
                                         <td className="p-4 text-xl font-bold text-blue-400">{sB}</td>
                                         <td className="p-4 font-bold text-purple-400">+{sC}</td>
                                         <td className="p-4">
-                                            <button onClick={() => { setSelectedTerritory(t); setMatchCount(null); }} className="bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/40 border border-emerald-500/50 px-3 py-1.5 rounded transition-colors text-xs font-bold">
-                                                Avaliar Matriz
-                                            </button>
+                                            <div className="flex gap-2">
+                                                <button onClick={() => { setSelectedTerritory(t); setMatchCount(null); }} className="bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/40 border border-emerald-500/50 px-3 py-1.5 rounded transition-colors text-xs font-bold">
+                                                    Avaliar Matriz
+                                                </button>
+                                                <button onClick={() => handleDelete(t.id)} className="bg-red-600/20 text-red-400 hover:bg-red-600/40 border border-red-500/50 px-3 py-1.5 rounded transition-colors text-xs font-bold">
+                                                    Excluir
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 );
