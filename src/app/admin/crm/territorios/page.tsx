@@ -327,6 +327,9 @@ export default function BancoTerrasAdmin() {
                                                 {totalScore}
                                             </div>
                                             <div className="text-[10px] text-slate-500 mt-2">Max 100 {isEixoPirai && '(+10 Piraí)'}</div>
+                                            <div className={`text-xs font-black uppercase mt-2 px-2 py-1 rounded ${isEliminated ? 'bg-red-900/50 text-red-200' : totalScore >= 80 ? 'bg-green-900/50 text-green-300' : totalScore >= 60 ? 'bg-yellow-900/50 text-yellow-300' : 'bg-slate-700/50 text-slate-400'}`}>
+                                                {isEliminated ? 'DESCARTAR' : totalScore >= 80 ? 'ALTA PRIORIDADE' : totalScore >= 60 ? 'MONITORAR' : 'BAIXA PRIORIDADE'}
+                                            </div>
                                         </div>
 
                                         <div className="text-center p-4 bg-slate-800/80 rounded-2xl border border-blue-900/50">
