@@ -282,9 +282,9 @@ const isEixoPirai = selectedTerritory?.location_city?.toLowerCase().includes('it
                                     {(selectedTerritory.current_use?.length > 0 || selectedTerritory.infra_items?.length > 0 || selectedTerritory.improvements?.length > 0) && (
                                         <div className="bg-slate-800/50 p-4 rounded-lg">
                                             <p className="text-xs text-slate-500 uppercase font-bold mb-2">Uso e Infraestrutura</p>
-                                            {selectedTerritory.current_use && selectedTerritory.current_use.length > 0 && <p className="text-slate-300 text-xs mb-1"><b>Uso:</b> {selectedTerritory.current_use.join(', ')}</p>}
-                                            {selectedTerritory.infra_items && selectedTerritory.infra_items.length > 0 && <p className="text-slate-300 text-xs mb-1"><b>Infra:</b> {selectedTerritory.infra_items.join(', ')}</p>}
-                                            {selectedTerritory.improvements && selectedTerritory.improvements.length > 0 && <p className="text-slate-300 text-xs mb-1"><b>Benfeitorias:</b> {selectedTerritory.improvements.join(', ')}</p>}
+                                            {selectedTerritory.current_use && selectedTerritory.current_use.length > 0 && <p className="text-slate-300 text-xs mb-1"><b>Uso:</b> {Array.isArray(selectedTerritory.current_use) ? selectedTerritory.current_use.join(', ') : String(selectedTerritory.current_use)}</p>}
+                                            {selectedTerritory.infra_items && selectedTerritory.infra_items.length > 0 && <p className="text-slate-300 text-xs mb-1"><b>Infra:</b> {Array.isArray(selectedTerritory.infra_items) ? selectedTerritory.infra_items.join(', ') : String(selectedTerritory.infra_items)}</p>}
+                                            {selectedTerritory.improvements && selectedTerritory.improvements.length > 0 && <p className="text-slate-300 text-xs mb-1"><b>Benfeitorias:</b> {Array.isArray(selectedTerritory.improvements) ? selectedTerritory.improvements.join(', ') : String(selectedTerritory.improvements)}</p>}
                                             {selectedTerritory.distance_main_road && <p className="text-slate-300 text-xs mt-1"><b>Acesso:</b> {selectedTerritory.distance_main_road}</p>}
                                         </div>
                                     )}
@@ -297,7 +297,7 @@ const isEixoPirai = selectedTerritory?.location_city?.toLowerCase().includes('it
                                     {selectedTerritory.files_urls && selectedTerritory.files_urls.length > 0 && (
                                         <div className="bg-slate-800/50 p-4 rounded-lg">
                                             <p className="text-xs text-slate-500 uppercase font-bold mb-2">Arquivos Anexos</p>
-                                            {selectedTerritory.files_urls.map((url: string, i: number) => (
+                                            {(Array.isArray(selectedTerritory.files_urls) ? selectedTerritory.files_urls : (typeof selectedTerritory.files_urls === 'string' ? JSON.parse(selectedTerritory.files_urls || '[]') : [])).map((url: string, i: number) => (
                                                 <a key={i} href={url} target="_blank" className="text-emerald-400 hover:underline block text-xs bg-slate-800 p-2 rounded mb-1 truncate">
                                                     📎 Anexo {i+1}
                                                 </a>
