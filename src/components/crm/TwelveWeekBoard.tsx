@@ -31,6 +31,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
     const [editTaskDesc, setEditTaskDesc] = useState('');
     const [editTaskObj, setEditTaskObj] = useState<string | undefined>(undefined);
+    const [editTaskOwner, setEditTaskOwner] = useState<string | undefined>(undefined);
     const [editTaskTargetSprint, setEditTaskTargetSprint] = useState<number>(1);
     const [editTaskImage, setEditTaskImage] = useState<string | undefined>(undefined);
     const [editTaskIsMilestone, setEditTaskIsMilestone] = useState<boolean>(false);
@@ -97,6 +98,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         e.preventDefault();
         const input = e.target.elements.taskDesc;
         const objSelect = e.target.elements.taskObj;
+        const ownerSelect = e.target.elements.taskOwner;
         if (!input.value.trim()) return;
         
         const newPlan = { ...plan };
@@ -104,7 +106,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             id: 'task_' + Date.now(),
             description: input.value,
             status: 'todo',
-            objectiveId: objSelect ? objSelect.value : undefined
+            objectiveId: objSelect ? objSelect.value : undefined,
+            taskOwner: ownerSelect && ownerSelect.value ? ownerSelect.value : undefined
         });
         await savePlan(newPlan);
         input.value = '';
@@ -135,6 +138,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             const task = isInbox ? newPlan.inbox[taskIndex] : newPlan.sprints[currentWeek].tasks[taskIndex];
             task.description = editTaskDesc;
             task.objectiveId = editTaskObj;
+            task.taskOwner = editTaskOwner;
             task.imageUrl = editTaskImage;
             task.isMilestone = editTaskIsMilestone;
             task.checklist = editTaskChecklist;
@@ -221,6 +225,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const startEditingTask = (task: any) => {
         setEditTaskDesc(task.description);
         setEditTaskObj(task.objectiveId);
+        setEditTaskOwner(task.taskOwner);
         setEditTaskTargetSprint(currentWeek);
         setEditTaskImage(task.imageUrl);
         setEditTaskIsMilestone(task.isMilestone || false);
@@ -413,6 +418,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         const form = e.currentTarget;
         const input = form.elements.namedItem('taskDesc') as HTMLInputElement;
         const objSelect = form.elements.namedItem('taskObj') as HTMLSelectElement;
+        const ownerSelect = form.elements.namedItem('taskOwner') as HTMLSelectElement;
         if (!input.value.trim()) return;
         
         const newPlan = { ...plan };
@@ -421,7 +427,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             id: 'inbox_' + Date.now(),
             description: input.value,
             status: 'todo',
-            objectiveId: objSelect ? objSelect.value : undefined
+            objectiveId: objSelect ? objSelect.value : undefined,
+            taskOwner: ownerSelect && ownerSelect.value ? ownerSelect.value : undefined
         });
         await savePlan(newPlan);
         input.value = '';
@@ -486,6 +493,16 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                             {plan.objectives.map((o:any) => <option key={o.id} value={o.id}>{o.name}</option>)}
                         </select>
                     )}
+                    <select
+                        value={editTaskOwner || ''}
+                        onChange={e => setEditTaskOwner(e.target.value)}
+                        className="w-full bg-[#020617] border border-slate-700 rounded p-1 text-xs text-slate-400 mb-2 focus:outline-none"
+                    >
+                        <option value="">(Sem dono)</option>
+                        <option value="Adauto">Adauto</option>
+                        <option value="Claudia">Claudia</option>
+                        <option value="Paulo">Paulo</option>
+                    </select>
                     
                     <div className="mb-3 border border-slate-700 border-dashed rounded p-2 text-center relative group">
                         {editTaskImage ? (
@@ -638,6 +655,16 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                             {plan.objectives.map((o:any) => <option key={o.id} value={o.id}>{o.name}</option>)}
                         </select>
                     )}
+                    <select
+                        value={editTaskOwner || ''}
+                        onChange={e => setEditTaskOwner(e.target.value)}
+                        className="w-full bg-[#020617] border border-slate-700 rounded p-1 text-xs text-slate-400 mb-2 focus:outline-none"
+                    >
+                        <option value="">(Sem dono)</option>
+                        <option value="Adauto">Adauto</option>
+                        <option value="Claudia">Claudia</option>
+                        <option value="Paulo">Paulo</option>
+                    </select>
                     
                     <div className="mb-3 border border-slate-700 border-dashed rounded p-2 text-center relative group">
                         {editTaskImage ? (
@@ -911,6 +938,12 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                             <div className="p-3 border-t border-slate-700/50 bg-slate-900/50 rounded-b-xl">
                                 <form onSubmit={addInboxTask} className="space-y-2">
                                     <input name="taskDesc" type="text" placeholder="+ Nova Ideia (Backlog)" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:border-purple-500 focus:outline-none" autoComplete="off" />
+                                    <select name="taskOwner" className="w-full bg-[#020617] border border-slate-700 rounded p-1 text-xs text-slate-400 focus:outline-none">
+                                        <option value="">(Sem dono)</option>
+                                        <option value="Adauto">Adauto</option>
+                                        <option value="Claudia">Claudia</option>
+                                        <option value="Paulo">Paulo</option>
+                                    </select>
                                     {plan.objectives?.length > 0 && (
                                         <select name="taskObj" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-xs text-slate-400 focus:border-purple-500 focus:outline-none">
                                             <option value="">(Sem vínculo trimestral)</option>
@@ -934,6 +967,12 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                             <div className="p-3 border-t border-slate-700/50 bg-slate-900/50 rounded-b-xl">
                                 <form onSubmit={addTask} className="space-y-2">
                                     <input name="taskDesc" type="text" placeholder="+ Adicionar Tática" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:border-blue-500 focus:outline-none" autoComplete="off" />
+                                    <select name="taskOwner" className="w-full bg-[#020617] border border-slate-700 rounded p-1 text-xs text-slate-400 focus:outline-none">
+                                        <option value="">(Sem dono)</option>
+                                        <option value="Adauto">Adauto</option>
+                                        <option value="Claudia">Claudia</option>
+                                        <option value="Paulo">Paulo</option>
+                                    </select>
                                     {plan.objectives.length > 0 && (
                                         <select name="taskObj" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-xs text-slate-400 focus:border-blue-500 focus:outline-none">
                                             <option value="">(Sem vínculo trimestral)</option>
