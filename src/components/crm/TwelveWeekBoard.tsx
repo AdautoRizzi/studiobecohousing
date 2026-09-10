@@ -477,11 +477,11 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         const isEditing = editingTaskId === task.id;
         if (isEditing) {
             return (
-                <div key={task.id} className="bg-[#0f172a] p-3 rounded-lg border border-purple-500 shadow-sm relative mb-3">
+                <div key={task.id} className="bg-[#0f172a] p-2 rounded-lg border border-purple-500 shadow-sm relative mb-2">
                     <textarea 
                         value={editTaskDesc}
                         onChange={e => setEditTaskDesc(e.target.value)}
-                        className="w-full bg-[#020617] border border-slate-700 rounded p-2 mb-2 text-sm text-slate-200 focus:outline-none min-h-[120px] resize-y custom-scrollbar"
+                        className="w-full bg-[#020617] border border-slate-700 rounded p-2 mb-2 text-sm text-slate-200 focus:outline-none min-h-[60px] resize-y custom-scrollbar"
                     />
                     {plan.objectives?.length > 0 && (
                         <select 
@@ -504,10 +504,10 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <option value="Paulo">Paulo</option>
                     </select>
                     
-                    <div className="mb-3 border border-slate-700 border-dashed rounded p-2 text-center relative group">
+                    <div className="mb-2 border border-slate-700 border-dashed rounded p-1 text-center relative group">
                         {editTaskImage ? (
                             <div className="relative">
-                                <img src={editTaskImage} alt="Anexo" className="max-h-32 mx-auto rounded" />
+                                <img src={editTaskImage} alt="Anexo" className="max-h-20 mx-auto rounded" />
                                 <button onClick={() => setEditTaskImage(undefined)} className="absolute top-1 right-1 bg-red-500/80 text-white rounded-full p-1 hover:bg-red-500">
                                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
@@ -643,7 +643,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     <textarea 
                         value={editTaskDesc}
                         onChange={e => setEditTaskDesc(e.target.value)}
-                        className="w-full bg-[#020617] border border-slate-700 rounded p-2 mb-2 text-sm text-slate-200 focus:outline-none min-h-[120px] resize-y custom-scrollbar"
+                        className="w-full bg-[#020617] border border-slate-700 rounded p-2 mb-2 text-sm text-slate-200 focus:outline-none min-h-[60px] resize-y custom-scrollbar"
                     />
                     {plan.objectives?.length > 0 && (
                         <select 
@@ -666,10 +666,10 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <option value="Paulo">Paulo</option>
                     </select>
                     
-                    <div className="mb-3 border border-slate-700 border-dashed rounded p-2 text-center relative group">
+                    <div className="mb-2 border border-slate-700 border-dashed rounded p-1 text-center relative group">
                         {editTaskImage ? (
                             <div className="relative">
-                                <img src={editTaskImage} alt="Anexo" className="max-h-32 mx-auto rounded" />
+                                <img src={editTaskImage} alt="Anexo" className="max-h-20 mx-auto rounded" />
                                 <button onClick={() => setEditTaskImage(undefined)} className="absolute top-1 right-1 bg-red-500/80 text-white rounded-full p-1 hover:bg-red-500">
                                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
@@ -775,8 +775,13 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     )}
 
                 {obj && (
-                    <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-xs px-2 py-1 rounded-md font-semibold truncate max-w-full mt-1">
+                    <div className="inline-block bg-emerald-900/40 text-emerald-300 border border-emerald-700/60 text-[10px] px-1.5 py-0.5 rounded font-semibold truncate max-w-full mt-1 mr-1">
                         {obj.name}
+                    </div>
+                )}
+                {task.taskOwner && (
+                    <div className={`inline-block text-[10px] px-1.5 py-0.5 rounded font-semibold truncate max-w-full mt-1 mr-1 border ${task.taskOwner === 'Adauto' ? 'bg-orange-900/40 text-orange-300 border-orange-700/60' : task.taskOwner === 'Claudia' ? 'bg-purple-900/40 text-purple-300 border-purple-700/60' : 'bg-blue-900/40 text-blue-300 border-blue-700/60'}`}>
+                        👤 {task.taskOwner}
                     </div>
                 )}
                 <div className="flex gap-2 justify-end items-center -mt-1 h-0 overflow-visible relative z-10">
@@ -847,11 +852,23 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             </div>
 
             {/* Menu de Abas */}
-            <div className="flex gap-4 border-b border-slate-700/50 mb-4">
+            <div className="flex justify-between items-center border-b border-slate-700/50 mb-4">
+                <div className="flex gap-4">
                 <button onClick={() => setActiveTab('vision')} className={`pb-3 px-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'vision' ? 'border-primary-500 text-primary-400' : 'border-transparent text-slate-500 hover:text-slate-300'}`}>1. Visão Trimestral</button>
                 <button onClick={() => setActiveTab('kanban')} className={`pb-3 px-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'kanban' ? 'border-blue-500 text-blue-400' : 'border-transparent text-slate-500 hover:text-slate-300'}`}>2. Kanban do Sprint</button>
                 <button onClick={() => setActiveTab('analytics')} className={`pb-3 px-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'analytics' ? 'border-purple-500 text-purple-400' : 'border-transparent text-slate-500 hover:text-slate-300'}`}>3. Analytics & Rituais</button>
                         <button onClick={() => setActiveTab('agents')} className={`pb-3 px-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'agents' ? 'border-green-500 text-green-400' : 'border-transparent text-slate-500 hover:text-slate-300'}`}>4. Agentes (IA)</button>
+            </div>
+                <div className="flex items-center gap-2 pb-2">
+                    <input 
+                        type="text" 
+                        placeholder="URL Imagem de Fundo (opcional)"
+                        value={bgImage}
+                        onChange={(e) => setBgImage(e.target.value)}
+                        className="bg-[#020617] border border-slate-700 rounded-lg p-1 text-xs text-slate-200 w-48 focus:border-blue-500 focus:outline-none"
+                    />
+                    <button onClick={() => savePlan({ ...plan, bgImage })} className="bg-slate-700 hover:bg-slate-600 text-white px-2 py-1 rounded text-xs font-bold transition-colors">Salvar</button>
+                </div>
             </div>
 
             {/* ABA 1: VISÃO */}
@@ -906,21 +923,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             {/* ABA 2: KANBAN DO SPRINT */}
             {activeTab === 'kanban' && (
                 <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <div className="flex justify-between items-center mb-2">
-                        <div className="text-xl font-bold text-white">Tração & Marcos</div>
-                        <div className="flex items-center gap-2">
-                            <input 
-                                type="text" 
-                                placeholder="URL Imagem de Fundo (opcional)"
-                                value={bgImage}
-                                onChange={(e) => setBgImage(e.target.value)}
-                                className="bg-[#020617] border border-slate-700 rounded-lg p-2 text-xs text-slate-200 w-64 focus:outline-none"
-                            />
-                            <button onClick={() => savePlan({...plan, bgImage})} className="text-xs bg-slate-800 text-slate-300 px-3 py-2 rounded hover:bg-slate-700 transition font-bold">
-                                Salvar Fundo
-                            </button>
-                        </div>
-                    </div>
+                    
                     <div 
                         className="grid grid-cols-1 md:grid-cols-5 gap-4 rounded-xl p-4 transition-all duration-500"
                         style={bgImage ? {backgroundImage: `linear-gradient(rgba(15,23,42,0.85), rgba(15,23,42,0.85)), url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center'} : {}}
