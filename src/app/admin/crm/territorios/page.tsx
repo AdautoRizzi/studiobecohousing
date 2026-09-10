@@ -9,6 +9,8 @@ export default function BancoTerrasAdmin() {
     const [matchCount, setMatchCount] = useState<number | null>(null);
     const [selectedTerritory, setSelectedTerritory] = useState<any>(null);
     const [showHelp, setShowHelp] = useState(false);
+    const [aiReport, setAiReport] = useState<string | null>(null);
+    const [isGeneratingAi, setIsGeneratingAi] = useState(false);
     
     // Matriz de Pesos 
     const weights: Record<string, number> = {
@@ -55,6 +57,29 @@ export default function BancoTerrasAdmin() {
         // Bônus do Índice Piraí soma direto no total
         const piraiBonus = Number(terr.score_pirai) || 0;
         return Math.round(total + piraiBonus); // Agora pode ultrapassar 100
+    };
+
+    
+    const handleGenerateReport = async () => {
+        if (!selectedTerritory) return;
+        setIsGeneratingAi(true);
+        try {
+            const res = await fetch('/api/crm/parecer-ia', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ territory: selectedTerritory })
+            });
+            const data = await res.json();
+            if (data.report) {
+                setAiReport(data.report);
+            } else {
+                alert(data.error || 'Erro desconhecido ao gerar parecer.');
+            }
+        } catch (e: any) {
+            alert('Erro ao conectar com Cérebro: ' + e.message);
+        } finally {
+            setIsGeneratingAi(false);
+        }
     };
 
     const handleFieldChange = (field: string, value: any) => {
@@ -419,8 +444,8 @@ const isEixoPirai = selectedTerritory?.location_city?.toLowerCase().includes('it
                                             <button onClick={handleSave} disabled={saving} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl transition-colors shadow-lg shadow-emerald-900/20">
                                                 {saving ? 'Salvando...' : '💾 Salvar Análise no Banco'}
                                             </button>
-                                            <button onClick={() => alert('Cérebro Antigravity acionado: Gerando Parecer Executivo em PDF...')} className="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl transition-colors border border-slate-500">
-                                                🧠 Parecer Inteligência Artifical
+                                            <button onClick={handleGenerateReport} disabled={isGeneratingAi} className="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl transition-colors border border-slate-500 flex justify-center items-center gap-2">
+                                                {isGeneratingAi ? <span className="animate-pulse">⏳ Processando Análise...</span> : <span>🤖 Parecer Inteligência Artificial</span>}
                                             </button>
                                         </div>
                                     </div>
@@ -507,6 +532,23 @@ const isEixoPirai = selectedTerritory?.location_city?.toLowerCase().includes('it
                     </div>
                 </div>
             )}
-        </div>
-    );
-}
+        
+            {aiReport && (
+                <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+                    <div className="bg-slate-900 border border-purple-500/50 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto custom-scrollbar p-8 shadow-2xl relative">
+                        <button onClick={() => setAiReport(null)} className="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800 rounded-full w-8 h-8 flex items-center justify-center">✕</button>
+                        
+                        <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">🤖 Parecer Executivo de Investimento</h2>
+                        
+                        <div className="prose prose-invert prose-emerald max-w-none text-slate-300">
+                            <div dangerouslySetInnerHTML={{ __html: aiReport.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                        </div>
+
+                        <div className="mt-8 flex justify-end gap-3 pt-4 border-t border-slate-800">
+                            <button onClick={() => setAiReport(null)} className="px-4 py-2 bg-slate-800 text-white rounded hover:bg-slate-700">Fechar</button>
+                            <button onClick={() => window.print()} className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Exportar PDF</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+

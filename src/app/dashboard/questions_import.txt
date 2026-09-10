@@ -1,0 +1,238 @@
+1. Quando pretende mudar?
+Selecione uma opção:
+* Em 1 ano 
+* Entre 1 e 2 anos 
+* Entre 2 e 5 anos 
+* Mais de 5 anos 
+* Ainda não sei, estou apenas pesquisando 
+2. O que mais motiva sua busca por uma nova moradia? (Máx. 3 respostas)
+* Ter mais qualidade de vida 
+* Viver em comunidade, criando uma rede de apoio 
+* Combater a solidão 
+* Envelhecer com autonomia 
+* Ter mais segurança 
+* Reduzir custos 
+* Ter contato com a natureza 
+* Ter mais sustentabilidade 
+* Estar perto de pessoas com interesses semelhantes 
+* Ter acesso a serviços compartilhados 
+* Morar próximo a familiares ou amigos
+* Outro 
+3. Como você gostaria de se relacionar com seus vizinhos?
+* Quero muita convivência e interação 
+* Gosto de convivência frequente, mas preciso de privacidade 
+* Prefiro um equilíbrio entre convivência e privacidade 
+* Sou mais reservado e prefiro pouca interação 
+* Ainda não tenho opinião formada
+4. Com que frequência gostaria de participar de atividades coletivas?
+* Diariamente 
+* Várias vezes por semana 
+* Uma vez por semana 
+* Algumas vezes por mês 
+* Apenas ocasionalmente 
+* Prefiro não participar 
+5. O que você gostaria de compartilhar? (Máx. 5 respostas)
+* Horta 
+* Cozinha 
+* Lavanderia 
+* Carros 
+* Bicicletas 
+* Ferramentas 
+* Espaços de lazer 
+* Espaços para trabalho/coworking 
+* Equipamentos esportivos 
+* Biblioteca 
+* Serviços (jardinagem, limpeza, compras) 
+* Ateliê
+* Nada, prefiro ter tudo individual 
+6. Quanto você estaria disposto a contribuir para a vida comunitária?
+* Com meu tempo 
+* Com meus conhecimentos profissionais 
+* Com atividades práticas 
+* Participando da organização e gestão 
+* Posso contribuir de várias dessas formas 
+* Financeiramente, para o bem-estar da comunidade
+* Prefiro não assumir responsabilidades 
+7. Como você costuma lidar com conflitos?
+* Procuro conversar imediatamente 
+* Prefiro ouvir antes de me posicionar 
+* Procuro uma solução consensual 
+* Prefiro que alguém neutro ajude 
+* Evito conflitos sempre que possível 
+* Tenho dificuldade em lidar com conflitos 
+8. Como você gostaria que as decisões da comunidade fossem tomadas?
+* Consentimento entre todos 
+* Maioria dos moradores 
+* Consenso para decisões importantes e maioria para as demais 
+* Delegação para representantes/comissões 
+* Não tenho preferência 
+9. Quais comportamentos seriam incompatíveis com sua forma de viver? (Máx. 5 respostas)- em ordem de prioridade
+* Barulho excessivo 
+* Falta de respeito 
+* Falta de participação comunitária 
+* Falta de organização 
+* Falta de privacidade 
+* Uso excessivo de álcool 
+* Fumo 
+* Animais sem controle 
+* Descuido com espaços comuns 
+* Falta de compromisso financeiro 
+* Intolerância/preconceito 
+* Outro 
+10. Você se imagina envelhecendo nesta comunidade?
+* Sim, é exatamente o que procuro 
+* Sim, se houver estrutura adequada 
+* Talvez 
+* Não é uma prioridade 
+* Não penso nisso atualmente 
+11. Que tipo de apoio você gostaria de encontrar no futuro? (Máx. 5 respostas)- em ordem de prioridade
+* Rede de apoio e companhia 
+* Serviços de saúde e bem-estar 
+* Apoio em situações de emergência 
+* Serviços de cuidadores 
+* Transporte 
+* Alimentação 
+* Manutenção da residência 
+* Atividades físicas 
+* Atividades culturais 
+* Apoio emocional/social 
+* Não considero necessário 
+12. Você estaria disposto a ajudar outros moradores quando necessário?
+* Sim, tenho bastante disponibilidade 
+* Sim, eventualmente 
+* Apenas em situações específicas 
+* Prefiro não assumir esse compromisso 
+* Depende da situação 
+13. Quais são os 5 valores mais importantes para você? Em ordem de prioridade.
+* Família 
+* Amizade 
+* Liberdade 
+* Privacidade 
+* Segurança 
+* Solidariedade 
+* Sustentabilidade 
+* Natureza 
+* Saúde 
+* Espiritualidade 
+* Diversidade 
+* Autonomia 
+* Participação 
+* Cooperação 
+* Simplicidade 
+* Justiça 
+* Desenvolvimento pessoal 
+* Outro 
+14. Que tipo de pessoa você gostaria de ter como vizinho? (Máx. 5 respostas)
+* Sociável 
+* Tranquila/o 
+* Solidária/o 
+* Independente 
+* Participativa/o 
+* Empreendedora/o 
+* Criativa/o 
+* Ligada/o à natureza 
+* Ativa/o fisicamente 
+* Interessada/o em cultura 
+* Familiar 
+* Espiritualizada/o 
+* Disposta/o a ajudar 
+* Respeitosa/o com a privacidade 
+* Outro 
+"Como é viver com você?"
+15. Você prefere uma comunidade:
+* Muito ativa e social 
+* Social, mas equilibrada 
+* Tranquila 
+* Muito tranquila e reservada 
+16. Em relação ao silêncio:
+* Gosto de ambientes silenciosos 
+* Tolero algum movimento 
+* Gosto de uma casa/comunidade animada 
+17. Em relação a visitas:
+* Gosto de receber pessoas frequentemente 
+* Eventualmente 
+* Prefiro pouca movimentação 
+18. Em relação à organização:
+* Sou muito organizado 
+* Razoavelmente organizado 
+* Sou mais flexível 
+* Não sou muito organizado
+"A vida que você quer viver"
+1. Pensando nos próximos 5 anos, o que você gostaria de ter MAIS na sua vida? (Máx. 5 respostas)- em ordem de prioridade
+* Companhia e amizades 
+* Segurança 
+* Saúde e bem-estar 
+* Natureza 
+* Tempo livre 
+* Apoio de pessoas próximas 
+* Atividades e experiências 
+* Lazer 
+* Autonomia 
+* Propósito 
+* Tranquilidade
+* Outro 
+2. O que você gostaria de ter MENOS? (Máx. 5 respostas)- em ordem de prioridade
+* Solidão 
+* Estresse 
+* Custos 
+* Preocupações com manutenção 
+* Insegurança 
+* Isolamento 
+* Trânsito 
+* Sedentarismo 
+* Falta de tempo 
+* Preocupação com o futuro
+* Outro 
+3. Hoje, quanto você se sente conectado (presencialmente) às pessoas que vivem ao seu redor?
+* Muito conectado 
+* Razoavelmente conectado 
+* Pouco conectado 
+* Muito pouco conectado 
+* Praticamente isolado 
+4. Se você precisasse de ajuda amanhã, quantas pessoas próximas poderia chamar?
+* Muitas 
+* Algumas 
+* Poucas 
+* Nenhuma 
+5. Como você gostaria que fosse sua rede de apoio daqui a 5 anos?
+* Família 
+* Amigos 
+* Vizinhos 
+* Comunidade 
+* Profissionais contratados 
+* Uma combinação de todos 
+6. Qual destas situações mais representa seu futuro desejado? (Max. 3 respostas) – em ordem de prioridade
+* Continuar vivendo exatamente como hoje 
+* Melhorar minha moradia 
+* Morar perto de pessoas queridas 
+* Viver em contato com a natureza 
+* Construir coletivamente uma nova forma de viver em comunidade
+* Ainda não sei 
+7. Você estaria disposto a começar a construir essa vida antes de ter certeza de onde irá morar?
+* Sim, quero começar agora 
+* Sim, quero conhecer pessoas primeiro 
+* Talvez 
+* Prefiro esperar uma oportunidade concreta 
+* Acho que isso é algo para o futuro 
+8. Se existisse hoje uma comunidade formada por pessoas com valores e objetivos semelhantes aos seus, o que faria você considerar fazer parte dela agora? (Max 5 respostas) – em ordem de prioridade
+* Ter pessoas com quem compartilhar a vida 
+* Segurança e apoio mútuo 
+* Envelhecer com autonomia 
+* Reduzir custos 
+* Ter mais saúde e qualidade de vida 
+* Viver mais perto da natureza 
+* Ter mais lazer e experiências 
+* Combater a solidão 
+* Construir algo coletivo 
+* Ter uma rede de apoio para minha família 
+* Conhecer pessoas antes de decidir 
+* Ainda não consigo imaginar isso para mim 
+9. Qual destas frases mais representa você hoje?
+* "Quero continuar como estou." 
+* "Quero mudar, mas ainda não sei como." 
+* "Se encontrasse as pessoas certas, eu mudaria." 
+* "Estou procurando uma nova forma de viver." 
+* "Quero começar a construir essa nova vida agora."
+
+
+"Talvez eu não esteja procurando uma casa. Talvez esteja procurando uma vida melhor."
