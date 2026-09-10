@@ -223,36 +223,75 @@ const isEixoPirai = selectedTerritory?.location_city?.toLowerCase().includes('it
                                     <div className="bg-slate-800/50 p-4 rounded-lg">
                                         <p className="text-xs text-slate-500 uppercase font-bold mb-1">Contato do Proprietário</p>
                                         <p className="text-white font-medium">{selectedTerritory.property_name ? `${selectedTerritory.property_name} (${selectedTerritory.owner_name})` : selectedTerritory.owner_name}</p>
-                                        <p className="text-emerald-400">{selectedTerritory.owner_phone}</p>
+                                        <p className="text-emerald-400">{selectedTerritory.owner_phone} ({selectedTerritory.preferred_contact || 'WhatsApp'})</p>
+                                        {selectedTerritory.owner_email && <p className="text-slate-300 text-xs mt-1">{selectedTerritory.owner_email}</p>}
                                     </div>
                                     
                                     <div className="bg-slate-800/50 p-4 rounded-lg">
                                         <p className="text-xs text-slate-500 uppercase font-bold mb-1">Localização e Tamanho</p>
                                         <p className="text-white">{selectedTerritory.location_city}</p>
-                                        <p className="text-slate-300">{selectedTerritory.area_hectares} ha</p>
-                                        {selectedTerritory.maps_link && <a href={selectedTerritory.maps_link} target="_blank" className="text-blue-400 hover:underline mt-2 inline-block">Abrir no Maps ↗</a>}
+                                        {selectedTerritory.address && <p className="text-slate-400 text-xs mt-1">{selectedTerritory.address}</p>}
+                                        {selectedTerritory.coordinates && <p className="text-slate-400 text-xs font-mono">{selectedTerritory.coordinates}</p>}
+                                        <p className="text-slate-300 mt-2">Área Total: {selectedTerritory.area_hectares} ha</p>
+                                        {selectedTerritory.maps_link && <a href={selectedTerritory.maps_link} target="_blank" className="text-blue-400 hover:underline mt-2 inline-block">Abrir no Maps 🗺️</a>}
                                     </div>
 
                                     <div className="bg-slate-800/50 p-4 rounded-lg">
                                         <p className="text-xs text-slate-500 uppercase font-bold mb-1">Comercial</p>
                                         <p className="text-emerald-400 font-mono text-lg">{selectedTerritory.estimated_price}</p>
-                                        <p className="text-white mt-1">Doc: {selectedTerritory.documentation || 'Não informada'}</p>
                                         <div className="mt-2 flex flex-wrap gap-1">
                                             {selectedTerritory.accept_negotiation && <span className="bg-slate-700 px-2 py-0.5 rounded text-xs">Aceita Negociar</span>}
                                             {selectedTerritory.accept_exchange && <span className="bg-slate-700 px-2 py-0.5 rounded text-xs">Permuta</span>}
                                             {selectedTerritory.accept_partnership && <span className="bg-slate-700 px-2 py-0.5 rounded text-xs">Parceria</span>}
+                                            {selectedTerritory.accept_buy_option && <span className="bg-slate-700 px-2 py-0.5 rounded text-xs">Opção de Compra</span>}
                                         </div>
                                     </div>
 
                                     <div className="bg-slate-800/50 p-4 rounded-lg">
-                                        <p className="text-xs text-slate-500 uppercase font-bold mb-1">Físicas / Água</p>
-                                        <p className="text-white">Topografia: {selectedTerritory.topography || 'Não info'}</p>
-                                        <p className="text-blue-300 font-bold mt-1">💧 {selectedTerritory.has_water || 'Não info'}</p>
+                                        <p className="text-xs text-slate-500 uppercase font-bold mb-2">Documentação e Pendências</p>
+                                        <p className="text-white text-xs mb-2">Situação Base: {selectedTerritory.documentation || 'Não informada'}</p>
+                                        <div className="flex flex-wrap gap-1 mb-2">
+                                            {selectedTerritory.doc_car && <span className="bg-blue-900/40 text-blue-300 px-2 py-0.5 rounded text-xs border border-blue-800">CAR</span>}
+                                            {selectedTerritory.doc_ccir && <span className="bg-blue-900/40 text-blue-300 px-2 py-0.5 rounded text-xs border border-blue-800">CCIR</span>}
+                                            {selectedTerritory.doc_itr && <span className="bg-blue-900/40 text-blue-300 px-2 py-0.5 rounded text-xs border border-blue-800">ITR</span>}
+                                            {selectedTerritory.doc_georef && <span className="bg-blue-900/40 text-blue-300 px-2 py-0.5 rounded text-xs border border-blue-800">Georref.</span>}
+                                            {selectedTerritory.doc_legal_reserve && <span className="bg-blue-900/40 text-blue-300 px-2 py-0.5 rounded text-xs border border-blue-800">Reserva</span>}
+                                            {selectedTerritory.doc_app && <span className="bg-blue-900/40 text-blue-300 px-2 py-0.5 rounded text-xs border border-blue-800">APP</span>}
+                                        </div>
+                                        {selectedTerritory.judicial_issues && (
+                                            <div className="mt-2 bg-red-900/20 p-2 rounded border border-red-900/50">
+                                                <p className="text-[10px] text-red-400 font-bold uppercase">Restrições:</p>
+                                                <p className="text-slate-300 text-xs italic">{selectedTerritory.judicial_issues}</p>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="bg-slate-800/50 p-4 rounded-lg">
+                                        <p className="text-xs text-slate-500 uppercase font-bold mb-1">Físicas / Água</p>
+                                        <p className="text-white text-xs">Topografia: {selectedTerritory.topography || 'Não info'}</p>
+                                        <p className="text-white text-xs mt-1">Solo: {selectedTerritory.soil_type || 'Não info'}</p>
+                                        
+                                        <div className="grid grid-cols-3 gap-2 mt-2">
+                                            {selectedTerritory.forest_area && <div className="bg-slate-900 p-1 rounded text-center"><span className="block text-[9px] text-slate-500">Mata</span><span className="text-xs text-slate-300">{selectedTerritory.forest_area}ha</span></div>}
+                                            {selectedTerritory.pasture_area && <div className="bg-slate-900 p-1 rounded text-center"><span className="block text-[9px] text-slate-500">Pastagem</span><span className="text-xs text-slate-300">{selectedTerritory.pasture_area}ha</span></div>}
+                                            {selectedTerritory.agriculture_area && <div className="bg-slate-900 p-1 rounded text-center"><span className="block text-[9px] text-slate-500">Agricola</span><span className="text-xs text-slate-300">{selectedTerritory.agriculture_area}ha</span></div>}
+                                        </div>
+                                        <p className="text-blue-400 font-bold mt-2 text-xs">💧 {selectedTerritory.has_water || 'Não info'}</p>
+                                    </div>
+                                    
+                                    {(selectedTerritory.current_use?.length > 0 || selectedTerritory.infra_items?.length > 0 || selectedTerritory.improvements?.length > 0) && (
+                                        <div className="bg-slate-800/50 p-4 rounded-lg">
+                                            <p className="text-xs text-slate-500 uppercase font-bold mb-2">Uso e Infraestrutura</p>
+                                            {selectedTerritory.current_use && selectedTerritory.current_use.length > 0 && <p className="text-slate-300 text-xs mb-1"><b>Uso:</b> {selectedTerritory.current_use.join(', ')}</p>}
+                                            {selectedTerritory.infra_items && selectedTerritory.infra_items.length > 0 && <p className="text-slate-300 text-xs mb-1"><b>Infra:</b> {selectedTerritory.infra_items.join(', ')}</p>}
+                                            {selectedTerritory.improvements && selectedTerritory.improvements.length > 0 && <p className="text-slate-300 text-xs mb-1"><b>Benfeitorias:</b> {selectedTerritory.improvements.join(', ')}</p>}
+                                            {selectedTerritory.distance_main_road && <p className="text-slate-300 text-xs mt-1"><b>Acesso:</b> {selectedTerritory.distance_main_road}</p>}
+                                        </div>
+                                    )}
+
+                                    <div className="bg-slate-800/50 p-4 rounded-lg">
                                         <p className="text-xs text-slate-500 uppercase font-bold mb-1">Por que serve para Cohousing?</p>
-                                        <p className="text-slate-300 italic">"{selectedTerritory.owner_pitch || 'Proprietário não detalhou.'}"</p>
+                                        <p className="text-slate-300 italic text-sm">"{selectedTerritory.owner_pitch || 'Proprietário não detalhou.'}"</p>
                                     </div>
 
                                     {selectedTerritory.files_urls && selectedTerritory.files_urls.length > 0 && (
@@ -260,14 +299,14 @@ const isEixoPirai = selectedTerritory?.location_city?.toLowerCase().includes('it
                                             <p className="text-xs text-slate-500 uppercase font-bold mb-2">Arquivos Anexos</p>
                                             {selectedTerritory.files_urls.map((url: string, i: number) => (
                                                 <a key={i} href={url} target="_blank" className="text-emerald-400 hover:underline block text-xs bg-slate-800 p-2 rounded mb-1 truncate">
-                                                    📄 Anexo {i+1}
+                                                    📎 Anexo {i+1}
                                                 </a>
                                             ))}
                                         </div>
                                     )}
                                 </div>
                             </div>
-
+                            
                             {/* COLUNA CENTRAL E DIREITA: Matriz de Inteligência */}
                             <div className="flex-1 bg-slate-900 p-6 overflow-y-auto custom-scrollbar">
                                 <div className="flex justify-between items-center mb-6 border-b border-slate-800 pb-2">
