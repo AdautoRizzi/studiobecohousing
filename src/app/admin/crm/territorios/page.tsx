@@ -8,6 +8,7 @@ export default function BancoTerrasAdmin() {
     const [saving, setSaving] = useState(false);
     const [matchCount, setMatchCount] = useState<number | null>(null);
     const [selectedTerritory, setSelectedTerritory] = useState<any>(null);
+    const [showHelp, setShowHelp] = useState(false);
     
     // Matriz de Pesos 
     const weights: Record<string, number> = {
@@ -310,7 +311,12 @@ const isEixoPirai = selectedTerritory?.location_city?.toLowerCase().includes('it
                             {/* COLUNA CENTRAL E DIREITA: Matriz de Inteligência */}
                             <div className="flex-1 bg-slate-900 p-6 overflow-y-auto custom-scrollbar">
                                 <div className="flex justify-between items-center mb-6 border-b border-slate-800 pb-2">
-                                    <h4 className="font-bold text-emerald-400 text-lg flex items-center gap-2"><span>🧠</span> Matriz de Avaliação da Oportunidade</h4>
+                                    <div className="flex items-center gap-3">
+                                        <h4 className="font-bold text-emerald-400 text-lg flex items-center gap-2"><span>🧠</span> Matriz de Avaliação da Oportunidade</h4>
+                                        <button onClick={() => setShowHelp(true)} className="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-600 px-2 py-1 rounded flex items-center gap-1 transition-colors">
+                                            <span>❓</span> Entender o Racional
+                                        </button>
+                                    </div>
                                     
                                     <select className="bg-slate-800 border border-slate-600 text-white text-sm rounded p-2" value={selectedTerritory.stage || ''} onChange={e => handleFieldChange('stage', e.target.value)}>
                                         <option value="1 - Emergente">⏳ Estágio 1 (Emergente)</option>
@@ -421,6 +427,82 @@ const isEixoPirai = selectedTerritory?.location_city?.toLowerCase().includes('it
 
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        
+            {showHelp && (
+                <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+                    <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto custom-scrollbar p-8 shadow-2xl relative">
+                        <button onClick={() => setShowHelp(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800 rounded-full w-8 h-8 flex items-center justify-center">✕</button>
+                        
+                        <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">🧠 Racional de Inteligência Territorial</h2>
+                        <p className="text-slate-400 mb-8">Guia de referência para preenchimento da Matriz de Avaliação (Base 100 + Bônus).</p>
+                        
+                        <div className="space-y-8">
+                            {/* Estágios */}
+                            <section>
+                                <h3 className="text-emerald-400 font-bold border-b border-slate-800 pb-2 mb-4 text-lg">⏳ Estágios de Maturidade</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-300">
+                                    <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
+                                        <span className="font-bold text-white">Estágio 1 (Emergente)</span>
+                                        <p className="mt-1 text-slate-400">Território cru, "fora do radar" do mercado tradicional. Risco de desenvolvimento mais alto, mas com **potencial gigantesco de valorização e assimetria**. Infraestrutura escassa, necessita visão de longo prazo.</p>
+                                    </div>
+                                    <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
+                                        <span className="font-bold text-white">Estágio 2 (Primeiros Invest.)</span>
+                                        <p className="mt-1 text-slate-400">Pioneiros já identificaram valor. Processo de regularização iniciado, infraestrutura básica planejada. A assimetria ainda é alta, mas com alicerces mais claros.</p>
+                                    </div>
+                                    <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
+                                        <span className="font-bold text-white">Estágio 3 (Aceleração)</span>
+                                        <p className="mt-1 text-slate-400">Obras avançando, documentação clara, ecossistema e comunidade ganhando corpo. O risco despenca e a velocidade de vendas/atração aumenta muito.</p>
+                                    </div>
+                                    <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
+                                        <span className="font-bold text-white">Estágio 4 (Consolidação)</span>
+                                        <p className="mt-1 text-slate-400">Cohousing habitado e maduro. Risco próximo de zero. A valorização atingiu o platô e o local agora é um polo reconhecido e estabelecido (venda de mercado).</p>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* Pesos Críticos */}
+                            <section>
+                                <h3 className="text-red-400 font-bold border-b border-slate-800 pb-2 mb-4 text-lg">🔥 Pesos Críticos (Peso 15)</h3>
+                                <div className="space-y-3 text-sm text-slate-300">
+                                    <p><strong className="text-white">Aderência:</strong> O perfil atrai o público-alvo da Studio Be? (0 = Foge do nosso DNA corporativo/comunitário; 10 = O local "grita" Studio Be).</p>
+                                    <p><strong className="text-white">Natureza/Visual:</strong> Avaliação cênica. (0 = Área degradada e sem atrativos; 10 = Paisagem de tirar o fôlego, mata preservada, paraíso natural).</p>
+                                    <p><strong className="text-white">Viabilidade Legal:</strong> O projeto passa na prefeitura/órgãos ambientais? (0 = Cheio de entraves e APPs complexas; 10 = Plano Diretor permite, zoneamento perfeito).</p>
+                                    <p><strong className="text-white">Pot. Valorização:</strong> A região está crescendo? (0 = Estagnada ou em declínio; 10 = Vetor de crescimento da cidade, grandes obras ao redor).</p>
+                                </div>
+                            </section>
+
+                            {/* Pesos Altos */}
+                            <section>
+                                <h3 className="text-blue-400 font-bold border-b border-slate-800 pb-2 mb-4 text-lg">⭐ Pesos Altos (Peso 10)</h3>
+                                <div className="space-y-3 text-sm text-slate-300">
+                                    <p><strong className="text-white">Água:</strong> Segurança hídrica. (0 = Seco, dependência total de caminhão-pipa; 10 = Nascentes próprias fortes, lagos, lençol freático abundante).</p>
+                                    <p><strong className="text-white">Acesso (Distância):</strong> Facilidade de chegar. (0 = Estrada de terra terrível, muito distante de centros; 10 = Asfalto na porta, próximo a rodovias e cidades).</p>
+                                </div>
+                            </section>
+
+                            {/* Pesos Complementares */}
+                            <section>
+                                <h3 className="text-slate-300 font-bold border-b border-slate-800 pb-2 mb-4 text-lg">⚖️ Pesos Complementares (Peso 5)</h3>
+                                <div className="space-y-3 text-sm text-slate-300">
+                                    <p><strong className="text-white">Infraestrutura:</strong> O que já tem pronto? (0 = Nada, mato puro; 10 = Energia trifásica, internet, sedes prontas, cercas boas).</p>
+                                    <p><strong className="text-white">Custo Relativo:</strong> Oportunidade de compra. (0 = Acima do preço de mercado; 10 = "Barganha", muito abaixo do valor real).</p>
+                                    <p><strong className="text-white">Regenerativo:</strong> Oportunidade de impacto ecológico. (0 = Não há o que recuperar ou impossível; 10 = Pode virar um grande case de reflorestamento e carbono).</p>
+                                    <p><strong className="text-white">Comunitário:</strong> Impacto no entorno. (0 = Isolado/hostil; 10 = Possibilidade gigante de envolver produtores locais e gerar impacto social positivo).</p>
+                                </div>
+                            </section>
+
+                            {/* Especiais */}
+                            <section className="bg-blue-900/20 p-4 rounded-xl border border-blue-900/50">
+                                <h3 className="text-purple-400 font-bold mb-2 text-lg">✨ Índice Piraí (Bônus) & Assimetria 2035</h3>
+                                <div className="space-y-3 text-sm text-slate-300">
+                                    <p><strong className="text-white">Índice Piraí (Até +10 pontos extras):</strong> O "Fator X". Use para premiar terrenos que têm algo único que a matemática não captura (ex: vista exclusiva para um cânion, história única, localização num eixo muito desejado). Soma direto na nota final, podendo ultrapassar os 100 pontos.</p>
+                                    <p><strong className="text-white">Score 2035:</strong> Projete a nota do terreno em 10 anos. A diferença entre o Score Atual e o 2035 gera a "Assimetria" (o lucro/valorização projetada). Terrenos Emergentes geralmente têm notas atuais baixas (ex: 45) mas alto Score 2035 (ex: 85), revelando uma assimetria enorme (+40).</p>
+                                </div>
+                            </section>
                         </div>
                     </div>
                 </div>
