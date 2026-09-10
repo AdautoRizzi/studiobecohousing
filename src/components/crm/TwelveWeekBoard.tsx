@@ -613,8 +613,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     )}
 
                 
-                <div className="flex gap-2 mt-3 pt-3 border-t border-slate-800 justify-between items-center">
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end items-center">
+                <div className="flex gap-2 justify-end items-center -mt-1 h-0 overflow-visible relative z-10">
+                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity justify-end items-center bg-slate-900/80 rounded px-1 py-0.5 border border-slate-700 backdrop-blur-sm -translate-y-2">
                         <button onClick={(e) => { e.stopPropagation(); moveTask(task.id, 'up'); }} className="text-slate-500 hover:text-white mr-1" title="Mover para Cima">
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
                         </button>
@@ -779,9 +779,9 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         {obj.name}
                     </div>
                 )}
-                <div className="flex gap-2 mt-3 pt-3 border-t border-slate-700 justify-between items-center">
+                <div className="flex gap-2 justify-end items-center -mt-1 h-0 overflow-visible relative z-10">
                     
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity w-full justify-end items-center">
+                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity justify-end items-center bg-slate-900/80 rounded px-1 py-0.5 border border-slate-700 backdrop-blur-sm -translate-y-2">
                         <button onClick={(e) => { e.stopPropagation(); moveTask(task.id, 'up'); }} className="text-slate-500 hover:text-white mr-1" title="Mover para Cima">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
     </button>
