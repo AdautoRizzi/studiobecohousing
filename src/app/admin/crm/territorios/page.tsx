@@ -551,4 +551,6 @@ const isEixoPirai = selectedTerritory?.location_city?.toLowerCase().includes('it
                     </div>
                 </div>
             )}
-
+        </div>
+    );
+}
