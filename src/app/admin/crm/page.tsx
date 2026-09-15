@@ -110,7 +110,7 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
     };
 
     return (
-        <div>
+        <div className="w-full max-w-full min-w-0">
             <div className="flex justify-between items-end mb-8">
                 <div>
                     <h1 className="text-3xl font-bold text-slate-50 tracking-tight">Gestão de Leads</h1>
@@ -157,7 +157,7 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
                 </div>
             </div>
 
-            <div className="bg-[#0f172a] rounded-2xl shadow-sm border border-slate-800 overflow-x-auto">
+            <div className="bg-[#0f172a] rounded-2xl shadow-sm border border-slate-800 overflow-x-auto w-full max-w-full" style={{ maxWidth: "calc(100vw - 40px)" }}>
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-[#020617]">
                         <tr>
