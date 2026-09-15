@@ -6,6 +6,7 @@ export interface UserAccount {
     phone: string;
     status: 'Pendente' | 'Aprovado';
     createdAt: string;
+    role?: 'ADMIN' | 'FACILITATOR' | 'CLIENT';
 }
 
 export interface Lead {
@@ -105,6 +106,15 @@ export async function approveUser(email: string) {
     const { error } = await supabase
         .from('users')
         .update({ status: 'Aprovado' })
+        .eq('email', email);
+    
+    return !error;
+}
+
+export async function updateUserRole(email: string, role: 'ADMIN' | 'FACILITATOR' | 'CLIENT') {
+    const { error } = await supabase
+        .from('users')
+        .update({ role })
         .eq('email', email);
     
     return !error;
