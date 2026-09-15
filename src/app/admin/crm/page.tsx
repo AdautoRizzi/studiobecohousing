@@ -157,7 +157,7 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
                 </div>
             </div>
 
-            <div className="bg-[#0f172a] rounded-2xl shadow-sm border border-slate-800 overflow-x-auto w-full max-w-full" style={{ maxWidth: "calc(100vw - 40px)" }}>
+            <div className="bg-[#0f172a] rounded-2xl shadow-sm border border-slate-800 overflow-x-auto w-full">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-[#020617]">
                         <tr>
