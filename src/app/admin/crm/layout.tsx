@@ -79,7 +79,7 @@ export default async function CRMLayout({ children }: { children: React.ReactNod
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 p-6 md:p-10 overflow-y-auto">
+            <main className="flex-1 min-w-0 p-6 md:p-10 overflow-y-auto overflow-x-hidden">
                 {children}
             </main>
         </div>
