@@ -13,6 +13,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     const allNav = [
         { name: 'Minha Jornada', href: '/dashboard', icon: '🗺️', minTier: 0, exact: true },
         { name: 'Meu Perfil', href: '/dashboard/perfil', icon: '👤', minTier: 0 },
+        { name: 'Treinamentos', href: '/dashboard/cursos', icon: '🎓', minTier: 0 },
         { name: 'Comunidade & Vizinhos', href: '/dashboard/comunidade', icon: '👥', minTier: 2 },
         { name: 'Governança & Fórum', href: '/dashboard/governanca', icon: '🏛️', minTier: 3 },
         { name: 'Eventos da Vila', href: '/dashboard/eventos', icon: '📅', minTier: 4 },
