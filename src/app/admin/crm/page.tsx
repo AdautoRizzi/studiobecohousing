@@ -157,7 +157,7 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
                 </div>
             </div>
 
-            <div className="bg-[#0f172a] rounded-2xl shadow-sm border border-slate-800 overflow-hidden">
+            <div className="bg-[#0f172a] rounded-2xl shadow-sm border border-slate-800 overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-[#020617]">
                         <tr>
@@ -228,7 +228,8 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
                                             {new Date(lead.createdAt).toLocaleDateString('pt-BR')}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 text-right whitespace-nowrap space-x-2 flex items-center justify-end">
+                                    <td className="px-6 py-4 text-right whitespace-nowrap">
+                                        <div className="flex items-center justify-end space-x-2">
                                         <Link href={`/admin/crm/lead/${lead.id}`} className="text-slate-300 hover:text-slate-50 font-bold bg-slate-800 px-3 py-2 rounded-lg transition-colors text-xs">
                                             Analisar Match
                                         </Link>
@@ -236,6 +237,7 @@ export default async function CRMPage({ searchParams }: { searchParams: Promise<
                                             Ver Dossiê
                                         </Link>
                                         <DeleteLeadButton leadId={lead.id} leadName={lead.nome} />
+                                        </div>
                                     </td>
                                 </tr>
                             ))

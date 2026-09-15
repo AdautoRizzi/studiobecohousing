@@ -1011,7 +1011,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         </div>
 
                         {/* DONE */}
-                        <div className="bg-green-950/10 rounded-xl border border-green-700/40 flex flex-col h-[600px]">
+                        <div className="bg-green-950/10 rounded-xl border border-green-700/40 flex flex-col h-[600px]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'done')}>
                             <div className="p-3 border-b border-green-700/40 flex justify-between items-center bg-green-900/20 rounded-t-xl">
                                 <h3 className="font-bold text-green-400 uppercase text-[10px] tracking-wider">Done (Concluído)</h3>
                                 <span className="text-xs bg-green-900/50 text-green-300 px-2 py-0.5 rounded-full">{activeTasks.filter((t:any) => t.status === 'done').length}</span>
