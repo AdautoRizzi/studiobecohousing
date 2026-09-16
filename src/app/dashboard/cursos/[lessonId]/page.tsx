@@ -78,10 +78,7 @@ export default function AulaPage({ params }: { params: Promise<{ lessonId: strin
                                 width="100%" 
                                 height="100%" 
                                 controls={true}
-                                config={{
-                                    youtube: { playerVars: { showinfo: 1 } },
-                                    vimeo: { playerOptions: { byline: false, portrait: false, title: false } }
-                                }}
+                                
                             />
                         </div>
                     ) : (
