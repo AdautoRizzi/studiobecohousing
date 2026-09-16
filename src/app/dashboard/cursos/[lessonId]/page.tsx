@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import ReactPlayer from 'react-player/lazy';
+import ReactPlayer from 'react-player';
 
 export default function AulaPage({ params }: { params: Promise<{ lessonId: string }> }) {
     const router = useRouter();
