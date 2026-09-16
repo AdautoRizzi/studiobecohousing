@@ -8,7 +8,7 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
         
         const { data, error } = await supabase
             .from('lessons')
-            .update({ title: body.title, video_url: body.video_url })
+            .update({ title: body.title, video_url: body.video_url, text_content: body.text_content })
             .eq('id', id)
             .select()
             .single();

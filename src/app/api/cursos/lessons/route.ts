@@ -10,11 +10,11 @@ export async function GET() {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { module_id, title, video_url, order_index } = body;
+        const { module_id, title, video_url, text_content, order_index } = body;
         
         const { data, error } = await supabase
             .from('lessons')
-            .insert([{ module_id, title, video_url, order_index }])
+            .insert([{ module_id, title, video_url, text_content, order_index }])
             .select()
             .single();
 

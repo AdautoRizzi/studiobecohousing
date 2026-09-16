@@ -15,6 +15,7 @@ interface Lesson {
     module_id: string;
     title: string;
     video_url: string;
+    text_content?: string;
     order_index: number;
 }
 
@@ -24,7 +25,7 @@ export default function GestaoCursosPage() {
     const [loading, setLoading] = useState(true);
 
     const [newModule, setNewModule] = useState({ title: '', description: '' });
-    const [newLesson, setNewLesson] = useState({ module_id: '', title: '', video_url: '' });
+    const [newLesson, setNewLesson] = useState({ module_id: '', title: '', video_url: '', text_content: '' });
     
     // Modal states
     const [editingModule, setEditingModule] = useState<Module | null>(null);
@@ -67,7 +68,7 @@ export default function GestaoCursosPage() {
         await fetch(`/api/cursos/lessons/${editingLesson.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: editingLesson.title, video_url: editingLesson.video_url || '' })
+            body: JSON.stringify({ title: editingLesson.title, video_url: editingLesson.video_url || '', text_content: editingLesson.text_content || '' })
         });
         setEditingLesson(null);
         fetchData();
@@ -125,7 +126,7 @@ export default function GestaoCursosPage() {
         });
         
         if(res.ok) {
-            setNewLesson({ ...newLesson, title: '', video_url: '' });
+            setNewLesson({ ...newLesson, title: '', video_url: '', text_content: '' });
             fetchData();
         } else {
             alert('Erro ao criar aula');
@@ -183,6 +184,10 @@ export default function GestaoCursosPage() {
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">URL do Vídeo (Vimeo/YouTube)</label>
                                 <input type="text" value={newLesson.video_url} onChange={e => setNewLesson({...newLesson, video_url: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500" placeholder="https://..." />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Descrição / Texto de Apoio</label>
+                                <textarea rows={2} value={newLesson.text_content} onChange={e => setNewLesson({...newLesson, text_content: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500" placeholder="Resumo da aula..."></textarea>
                             </div>
                             <button type="submit" className="w-full py-2 bg-secondary-600 text-white font-bold rounded-lg hover:bg-secondary-700 transition-colors">Criar Aula</button>
                         </form>
@@ -276,6 +281,10 @@ export default function GestaoCursosPage() {
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">URL do Vídeo</label>
                                 <input type="text" value={editingLesson.video_url} onChange={e => setEditingLesson({...editingLesson, video_url: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Descrição / Texto de Apoio</label>
+                                <textarea rows={6} value={editingLesson.text_content || ''} onChange={e => setEditingLesson({...editingLesson, text_content: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500" placeholder="Resumo da aula..."></textarea>
                             </div>
                             <div className="flex justify-end gap-3 mt-6">
                                 <button onClick={() => setEditingLesson(null)} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors font-medium">Cancelar</button>
