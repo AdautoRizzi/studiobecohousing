@@ -25,6 +25,10 @@ export default function GestaoCursosPage() {
 
     const [newModule, setNewModule] = useState({ title: '', description: '' });
     const [newLesson, setNewLesson] = useState({ module_id: '', title: '', video_url: '' });
+    
+    // Modal states
+    const [editingModule, setEditingModule] = useState<Module | null>(null);
+    const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
 
     
     const handleDeleteModule = async (id: string) => {
@@ -39,27 +43,33 @@ export default function GestaoCursosPage() {
         fetchData();
     };
 
-    const handleEditModule = async (mod: Module) => {
-        const newTitle = prompt('Novo título do Módulo:', mod.title);
-        if(!newTitle) return;
-        const newDesc = prompt('Nova descrição:', mod.description);
-        await fetch(`/api/cursos/modules/${mod.id}`, {
+    const handleEditModule = (mod: Module) => {
+        setEditingModule(mod);
+    };
+
+    const saveModuleEdit = async () => {
+        if(!editingModule) return;
+        await fetch(`/api/cursos/modules/${editingModule.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: newTitle, description: newDesc || '' })
+            body: JSON.stringify({ title: editingModule.title, description: editingModule.description || '' })
         });
+        setEditingModule(null);
         fetchData();
     };
 
-    const handleEditLesson = async (les: Lesson) => {
-        const newTitle = prompt('Novo título da Aula:', les.title);
-        if(!newTitle) return;
-        const newUrl = prompt('Nova URL do Vídeo:', les.video_url || '');
-        await fetch(`/api/cursos/lessons/${les.id}`, {
+    const handleEditLesson = (les: Lesson) => {
+        setEditingLesson(les);
+    };
+
+    const saveLessonEdit = async () => {
+        if(!editingLesson) return;
+        await fetch(`/api/cursos/lessons/${editingLesson.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: newTitle, video_url: newUrl || '' })
+            body: JSON.stringify({ title: editingLesson.title, video_url: editingLesson.video_url || '' })
         });
+        setEditingLesson(null);
         fetchData();
     };
 
@@ -229,6 +239,53 @@ export default function GestaoCursosPage() {
                     )}
                 </div>
             </div>
+
+            {/* Modal Editar Módulo */}
+            {editingModule && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-2xl shadow-xl">
+                        <h3 className="text-xl font-bold text-primary-900 mb-4">Editar Módulo</h3>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Título</label>
+                                <input type="text" value={editingModule.title} onChange={e => setEditingModule({...editingModule, title: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+                                <textarea rows={8} value={editingModule.description} onChange={e => setEditingModule({...editingModule, description: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500"></textarea>
+                            </div>
+                            <div className="flex justify-end gap-3 mt-6">
+                                <button onClick={() => setEditingModule(null)} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors font-medium">Cancelar</button>
+                                <button onClick={saveModuleEdit} className="px-4 py-2 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-700 transition-colors">Salvar Alterações</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal Editar Aula */}
+            {editingLesson && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-xl">
+                        <h3 className="text-xl font-bold text-primary-900 mb-4">Editar Aula</h3>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Título</label>
+                                <input type="text" value={editingLesson.title} onChange={e => setEditingLesson({...editingLesson, title: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">URL do Vídeo</label>
+                                <input type="text" value={editingLesson.video_url} onChange={e => setEditingLesson({...editingLesson, video_url: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500" />
+                            </div>
+                            <div className="flex justify-end gap-3 mt-6">
+                                <button onClick={() => setEditingLesson(null)} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors font-medium">Cancelar</button>
+                                <button onClick={saveLessonEdit} className="px-4 py-2 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-700 transition-colors">Salvar Alterações</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }
