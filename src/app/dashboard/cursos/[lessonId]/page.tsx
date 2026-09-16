@@ -73,7 +73,7 @@ export default function AulaPage({ params }: { params: Promise<{ lessonId: strin
                     {lesson.video_url ? (
                         <div className="absolute inset-0 w-full h-full">
                             {/* ReactPlayer is great for YouTube/Vimeo/MP4 embeds */}
-                            {@ts-ignore}
+                            {/* @ts-ignore */}
                             <ReactPlayer 
                                 url={lesson.video_url} 
                                 width="100%" 
