@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import ReactPlayer from 'react-player';
+import _ReactPlayer from 'react-player';
+const ReactPlayer = _ReactPlayer as any;
 
 export default function AulaPage({ params }: { params: Promise<{ lessonId: string }> }) {
     const router = useRouter();
@@ -73,7 +74,7 @@ export default function AulaPage({ params }: { params: Promise<{ lessonId: strin
                     {lesson.video_url ? (
                         <div className="absolute inset-0 w-full h-full">
                             {/* ReactPlayer is great for YouTube/Vimeo/MP4 embeds */}
-                            {/* @ts-ignore */}
+                            
                             <ReactPlayer 
                                 url={lesson.video_url} 
                                 width="100%" 
