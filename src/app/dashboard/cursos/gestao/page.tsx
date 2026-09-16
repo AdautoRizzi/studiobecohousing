@@ -190,12 +190,12 @@ export default function GestaoCursosPage() {
                     ) : (
                         modules.sort((a,b) => a.order_index - b.order_index).map(module => (
                             <div key={module.id} className="bg-white rounded-2xl shadow-sm border border-secondary-100 overflow-hidden">
-                                <div className="bg-secondary-50 px-6 py-4 border-b border-secondary-100 flex justify-between items-center">
-                                    <div>
-                                        <h3 className="text-lg font-bold text-primary-900">{module.title}</h3>
-                                        <p className="text-sm text-gray-500 mt-1">{module.description}</p>
+                                <div className="bg-secondary-50 px-6 py-4 border-b border-secondary-100 flex justify-between items-start">
+                                    <div className="flex-1 min-w-0 pr-6">
+                                        <h3 className="text-lg font-bold text-primary-900 break-words">{module.title}</h3>
+                                        <p className="text-sm text-gray-600 mt-2 whitespace-pre-wrap leading-relaxed">{module.description}</p>
                                     </div>
-                                    <div className="flex gap-3">
+                                    <div className="flex gap-3 flex-shrink-0 mt-1">
                                         <button onClick={() => handleEditModule(module)} className="text-sm text-gray-500 hover:text-primary-600">Editar</button>
                                         <button onClick={() => handleDeleteModule(module.id)} className="text-sm text-red-400 hover:text-red-600">Excluir</button>
                                     </div>

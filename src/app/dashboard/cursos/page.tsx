@@ -71,7 +71,7 @@ export default function CursosAlunoPage() {
                             <div key={module.id} className="bg-white rounded-2xl shadow-sm border border-secondary-100 overflow-hidden">
                                 <div className="bg-gradient-to-r from-primary-900 to-secondary-900 px-6 md:px-8 py-6 text-white">
                                     <h2 className="text-2xl font-bold">{module.title}</h2>
-                                    <p className="text-primary-100 mt-2 max-w-3xl">{module.description}</p>
+                                    <p className="text-primary-100 mt-2 max-w-3xl whitespace-pre-wrap leading-relaxed opacity-90">{module.description}</p>
                                 </div>
                                 <div className="p-6 md:p-8">
                                     <h3 className="text-lg font-bold text-gray-800 mb-4">Aulas deste módulo:</h3>
