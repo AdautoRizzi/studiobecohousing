@@ -26,6 +26,43 @@ export default function GestaoCursosPage() {
     const [newModule, setNewModule] = useState({ title: '', description: '' });
     const [newLesson, setNewLesson] = useState({ module_id: '', title: '', video_url: '' });
 
+    
+    const handleDeleteModule = async (id: string) => {
+        if(!confirm('Tem certeza que deseja apagar este módulo e todas as suas aulas?')) return;
+        await fetch(`/api/cursos/modules/${id}`, { method: 'DELETE' });
+        fetchData();
+    };
+
+    const handleDeleteLesson = async (id: string) => {
+        if(!confirm('Tem certeza que deseja apagar esta aula?')) return;
+        await fetch(`/api/cursos/lessons/${id}`, { method: 'DELETE' });
+        fetchData();
+    };
+
+    const handleEditModule = async (mod: Module) => {
+        const newTitle = prompt('Novo título do Módulo:', mod.title);
+        if(!newTitle) return;
+        const newDesc = prompt('Nova descrição:', mod.description);
+        await fetch(`/api/cursos/modules/${mod.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: newTitle, description: newDesc || '' })
+        });
+        fetchData();
+    };
+
+    const handleEditLesson = async (les: Lesson) => {
+        const newTitle = prompt('Novo título da Aula:', les.title);
+        if(!newTitle) return;
+        const newUrl = prompt('Nova URL do Vídeo:', les.video_url || '');
+        await fetch(`/api/cursos/lessons/${les.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: newTitle, video_url: newUrl || '' })
+        });
+        fetchData();
+    };
+
     const fetchData = async () => {
         setLoading(true);
         try {
@@ -158,6 +195,10 @@ export default function GestaoCursosPage() {
                                         <h3 className="text-lg font-bold text-primary-900">{module.title}</h3>
                                         <p className="text-sm text-gray-500 mt-1">{module.description}</p>
                                     </div>
+                                    <div className="flex gap-3">
+                                        <button onClick={() => handleEditModule(module)} className="text-sm text-gray-500 hover:text-primary-600">Editar</button>
+                                        <button onClick={() => handleDeleteModule(module.id)} className="text-sm text-red-400 hover:text-red-600">Excluir</button>
+                                    </div>
                                 </div>
                                 <div className="divide-y divide-gray-100">
                                     {lessons.filter(l => l.module_id === module.id).length === 0 ? (
@@ -174,7 +215,11 @@ export default function GestaoCursosPage() {
                                                         {lesson.video_url && <a href={lesson.video_url} target="_blank" className="text-xs text-blue-500 hover:underline">Ver Vdeo</a>}
                                                     </div>
                                                 </div>
-                                                <button className="text-sm text-secondary-600 font-medium hover:underline">Gerenciar Quiz</button>
+                                                <div className="flex gap-3">
+                                                    <button onClick={() => handleEditLesson(lesson)} className="text-xs text-gray-500 hover:text-primary-600">Editar</button>
+                                                    <button onClick={() => handleDeleteLesson(lesson.id)} className="text-xs text-red-400 hover:text-red-600">Excluir</button>
+                                                    <button className="text-xs text-secondary-600 font-medium hover:underline">Quiz</button>
+                                                </div>
                                             </div>
                                         ))
                                     )}
