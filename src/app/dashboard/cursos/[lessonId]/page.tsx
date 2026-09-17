@@ -94,7 +94,7 @@ export default function AulaPage({ params }: { params: Promise<{ lessonId: strin
                 <div className="p-6 md:p-8">
                     <h3 className="text-xl font-bold text-primary-900 mb-4">Material de Apoio</h3>
                     {lesson.text_content ? (
-                        <div className="prose prose-primary max-w-none text-gray-700">
+                        <div className="prose prose-primary max-w-none text-gray-700 whitespace-pre-wrap leading-relaxed">
                             {lesson.text_content}
                         </div>
                     ) : (
