@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import FloatingAssistant from '@/components/chat/FloatingAssistant';
 import { usePathname } from 'next/navigation';
-import { ClientTierProvider, useClientTier } from './ClientTierContext';
+import { ClientTierProvider, useClientTier, Tiers } from './ClientTierContext';
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -14,13 +14,13 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         { name: 'Minha Jornada', href: '/dashboard', icon: '🗺️', minTier: 0, exact: true },
         { name: 'Meu Perfil', href: '/dashboard/perfil', icon: '👤', minTier: 0 },
         { name: 'Treinamentos', href: '/dashboard/cursos', icon: '🎓', minTier: 0 },
-        { name: 'Comunidade & Vizinhos', href: '/dashboard/comunidade', icon: '👥', minTier: 2 },
-        { name: 'Governança & Fórum', href: '/dashboard/governanca', icon: '🏛️', minTier: 3 },
-        { name: 'Eventos da Vila', href: '/dashboard/eventos', icon: '📅', minTier: 4 },
-        { name: 'Finanças & Boletos', href: '/dashboard/financas', icon: '📊', minTier: 5 },
-        { name: 'Serviços & Manutenção', href: '/dashboard/servicos', icon: '🔧', minTier: 6 },
-        { name: 'Sustentabilidade', href: '/dashboard/sustentabilidade', icon: '♻️', minTier: 6 },
-        { name: 'Horta Comunitária', href: '/dashboard/horta', icon: '🌱', minTier: 7 },
+        { name: 'Comunidade & Vizinhos', href: '/dashboard/comunidade', icon: '🏘️', minTier: 3 },
+        { name: 'Governança & Fórum', href: '/dashboard/governanca', icon: '⚖️', minTier: 4 },
+        { name: 'Eventos da Vila', href: '/dashboard/eventos', icon: '🎉', minTier: 4 },
+        { name: 'Finanças & Boletos', href: '/dashboard/financas', icon: '💸', minTier: 7 },
+        { name: 'Serviços & Manutenção', href: '/dashboard/servicos', icon: '🛠️', minTier: 9 },
+        { name: 'Sustentabilidade', href: '/dashboard/sustentabilidade', icon: '♻️', minTier: 9 },
+        { name: 'Horta Comunitária', href: '/dashboard/horta', icon: '🍅', minTier: 9 },
     ];
 
     const visibleNav = allNav.filter(item => tier >= item.minTier);
@@ -71,15 +71,11 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                             value={tier}
                             onChange={(e) => setTier(Number(e.target.value))}
                         >
-                            <option value={0}>0 - Descoberta (Grátis)</option>
-                            <option value={1}>1 - Match (Grátis/Premium)</option>
-                            <option value={2}>2 - Comunidade (Taxa Adesão)</option>
-                            <option value={3}>3 - Formação (Prog. Pago)</option>
-                            <option value={4}>4 - Projeto (Consultoria)</option>
-                            <option value={5}>5 - Construção (Gestão)</option>
-                            <option value={6}>6 - Moradia (SaaS)</option>
-                            <option value={7}>7 - Com. Madura (Admin)</option>
-                            <option value={8}>8 - Longevidade (Premium)</option>
+                            {Tiers.map(t => (
+                                <option key={t.level} value={t.level}>
+                                    {t.level} - {t.name.substring(0, 20)}{t.name.length > 20 ? '...' : ''}
+                                </option>
+                            ))}
                         </select>
                     </div>
                 </header>
