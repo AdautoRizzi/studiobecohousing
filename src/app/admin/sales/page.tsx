@@ -8,7 +8,7 @@ export default async function SalesDashboard() {
     const leads = await getAllLeads();
 
     // Filtra leads que não estão Descartados ou Turma Atribuída
-    const activeLeads = leads.filter(l => l.status !== 'Descartado' && l.status !== 'Turma Atribuída' && !l.nome.startsWith('SYSTEM') && (l.idade || l.ondeMorar || l.totalPessoas));
+    const activeLeads = leads.filter(l => l.status !== 'Descartado' && l.status !== 'Turma Atribuída' && !l.nome.startsWith('SYSTEM') && (l.idade || l.ondeMorar || l.totalPessoas) && l.categoria && l.categoria.includes('Lead Site'));
 
     const STEPS = await getMethodSteps();
 
