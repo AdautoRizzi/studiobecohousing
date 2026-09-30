@@ -325,7 +325,7 @@ export async function addToMessageQueue(leadId: string, message: string) {
 
 export async function updateLeadNotes(id: string, notasCrm: string) {
     const { error } = await supabase
-        .from('users')
+        .from('leads')
         .update({ notasCrm })
         .eq('id', id);
     if (error) {
