@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { BackButton } from '@/components/crm/BackButton';
 import { updateLeadStatusAction } from '@/app/actions';
+import CRMActionsPanel from '@/components/crm/CRMActionsPanel';
 import { MessageSender } from '@/components/crm/MessageSender';
 import EmailSender from '@/components/crm/EmailSender';
 import LogInteractionForm from '@/components/LogInteractionForm';
@@ -361,6 +362,17 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
 
                 {/* Coluna 2: Ações */}
                 <div className="space-y-6">
+                    
+                    {/* Painel de Checklist CRM */}
+                    <CRMActionsPanel 
+                        leadId={lead.id} 
+                        initialNotes={lead.notasCrm || ''} 
+                        leadEmail={lead.email || ''} 
+                        leadPhone={lead.telefone || ''} 
+                        leadName={lead.nome || ''} 
+                        globalSteps={methodSteps} 
+                    />
+
                     {/* Componente de Envio de Mensagem */}
                     <MessageSender leadId={lead.id} leadNome={lead.nome} templates={templates} />
 
