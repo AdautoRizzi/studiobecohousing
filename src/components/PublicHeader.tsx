@@ -8,11 +8,11 @@ import CohousingForm from './CohousingForm';
 const navItems = [
     { name: 'Início', path: '/' },
     { name: 'O que é cohousing', path: '/conceito' },
-    { name: 'A solução Studio Be', path: '/#solucao' },
-    { name: 'Modelos', path: '/modelos' },
+    { name: 'A solução', path: '/#solucao' },
+    { name: 'Oportunidades', path: '/universo' },
     { name: 'Mídias', path: '/midias' },
     { name: 'Quem somos', path: '/quem-somos' },
-    { name: 'Menu do Morador', path: '/login' }
+    { name: 'Portal', path: '/login' }
 ];
 
 export default function Header() {
@@ -53,7 +53,7 @@ export default function Header() {
                     {/* Navegação Desktop */}
                     <nav className="hidden md:flex items-center ml-auto">
                         <div className="flex items-center space-x-8 lg:space-x-12 mr-8">
-                            {navItems.filter(i => i.name !== 'Modelos').map((item) => {
+                            {navItems.map((item) => {
                                 // Lógica aprimorada de Active
                                 const isHome = pathname === '/';
                                 const hasHash = item.path.includes('#');
@@ -121,7 +121,7 @@ export default function Header() {
                 {isMenuOpen && (
                     <div className="md:hidden bg-white border-t border-primary-50 animate-in fade-in slide-in-from-top-4 duration-300">
                         <nav className="flex flex-col px-6 pt-2 pb-6 space-y-3">
-                            {navItems.filter(i => i.name !== 'Modelos').map((item) => {
+                            {navItems.map((item) => {
                                 const isHome = pathname === '/';
                                 const hasHash = item.path.includes('#');
                                 const itemHash = hasHash ? item.path.split('#')[1] : '';
