@@ -1112,6 +1112,76 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             {activeTab === 'kanban' && (
                 <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
                     
+                    
+                    {/* BARRA DE FILTRO POR DONO / RESPONSÁVEL */}
+                    <div className="bg-[#0f172a]/80 border border-slate-700/80 p-3 rounded-xl mb-4 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-xs text-slate-200 font-bold flex items-center gap-1.5 mr-1">
+                                <span>👤</span>
+                                <span>Filtrar por Responsável:</span>
+                            </span>
+                            
+                            <button
+                                type="button"
+                                onClick={() => setOwnerFilter('todos')}
+                                className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                                    ownerFilter === 'todos'
+                                        ? 'bg-blue-600 text-white shadow-sm'
+                                        : 'bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700'
+                                }`}
+                            >
+                                Todos ({allActiveTasks.length})
+                            </button>
+
+                            {allKnownMembers.map(member => {
+                                const count = allActiveTasks.filter((t: any) => getTaskOwners(t).includes(member)).length;
+                                const isSelected = ownerFilter === member;
+                                return (
+                                    <button
+                                        type="button"
+                                        key={member}
+                                        onClick={() => setOwnerFilter(member)}
+                                        className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                                            isSelected
+                                                ? 'bg-blue-600 text-white font-bold shadow-sm'
+                                                : 'bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700'
+                                        }`}
+                                    >
+                                        <span>{member}</span>
+                                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${isSelected ? 'bg-blue-800 text-white' : 'bg-slate-900 text-slate-400'}`}>
+                                            {count}
+                                        </span>
+                                    </button>
+                                );
+                            })}
+
+                            <button
+                                type="button"
+                                onClick={() => setOwnerFilter('sem_dono')}
+                                className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                                    ownerFilter === 'sem_dono'
+                                        ? 'bg-amber-600 text-white font-bold shadow-sm'
+                                        : 'bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700'
+                                }`}
+                            >
+                                <span>Sem responsável</span>
+                                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${ownerFilter === 'sem_dono' ? 'bg-amber-800 text-white' : 'bg-slate-900 text-slate-400'}`}>
+                                    {allActiveTasks.filter((t: any) => getTaskOwners(t).length === 0).length}
+                                </span>
+                            </button>
+                        </div>
+
+                        {ownerFilter !== 'todos' && (
+                            <button
+                                type="button"
+                                onClick={() => setOwnerFilter('todos')}
+                                className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 hover:underline cursor-pointer"
+                            >
+                                Mostrar todas as tarefas ✕
+                            </button>
+                        )}
+                    </div>
+
                     <div 
                         className="grid grid-cols-1 md:grid-cols-5 gap-4 rounded-xl p-4 transition-all duration-500"
                         style={bgImage ? {backgroundImage: `linear-gradient(rgba(15,23,42,0.85), rgba(15,23,42,0.85)), url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center'} : {}}
@@ -1129,12 +1199,11 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                             <div className="p-3 border-t border-slate-700/50 bg-slate-900/50 rounded-b-xl">
                                 <form onSubmit={addInboxTask} className="space-y-2">
                                     <input name="taskDesc" type="text" placeholder="+ Nova Ideia (Backlog)" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:border-purple-500 focus:outline-none" autoComplete="off" />
-                                    <select name="taskOwner" className="w-full bg-[#020617] border border-slate-700 rounded p-1 text-xs text-slate-400 focus:outline-none">
-                                        <option value="">(Sem dono)</option>
-                                        <option value="Adauto">Adauto</option>
-                                        <option value="Claudia">Claudia</option>
-                                        <option value="Paulo">Paulo</option>
-                                    </select>
+                                    <MultiOwnerSelector 
+                                        selectedOwners={newInboxOwners} 
+                                        onChange={setNewInboxOwners} 
+                                        label="Responsáveis"
+                                    />
                                     {plan.objectives?.length > 0 && (
                                         <select name="taskObj" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-xs text-slate-400 focus:border-purple-500 focus:outline-none">
                                             <option value="">(Sem vínculo trimestral)</option>
@@ -1158,12 +1227,11 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                             <div className="p-3 border-t border-slate-700/50 bg-slate-900/50 rounded-b-xl">
                                 <form onSubmit={addTask} className="space-y-2">
                                     <input name="taskDesc" type="text" placeholder="+ Adicionar Tática" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:border-blue-500 focus:outline-none" autoComplete="off" />
-                                    <select name="taskOwner" className="w-full bg-[#020617] border border-slate-700 rounded p-1 text-xs text-slate-400 focus:outline-none">
-                                        <option value="">(Sem dono)</option>
-                                        <option value="Adauto">Adauto</option>
-                                        <option value="Claudia">Claudia</option>
-                                        <option value="Paulo">Paulo</option>
-                                    </select>
+                                    <MultiOwnerSelector 
+                                        selectedOwners={newTaskOwners} 
+                                        onChange={setNewTaskOwners} 
+                                        label="Responsáveis"
+                                    />
                                     {plan.objectives.length > 0 && (
                                         <select name="taskObj" className="w-full bg-[#020617] border border-slate-700 rounded-lg p-2 text-xs text-slate-400 focus:border-blue-500 focus:outline-none">
                                             <option value="">(Sem vínculo trimestral)</option>
