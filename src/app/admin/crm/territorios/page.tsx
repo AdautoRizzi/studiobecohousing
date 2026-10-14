@@ -42,7 +42,8 @@ export default function BancoTerrasAdmin() {
         try {
             const { data, error } = await supabase.from('territories').select('*').order('created_at', { ascending: false });
             if (error) throw error;
-            setTerritories(data || []);
+            const activeTerritories = (data || []).filter(t => t.status !== 'excluido');
+            setTerritories(activeTerritories);
         } catch (err) {
             console.warn(err);
         } finally {
@@ -143,15 +144,33 @@ export default function BancoTerrasAdmin() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Tem certeza que deseja excluir esta propriedade? Essa ação é irreversível.')) return;
+        if (!confirm('Tem certeza que deseja excluir esta propriedade do Banco de Terras?')) return;
         setSaving(true);
         try {
-            const { error } = await supabase.from('territories').delete().eq('id', id);
-            if (error) throw error;
+            // Atualização otimista na tela imediatamente
+            setTerritories(prev => prev.filter(t => t.id !== id));
+
+            // 1. Tenta exclusão física (Hard Delete)
+            const { data: delData, error: hardError } = await supabase
+                .from('territories')
+                .delete()
+                .eq('id', id)
+                .select();
+
+            // 2. Se a política RLS do Supabase barrar o hard delete, executa soft delete (status: 'excluido')
+            if (hardError || !delData || delData.length === 0) {
+                const { error: softError } = await supabase
+                    .from('territories')
+                    .update({ status: 'excluido' })
+                    .eq('id', id);
+                if (softError) throw softError;
+            }
+
             await loadData();
-        } catch (err) {
-            console.error(err);
-            alert('Erro ao excluir propriedade.');
+        } catch (err: any) {
+            console.error('Erro ao excluir propriedade:', err);
+            alert('Erro ao excluir propriedade: ' + (err.message || 'Tente novamente'));
+            await loadData();
         } finally {
             setSaving(false);
         }
