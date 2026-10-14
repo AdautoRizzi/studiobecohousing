@@ -1,6 +1,24 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
+
+
+const DEFAULT_MEMBERS = ['Adauto', 'Claudia', 'Paulo'];
+
+const getTaskOwners = (task: any): string[] => {
+    if (!task) return [];
+    if (Array.isArray(task.taskOwners) && task.taskOwners.length > 0) {
+        return task.taskOwners.filter(Boolean);
+    }
+    if (Array.isArray(task.owners) && task.owners.length > 0) {
+        return task.owners.filter(Boolean);
+    }
+    const legacy = task.taskOwner || task.owner;
+    if (typeof legacy === 'string' && legacy.trim()) {
+        return legacy.split(',').map((s: string) => s.trim()).filter(Boolean);
+    }
+    return [];
+};
 
 export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [plan, setPlan] = useState<any>(initialPlan);
@@ -31,6 +49,10 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
     const [editTaskDesc, setEditTaskDesc] = useState('');
     const [editTaskObj, setEditTaskObj] = useState<string | undefined>(undefined);
+    const [editTaskOwners, setEditTaskOwners] = useState<string[]>([]);
+    const [newTaskOwners, setNewTaskOwners] = useState<string[]>([]);
+    const [newInboxOwners, setNewInboxOwners] = useState<string[]>([]);
+    const [ownerFilter, setOwnerFilter] = useState<string>('todos');
     const [editTaskOwner, setEditTaskOwner] = useState<string | undefined>(undefined);
     const [editTaskTargetSprint, setEditTaskTargetSprint] = useState<number>(1);
     const [editTaskImage, setEditTaskImage] = useState<string | undefined>(undefined);
@@ -52,6 +74,19 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         if (!plan.inbox) plan.inbox = [];
 
     const currentWeek = plan.currentSprintWeek || 1;
+
+    const allKnownMembers = useMemo(() => {
+        const set = new Set<string>(DEFAULT_MEMBERS);
+        Object.values(plan.sprints || {}).forEach((sprint: any) => {
+            (sprint.tasks || []).forEach((t: any) => {
+                getTaskOwners(t).forEach(o => set.add(o));
+            });
+        });
+        (plan.inbox || []).forEach((t: any) => {
+            getTaskOwners(t).forEach(o => set.add(o));
+        });
+        return Array.from(set);
+    }, [plan]);
 
     const savePlan = async (newPlan: any) => {
         setPlan(newPlan);
@@ -138,7 +173,8 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
             const task = isInbox ? newPlan.inbox[taskIndex] : newPlan.sprints[currentWeek].tasks[taskIndex];
             task.description = editTaskDesc;
             task.objectiveId = editTaskObj;
-            task.taskOwner = editTaskOwner;
+            task.taskOwner = editTaskOwners.join(', ');
+            task.taskOwners = editTaskOwners;
             task.imageUrl = editTaskImage;
             task.isMilestone = editTaskIsMilestone;
             task.checklist = editTaskChecklist;
@@ -397,8 +433,25 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         return Math.round((done / tasks.length) * 100);
     };
 
-    const activeTasks = plan.sprints[currentWeek].tasks;
-    const score = calculateScore(activeTasks);
+    const allActiveTasks = plan.sprints[currentWeek]?.tasks || [];
+    const score = calculateScore(allActiveTasks);
+
+    const activeTasks = useMemo(() => {
+        if (ownerFilter === 'todos') return allActiveTasks;
+        if (ownerFilter === 'sem_dono') {
+            return allActiveTasks.filter((t: any) => getTaskOwners(t).length === 0);
+        }
+        return allActiveTasks.filter((t: any) => getTaskOwners(t).includes(ownerFilter));
+    }, [allActiveTasks, ownerFilter]);
+
+    const activeInbox = useMemo(() => {
+        const inbox = plan.inbox || [];
+        if (ownerFilter === 'todos') return inbox;
+        if (ownerFilter === 'sem_dono') {
+            return inbox.filter((t: any) => getTaskOwners(t).length === 0);
+        }
+        return inbox.filter((t: any) => getTaskOwners(t).includes(ownerFilter));
+    }, [plan.inbox, ownerFilter]);
 
     
     const moveInboxToSprint = async (taskId: string, targetSprint: number) => {
@@ -470,6 +523,140 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         // Prevent toggle if clicking edit button or dragging
         if ((e.target as HTMLElement).closest('button')) return;
         setExpandedTaskId(prev => prev === taskId ? null : taskId);
+    };
+
+
+    const MultiOwnerSelector = ({
+        selectedOwners,
+        onChange,
+        label = "Responsáveis"
+    }: {
+        selectedOwners: string[];
+        onChange: (owners: string[]) => void;
+        label?: string;
+    }) => {
+        const [customName, setCustomName] = useState('');
+        const [showAddCustom, setShowAddCustom] = useState(false);
+
+        const toggle = (member: string) => {
+            if (selectedOwners.includes(member)) {
+                onChange(selectedOwners.filter(m => m !== member));
+            } else {
+                onChange([...selectedOwners, member]);
+            }
+        };
+
+        const handleAddCustom = (e: React.FormEvent) => {
+            e.preventDefault();
+            const trimmed = customName.trim();
+            if (trimmed && !selectedOwners.includes(trimmed)) {
+                onChange([...selectedOwners, trimmed]);
+                setCustomName('');
+                setShowAddCustom(false);
+            }
+        };
+
+        return (
+            <div className="space-y-1 my-1.5">
+                <div className="flex justify-between items-center text-[10px] text-slate-400">
+                    <span className="font-semibold">{label}:</span>
+                    {selectedOwners.length > 0 ? (
+                        <span className="text-blue-400 font-bold">({selectedOwners.length} selecionado{selectedOwners.length > 1 ? 's' : ''})</span>
+                    ) : (
+                        <span className="text-slate-500 italic">Nenhum selecionado</span>
+                    )}
+                </div>
+                
+                <div className="flex flex-wrap gap-1 items-center">
+                    {allKnownMembers.map(member => {
+                        const isSelected = selectedOwners.includes(member);
+                        return (
+                            <button
+                                type="button"
+                                key={member}
+                                onClick={() => toggle(member)}
+                                className={`text-[11px] px-2.5 py-0.5 rounded-full border transition-all flex items-center gap-1 cursor-pointer ${
+                                    isSelected
+                                        ? 'bg-blue-600 text-white border-blue-400 font-bold shadow-sm'
+                                        : 'bg-[#020617] text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200'
+                                }`}
+                            >
+                                <span>{isSelected ? '✓' : '+'}</span>
+                                <span>{member}</span>
+                            </button>
+                        );
+                    })}
+
+                    {!showAddCustom ? (
+                        <button
+                            type="button"
+                            onClick={() => setShowAddCustom(true)}
+                            className="text-[10px] text-slate-400 hover:text-white px-2 py-0.5 rounded border border-dashed border-slate-700 hover:border-slate-500"
+                        >
+                            + Outro
+                        </button>
+                    ) : (
+                        <div className="flex items-center gap-1">
+                            <input
+                                type="text"
+                                placeholder="Nome..."
+                                value={customName}
+                                onChange={(e) => setCustomName(e.target.value)}
+                                className="bg-[#020617] border border-blue-500 rounded px-1.5 py-0.5 text-xs text-white outline-none w-20"
+                                autoFocus
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleAddCustom(e);
+                                    }
+                                }}
+                            />
+                            <button
+                                type="button"
+                                onClick={handleAddCustom}
+                                className="bg-blue-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold"
+                            >
+                                OK
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setShowAddCustom(false)}
+                                className="text-slate-400 hover:text-white text-xs px-1"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
+    const renderOwnerBadges = (task: any) => {
+        const owners = getTaskOwners(task);
+        if (owners.length === 0) return null;
+
+        return (
+            <div className="flex flex-wrap gap-1 mt-1.5">
+                {owners.map(owner => {
+                    const colorClass = 
+                        owner === 'Adauto' ? 'bg-orange-950/70 text-orange-300 border-orange-700/60' :
+                        owner === 'Claudia' ? 'bg-purple-950/70 text-purple-300 border-purple-700/60' :
+                        owner === 'Paulo' ? 'bg-blue-950/70 text-blue-300 border-blue-700/60' :
+                        'bg-emerald-950/70 text-emerald-300 border-emerald-700/60';
+
+                    return (
+                        <span 
+                            key={owner} 
+                            className={`inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full font-semibold border ${colorClass}`}
+                        >
+                            <span>👤</span>
+                            <span>{owner}</span>
+                        </span>
+                    );
+                })}
+            </div>
+        );
     };
 
     const renderInboxCard = (task: any) => {
@@ -595,6 +782,7 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                     </div>
                 )}
                 <div onClick={(e) => toggleExpand(task.id, e)}>{renderFormattedText(task.description, expandedTaskId === task.id, task.isMilestone)}</div>
+                {renderOwnerBadges(task)}
                     {task.checklist && task.checklist.length > 0 && (
                         <div className="mt-2 space-y-1">
                             {task.checklist.map((chk: any, idx: number) => (
@@ -933,10 +1121,10 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                         <div className="bg-[#020617]/50 rounded-xl border border-slate-700/50 flex flex-col h-[650px] md:h-[80vh]" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'inbox')}>
                             <div className="p-3 border-b border-slate-700/50 flex justify-between items-center bg-purple-950/20 rounded-t-xl">
                                 <h3 className="font-bold text-purple-400 uppercase text-[10px] tracking-wider">📥 Caixa de Entrada</h3>
-                                <span className="text-xs bg-purple-900/50 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700/50">{(plan.inbox || []).length}</span>
+                                <span className="text-xs bg-purple-900/50 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700/50">{activeInbox.length}</span>
                             </div>
                             <div className="p-3 overflow-y-auto flex-1 custom-scrollbar drop-zone min-h-[50px]">
-                                {(plan.inbox || []).map(renderInboxCard)}
+                                {activeInbox.map(renderInboxCard)}
                             </div>
                             <div className="p-3 border-t border-slate-700/50 bg-slate-900/50 rounded-b-xl">
                                 <form onSubmit={addInboxTask} className="space-y-2">
