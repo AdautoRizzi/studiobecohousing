@@ -133,19 +133,22 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         e.preventDefault();
         const input = e.target.elements.taskDesc;
         const objSelect = e.target.elements.taskObj;
-        const ownerSelect = e.target.elements.taskOwner;
         if (!input.value.trim()) return;
         
         const newPlan = { ...plan };
+        const owners = newTaskOwners.length > 0 ? newTaskOwners : undefined;
         newPlan.sprints[currentWeek].tasks.push({
             id: 'task_' + Date.now(),
             description: input.value,
             status: 'todo',
             objectiveId: objSelect ? objSelect.value : undefined,
-            taskOwner: ownerSelect && ownerSelect.value ? ownerSelect.value : undefined
+            taskOwner: owners ? owners.join(', ') : undefined,
+            taskOwners: owners,
+            owners: owners
         });
         await savePlan(newPlan);
         input.value = '';
+        setNewTaskOwners([]);
     };
 
     const changeTaskStatus = async (taskId: string, newStatus: 'todo' | 'doing' | 'done') => {
@@ -261,7 +264,9 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
     const startEditingTask = (task: any) => {
         setEditTaskDesc(task.description);
         setEditTaskObj(task.objectiveId);
-        setEditTaskOwner(task.taskOwner);
+        const owners = getTaskOwners(task);
+        setEditTaskOwner(owners.join(', '));
+        setEditTaskOwners(owners);
         setEditTaskTargetSprint(currentWeek);
         setEditTaskImage(task.imageUrl);
         setEditTaskIsMilestone(task.isMilestone || false);
@@ -471,20 +476,23 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
         const form = e.currentTarget;
         const input = form.elements.namedItem('taskDesc') as HTMLInputElement;
         const objSelect = form.elements.namedItem('taskObj') as HTMLSelectElement;
-        const ownerSelect = form.elements.namedItem('taskOwner') as HTMLSelectElement;
         if (!input.value.trim()) return;
         
         const newPlan = { ...plan };
         if (!newPlan.inbox) newPlan.inbox = [];
+        const owners = newInboxOwners.length > 0 ? newInboxOwners : undefined;
         newPlan.inbox.push({
             id: 'inbox_' + Date.now(),
             description: input.value,
             status: 'todo',
             objectiveId: objSelect ? objSelect.value : undefined,
-            taskOwner: ownerSelect && ownerSelect.value ? ownerSelect.value : undefined
+            taskOwner: owners ? owners.join(', ') : undefined,
+            taskOwners: owners,
+            owners: owners
         });
         await savePlan(newPlan);
         input.value = '';
+        setNewInboxOwners([]);
     };
 
     const removeInboxTask = async (taskId: string) => {
@@ -680,16 +688,13 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                             {plan.objectives.map((o:any) => <option key={o.id} value={o.id}>{o.name}</option>)}
                         </select>
                     )}
-                    <select
-                        value={editTaskOwner || ''}
-                        onChange={e => setEditTaskOwner(e.target.value)}
-                        className="w-full bg-[#020617] border border-slate-700 rounded p-1 text-xs text-slate-400 mb-2 focus:outline-none"
-                    >
-                        <option value="">(Sem dono)</option>
-                        <option value="Adauto">Adauto</option>
-                        <option value="Claudia">Claudia</option>
-                        <option value="Paulo">Paulo</option>
-                    </select>
+                    <div className="mb-2 bg-[#020617]/50 p-1.5 rounded-lg border border-slate-800">
+                        <MultiOwnerSelector 
+                            selectedOwners={editTaskOwners} 
+                            onChange={setEditTaskOwners} 
+                            label="Responsáveis"
+                        />
+                    </div>
                     
                     <div className="mb-2 border border-slate-700 border-dashed rounded p-1 text-center relative group">
                         {editTaskImage ? (
@@ -843,16 +848,13 @@ export default function TwelveWeekBoard({ initialPlan }: { initialPlan: any }) {
                             {plan.objectives.map((o:any) => <option key={o.id} value={o.id}>{o.name}</option>)}
                         </select>
                     )}
-                    <select
-                        value={editTaskOwner || ''}
-                        onChange={e => setEditTaskOwner(e.target.value)}
-                        className="w-full bg-[#020617] border border-slate-700 rounded p-1 text-xs text-slate-400 mb-2 focus:outline-none"
-                    >
-                        <option value="">(Sem dono)</option>
-                        <option value="Adauto">Adauto</option>
-                        <option value="Claudia">Claudia</option>
-                        <option value="Paulo">Paulo</option>
-                    </select>
+                    <div className="mb-2 bg-[#020617]/50 p-1.5 rounded-lg border border-slate-800">
+                        <MultiOwnerSelector 
+                            selectedOwners={editTaskOwners} 
+                            onChange={setEditTaskOwners} 
+                            label="Responsáveis"
+                        />
+                    </div>
                     
                     <div className="mb-2 border border-slate-700 border-dashed rounded p-1 text-center relative group">
                         {editTaskImage ? (
