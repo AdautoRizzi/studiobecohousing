@@ -293,3 +293,15 @@ export async function sendEmailAction(leadId: string, emailTo: string, subject: 
         return { success: false, error: error.message };
     }
 }
+
+export async function logManualInteractionAction(leadId: string, content: string, type: 'WhatsApp' | 'Ligação' | 'Reunião' | 'E-mail') {
+    try {
+        const data = await logManualInteraction(leadId, content, type);
+        revalidatePath(`/admin/crm/lead/${leadId}`);
+        revalidatePath('/admin/crm');
+        return { success: true, data };
+    } catch (error: any) {
+        console.error("Erro ao registrar atividade manual:", error);
+        return { success: false, error: error.message || 'Erro desconhecido ao salvar atividade' };
+    }
+}

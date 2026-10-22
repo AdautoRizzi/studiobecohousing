@@ -351,7 +351,7 @@ export default async function LeadProfilePage(props: { params: Promise<{ id: str
                                                 </div>
                                                 <span className="text-xs text-slate-500">{new Date(it.sent_at).toLocaleString('pt-BR')}</span>
                                             </div>
-                                            <p className="text-sm text-gray-700 bg-[#020617] p-3 rounded-xl border border-slate-800 whitespace-pre-wrap">{it.content}</p>
+                                            <p className="text-sm text-slate-100 font-normal bg-[#020617] p-3 rounded-xl border border-slate-800 whitespace-pre-wrap">{it.content}</p>
                                         </div>
                                     </div>
                                 ))}
