@@ -1,7 +1,7 @@
 import React from 'react';
-import Link from 'next/link';
 import PublicHeader from '@/components/PublicHeader';
 import PublicFooter from '@/components/PublicFooter';
+import OportunidadeCard from '@/components/OportunidadeCard';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,8 +65,29 @@ export default async function UniversoPage() {
             descricao: 'Oportunidade exclusiva de transformar um hotel tradicional em uma comunidade urbana vibrante, de frente para o mar. A infraestrutura base já está pronta, os quartos serão ampliados para se transformarem nas unidades habitacionais. Um lindo projeto do arquiteto Roberto Kubota, aguardando um grupo com propósito para tornar esse sonho uma realidade.',
             status: 'Estudo de Viabilidade',
             tipo: 'Retrofit',
-            imagem_url: 'https://images.unsplash.com/photo-1551882547-ff40c0d13c05?q=80&w=2089',
-            destaque: true
+            imagem_url: '/retrofit/retrofit-1.jpg',
+            destaque: true,
+            linkInteresse: '/#cadastro',
+            media: [
+                {
+                    type: 'image' as const,
+                    url: '/retrofit/retrofit-1.jpg',
+                    thumbUrl: '/retrofit/retrofit-1.jpg',
+                    title: 'Piscina, Deck e Sacadas das Unidades Habitacionais'
+                },
+                {
+                    type: 'image' as const,
+                    url: '/retrofit/retrofit-2.jpg',
+                    thumbUrl: '/retrofit/retrofit-2.jpg',
+                    title: 'Vista Externa e Fachada Urbana de Frente para o Mar'
+                },
+                {
+                    type: 'video' as const,
+                    url: '/retrofit/retrofit-video.mp4',
+                    thumbUrl: '/retrofit/video-thumb.jpg',
+                    title: 'Tour Virtual 3D — Projeto Arquitetônico de Roberto Kubota'
+                }
+            ]
         }
     ];
 
@@ -124,46 +145,8 @@ export default async function UniversoPage() {
                         </div>
 
                         <div className="grid grid-cols-1 gap-10">
-                            {oportunidades.map((op: any) => (
-                                <div key={op.id} className="bg-white rounded-[2rem] border border-gray-200 overflow-hidden flex flex-col md:flex-row shadow-lg hover:shadow-2xl transition-shadow duration-500">
-                                    <div className="w-full md:w-2/5 lg:w-1/2 bg-gray-100 relative min-h-[300px] md:min-h-full">
-                                        {op.imagem_url ? (
-                                            <img src={op.imagem_url} alt={op.titulo} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200" />
-                                        )}
-                                        {op.destaque && (
-                                            <div className="absolute top-6 left-6">
-                                                <span className="inline-block px-4 py-2 bg-yellow-400 text-yellow-900 text-xs font-black uppercase tracking-widest rounded-full shadow-md">
-                                                    Oportunidade em Destaque
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div className="p-8 md:p-12 flex-1 flex flex-col justify-center w-full md:w-3/5 lg:w-1/2">
-                                        <div className="flex flex-wrap gap-3 mb-6">
-                                            <span className="px-4 py-1.5 bg-primary-50 text-primary-700 text-xs uppercase font-bold tracking-wider rounded-full border border-primary-100">
-                                                {op.tipo}
-                                            </span>
-                                            <span className="px-4 py-1.5 bg-gray-100 text-gray-600 text-xs uppercase font-bold tracking-wider rounded-full border border-gray-200">
-                                                Status: {op.status}
-                                            </span>
-                                        </div>
-                                        
-                                        <h3 className="text-3xl lg:text-4xl font-bold text-primary-900 mb-6 leading-tight">{op.titulo}</h3>
-                                        <p className="text-gray-600 text-lg mb-10 leading-relaxed">
-                                            {op.descricao}
-                                        </p>
-                                        
-                                        <div className="mt-auto">
-                                            <Link href="/registro" className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-full transition-all shadow-md hover:shadow-lg hover:-translate-y-1 text-lg w-full md:w-auto">
-                                                Tenho interesse neste projeto
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
+                            {oportunidades.map((op) => (
+                                <OportunidadeCard key={op.id} {...op} />
                             ))}
                         </div>
                     </div>
