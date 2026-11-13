@@ -61,8 +61,8 @@ export default async function UniversoPage() {
     const oportunidades = [
         {
             id: '1',
-            titulo: 'Retrofit Urbano: De Hotel Clássico a Cohousing',
-            descricao: 'Oportunidade exclusiva de transformar um hotel tradicional em uma comunidade urbana vibrante. A infraestrutura base já está pronta (quartos, áreas comuns, cozinha industrial), aguardando um grupo com propósito para retrofitar o espaço.',
+            titulo: 'Retrofit Urbano: de hotel a Cohousing',
+            descricao: 'Oportunidade exclusiva de transformar um hotel tradicional em uma comunidade urbana vibrante, de frente para o mar. A infraestrutura base já está pronta, os quartos serão ampliados para se transformarem nas unidades habitacionais. Um lindo projeto do arquiteto Roberto Kubota, aguardando um grupo com propósito para tornar esse sonho uma realidade.',
             status: 'Estudo de Viabilidade',
             tipo: 'Retrofit',
             imagem_url: 'https://images.unsplash.com/photo-1551882547-ff40c0d13c05?q=80&w=2089',
