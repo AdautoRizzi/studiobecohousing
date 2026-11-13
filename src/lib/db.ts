@@ -75,15 +75,20 @@ export async function getAllUsers(): Promise<UserAccount[]> {
 }
 
 export async function getUserByEmail(email: string): Promise<UserAccount | undefined> {
-    const { data, error } = await supabase
-        .from('users')
-        .select('*')
+    try {
+        const cleanEmail = (email || '').trim().toLowerCase();
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .ilike('email', cleanEmail)
+            .single();
         
-        .eq('email', email)
-        .single();
-    
-    if (error) return undefined;
-    return data as UserAccount;
+        if (error) return undefined;
+        return data as UserAccount;
+    } catch (err) {
+        console.error('Erro de conexao em getUserByEmail:', err);
+        return undefined;
+    }
 }
 
 export async function registerUser(email: string, name: string, phone: string) {

@@ -10,26 +10,50 @@ import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import nodemailer from 'nodemailer';
 
-export async function loginAction(email: string) {
-    const user = await getUserByEmail(email);
+const ALLOWED_ADMINS = [
+    'ajrizzi@gmail.com',
+    'pct@cmaisi.com',
+    'claudia.studiobertucci@gmail.com'
+];
 
-    if (!user) {
-        return { success: false, error: 'Credenciais inválidas ou e-mail não encontrado.' };
+export async function loginAction(email: string) {
+    const cleanEmail = (email || '').trim().toLowerCase();
+
+    // Administradores têm acesso garantido ao portal diretamente
+    if (ALLOWED_ADMINS.map(a => a.toLowerCase()).includes(cleanEmail)) {
+        const cookieStore = await cookies();
+        cookieStore.set('auth_token', cleanEmail, { httpOnly: true, path: '/' });
+        cookieStore.set('admin_token', cleanEmail, { httpOnly: true, path: '/' });
+        return { success: true };
     }
 
-    if (user.status === 'Pendente') {
+    try {
+        const user = await getUserByEmail(cleanEmail);
+
+        if (!user) {
+            return { success: false, error: 'Credenciais inválidas ou e-mail não encontrado.' };
+        }
+
+        if (user.status === 'Pendente') {
+            return {
+                success: false,
+                error: 'Sua conta está em análise por favor aguarde a liberação do Studio Be.',
+                status: 'Pendente'
+            };
+        }
+
+        // Se aprovado, logamos via cookies (Next 15 await)
+        const cookieStore = await cookies();
+        cookieStore.set('auth_token', user.email, { httpOnly: true, path: '/' });
+
+        return { success: true };
+    } catch (err: any) {
+        console.error('Erro ao verificar usuário:', err);
         return {
             success: false,
-            error: 'Sua conta está em análise por favor aguarde a liberação do Studio Be.',
-            status: 'Pendente'
+            error: 'O banco de dados está temporariamente em repouso no Supabase. Por favor, reative o projeto no painel do Supabase.'
         };
     }
-
-    // Se aprovado, logamos via cookies (Next 15 await)
-    const cookieStore = await cookies();
-    cookieStore.set('auth_token', user.email, { httpOnly: true, path: '/' });
-
-    return { success: true };
 }
 
 export async function registerAction(email: string, name: string, phone: string) {
@@ -58,19 +82,17 @@ export async function logoutAction() {
 }
 
 export async function adminLoginAction(email: string, pass: string) {
-    const allowedAdmins = [
-        'ajrizzi@gmail.com',
-        'pct@cmaisi.com',
-        'claudia.studiobertucci@gmail.com'
-    ];
+    const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanPass = (pass || '').trim();
 
-    if (allowedAdmins.includes(email) && pass === 'StudioBeSucesso') {
+    if (ALLOWED_ADMINS.map(a => a.toLowerCase()).includes(cleanEmail) && cleanPass === 'StudioBeSucesso') {
         const cookieStore = await cookies();
-        cookieStore.set('admin_token', email, { httpOnly: true, path: '/' });
+        cookieStore.set('admin_token', cleanEmail, { httpOnly: true, path: '/' });
+        cookieStore.set('auth_token', cleanEmail, { httpOnly: true, path: '/' });
         return { success: true };
     }
 
-    return { success: false, error: 'Credenciais administrativas inválidas.' };
+    return { success: false, error: 'Credenciais administrativas inválidas. Verifique seu e-mail e senha.' };
 }
 
 export async function adminLogoutAction() {
