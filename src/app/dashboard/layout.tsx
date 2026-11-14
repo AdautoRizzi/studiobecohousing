@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import FloatingAssistant from '@/components/chat/FloatingAssistant';
 import { usePathname } from 'next/navigation';
@@ -9,21 +9,23 @@ import { ClientTierProvider, useClientTier, Tiers } from './ClientTierContext';
 function DashboardContent({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const { tier, setTier } = useClientTier();
+    // Por padrão ativado para que administradores e moradores sempre visualizem todas as áreas construídas
+    const [showAllModules, setShowAllModules] = useState(true);
 
     const allNav = [
         { name: 'Minha Jornada', href: '/dashboard', icon: '🗺️', minTier: 0, exact: true },
         { name: 'Meu Perfil', href: '/dashboard/perfil', icon: '👤', minTier: 0 },
         { name: 'Treinamentos', href: '/dashboard/cursos', icon: '🎓', minTier: 0 },
-        { name: 'Comunidade & Vizinhos', href: '/dashboard/comunidade', icon: '🏘️', minTier: 3 },
+        { name: 'Comunidade & Vizinhos', href: '/dashboard/comunidade', icon: '🏡', minTier: 3 },
         { name: 'Governança & Fórum', href: '/dashboard/governanca', icon: '⚖️', minTier: 4 },
         { name: 'Eventos da Vila', href: '/dashboard/eventos', icon: '🎉', minTier: 4 },
         { name: 'Finanças & Boletos', href: '/dashboard/financas', icon: '💸', minTier: 7 },
         { name: 'Serviços & Manutenção', href: '/dashboard/servicos', icon: '🛠️', minTier: 9 },
         { name: 'Sustentabilidade', href: '/dashboard/sustentabilidade', icon: '♻️', minTier: 9 },
-        { name: 'Horta Comunitária', href: '/dashboard/horta', icon: '🍅', minTier: 9 },
+        { name: 'Horta Comunitária', href: '/dashboard/horta', icon: '🥕', minTier: 9 },
     ];
 
-    const visibleNav = allNav.filter(item => tier >= item.minTier);
+    const navItems = showAllModules ? allNav : allNav.filter(item => tier >= item.minTier);
 
     return (
         <div className="flex h-screen bg-secondary-50 font-sans">
@@ -34,25 +36,46 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                     </Link>
                 </div>
 
-                <div className="px-6 py-4 border-b border-secondary-800 text-sm">
-                    <p className="text-secondary-100 font-medium">Jornada do Cliente</p>
-                    <p className="text-secondary-200 text-xs mt-1">Status: Nível {tier}</p>
+                <div className="px-6 py-4 border-b border-secondary-800 text-sm flex items-center justify-between">
+                    <div>
+                        <p className="text-secondary-100 font-medium">Jornada do Cliente</p>
+                        <p className="text-secondary-200 text-xs mt-1">Status: Nível {tier}</p>
+                    </div>
+                    <button
+                        onClick={() => setShowAllModules(!showAllModules)}
+                        title={showAllModules ? "Filtrar apenas pelo nível atual do cliente" : "Exibir todos os módulos"}
+                        className={`text-[11px] px-2.5 py-1 rounded-md font-bold transition-all ${
+                            showAllModules 
+                                ? 'bg-primary-500/20 text-primary-300 border border-primary-500/40 hover:bg-primary-500/30' 
+                                : 'bg-secondary-800 text-secondary-300 border border-secondary-700 hover:bg-secondary-700'
+                        }`}
+                    >
+                        {showAllModules ? '🔓 Todos' : '🔒 Por Nível'}
+                    </button>
                 </div>
 
                 <nav className="flex-1 px-4 py-6 space-y-2">
-                    {visibleNav.map((item) => {
+                    {navItems.map((item) => {
                         const isActive = (item as any).exact ? pathname === item.href : pathname.startsWith(item.href);
+                        const isHigherTier = tier < item.minTier;
                         return (
                             <Link
                                 key={item.name}
                                 href={item.href}
                                 className={`
-                                    flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+                                    flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
                                     ${isActive ? 'bg-secondary-800 text-white shadow-sm' : 'text-secondary-100 hover:bg-secondary-800/50 hover:text-white'}
                                 `}
                             >
-                                <span className="text-lg">{item.icon}</span>
-                                {item.name}
+                                <div className="flex items-center gap-3">
+                                    <span className="text-lg">{item.icon}</span>
+                                    <span>{item.name}</span>
+                                </div>
+                                {showAllModules && isHigherTier && (
+                                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary-800 text-secondary-300 font-mono border border-secondary-700/50">
+                                        Nv.{item.minTier}
+                                    </span>
+                                )}
                             </Link>
                         );
                     })}
@@ -61,8 +84,15 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 
             <main className="flex-1 flex flex-col overflow-hidden bg-secondary-50 relative">
                 <header className="h-16 border-b border-secondary-100 bg-white flex items-center justify-between px-8">
-                    <span className="text-lg font-bold text-primary-900 md:hidden">Studio Be</span>
-                    <div className="hidden md:flex flex-1"></div>
+                    <div className="flex items-center gap-3">
+                        <span className="text-lg font-bold text-primary-900 md:hidden">Studio Be</span>
+                        <Link 
+                            href="/dashboard/horta" 
+                            className="text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-colors flex items-center gap-1.5"
+                        >
+                            <span>🥕</span> Horta & Jardim
+                        </Link>
+                    </div>
                     
                     <div className="flex items-center gap-3 bg-blue-50 px-4 py-2 rounded-lg border border-blue-100 shadow-sm">
                         <span className="text-sm font-semibold text-blue-900">🛠️ Admin Simulador:</span>
