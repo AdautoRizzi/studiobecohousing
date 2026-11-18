@@ -26,7 +26,7 @@ export default async function CRMLayout({ children }: { children: React.ReactNod
                     </Link>
                     <Link href="/admin/tasks" className="flex items-center gap-3 px-3 py-2 text-blue-400 bg-slate-800/50 hover:bg-slate-800 rounded-lg font-medium transition-colors border border-blue-500/20 mb-2">
                         <span className="text-xl">📋</span>
-                        Gerenciamento do Negócio
+                        Tarefas & Táticas (Kanban)
                     </Link>
                     <Link href="/admin/sales" className="flex items-center gap-3 px-3 py-2 text-green-400 bg-slate-800/50 hover:bg-slate-800 rounded-lg font-medium transition-colors border border-green-500/20 mb-2">
                         <span className="text-xl">🚀</span>
